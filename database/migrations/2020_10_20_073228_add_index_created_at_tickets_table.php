@@ -13,10 +13,8 @@ class AddIndexCreatedAtTicketsTable extends Migration
      */
     public function up()
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->timestamp('created_at')->index()->change();
+        Schema::table('tickets', function (Blueprint $table) {           
             $table->string('code',50)->index()->change();
-
         });
     }
 

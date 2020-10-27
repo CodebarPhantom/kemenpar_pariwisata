@@ -30,5 +30,13 @@ class Controller extends BaseController
         $userLog->save();
         return;
     }
+
+    function date_php_to_mysql($tgl) {
+        //put your code here
+        $tahun = substr($tgl,6,4);
+        $bulan = substr($tgl,3,2);
+        $tanggal = substr($tgl,0,2);
+        return $tahun.'-'.$bulan.'-'.$tanggal;
+    }
     
 }

@@ -24,7 +24,7 @@
                 <div class="card-header">                
                     <div class="d-flex justify-content-between">
                         <h3 class="card-title mt-1">
-                            <i class="fa fa-ticket-alt"></i>
+                            <i class="fa  fa-calendar-alt"></i>
                                 &nbsp; {{ __('Option').' '.__('Search') }}
                         </h3>                
                     </div>
@@ -86,8 +86,8 @@
             <div class="card-header">                
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
-                        <i class="fa fa-ticket-alt"></i>
-                            &nbsp; {{ __('Tickets').' '.__('Summary') }}
+                        <i class="fa fa-calendar-alt"></i>
+                            &nbsp; {{ __('Report').' '.__('Bulanan') }}
                     </h3>                
                 </div>
             </div>

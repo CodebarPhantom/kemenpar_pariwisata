@@ -62,7 +62,9 @@ Route::middleware(['auth'])->group(function(){
         });
 
         Route::middleware('permission:view-report-ticket-administrator')->group(function() {
-            Route::get('/report-ticket-administrator', 'ReportController@reportAdministrator')->name('report-ticket.administrator');
+            Route::get('/report-ticket-administrator', 'ReportController@reportAdministratorMonthly')->name('report-ticket.administrator');
+            Route::get('/report-ticket-administrator-daily', 'ReportController@reportAdministratorDaily')->name('report-ticket.administrator-daily');
+
         });
     });
     

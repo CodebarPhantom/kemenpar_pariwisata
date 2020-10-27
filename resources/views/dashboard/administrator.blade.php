@@ -200,6 +200,9 @@
                 yAxes: [{
                     gridLines : {
                         display : false,
+                    },
+                    ticks: {
+                        beginAtZero:true
                     }
                 }]
             }
@@ -253,7 +256,10 @@
                 yAxes: [{
                     gridLines : {
                         display : false,
-                    }
+                    },
+                    ticks: {
+                        beginAtZero:true
+                    },
                 }]
             }
         }

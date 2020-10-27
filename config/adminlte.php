@@ -274,13 +274,32 @@ return [
             'active' => ['role*'],
             'permission'=>'view-role'
         ],
+        
+
         [
             'text' => 'Report',
-            'url' => '/report-ticket-administrator',
             'icon' => 'fas fa-fw fa-calendar-alt',
             'active' => ['report-administrator*'],
-            'permission'=>'view-report-ticket-administrator'
+            'permission'=>'view-report-ticket-administrator',
+
+            'submenu' => [
+                [
+                    'text' => 'Report Harian',
+                    'url'  => '/report-ticket-administrator-daily',
+                    'permission'=>'view-report-ticket-administrator'
+
+                ],
+                [
+                    'text' => 'Report Bulanan',
+                    'url'  => '/report-ticket-administrator',
+                    'permission'=>'view-report-ticket-administrator'
+
+                ],
+                
+            ],
         ],
+
+
         [
             'text' => 'Report',
             'url' => '/report-ticket-user',
@@ -288,6 +307,8 @@ return [
             'active' => ['report-user*'],
             'permission'=>'view-report-ticket-user'
         ],
+
+       
         [
             'text' => 'Log Activity',
             'url' => '/user-log-activity',
@@ -295,6 +316,8 @@ return [
             'active' => ['user-log-activity*'],
             'permission'=>'view-user-log'
         ],
+
+        
     ],
 
     /*
