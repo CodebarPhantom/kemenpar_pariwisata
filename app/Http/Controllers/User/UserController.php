@@ -154,7 +154,7 @@ class UserController extends Controller
                     $color1 = 'success'; $status = 'Active';
                 }
 
-                return '<span class="badge bg-'.$color.'">'.$type.'</span> <span class="badge bg-'.$color1.'">'.$status.'</span>';
+                return '<span class="badge bg-'.$color.'">'.$type.'</span> <span class="badge bg-'.$color1.'">'.Lang::get($status).'</span>';
             })
             ->editColumn('action',function($user){
                 $show =  '<a href="'.route('user.show',$user->id).'" class="btn btn-info btn-flat btn-xs" title="'.Lang::get('Show').'"><i class="fa fa-eye fa-sm"></i></a>';
@@ -171,7 +171,7 @@ class UserController extends Controller
 		if($search == ''){
             $tourismInfos = TourismInfo::select('id','name','price','code')->paginate(25);
          }else{
-            $tourismInfos = TourismInfo::select('id','name','price','code')->where('name', 'like', '%' .$search. '%')
+            $tourismInfos = TourismInfo::select('id','name','price','code')->where('name', 'like', '%' .$search. '%')->where('is_active',1)
             ->paginate(25);
          }
    

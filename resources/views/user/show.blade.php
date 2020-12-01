@@ -6,12 +6,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">{{ __('Show User') }}</h1>
+            <h1 class="m-0 text-dark">{{ __('Show').' '.__('User') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">{{ __('Master User') }}</a></li>
-                <li class="breadcrumb-item"><a href="#">{{ __('Show User') }}</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ __('Show').' '.__('User') }}</a></li>
             </ol>
         </div>
     </div>
@@ -26,7 +26,7 @@
                     <div class="mr-auto">
                         <h3 class="card-title mt-1">
                             <i class="fa fa-users"></i>
-                                &nbsp; {{ __('Show Users') }}
+                                &nbsp; {{ __('Show').' '.__('User') }}
                         </h3>
                     </div>
                     <div class="mr-1">
@@ -70,10 +70,10 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             @php
-                                if($userData->is_status == 0){
-                                    $status = 'Inactive';
-                                }elseif($userData->is_status == 1){
-                                    $status = 'Active';
+                                if($userData->is_active == 0){
+                                    $status = 'Tidak Aktif';
+                                }elseif($userData->is_active == 1){
+                                    $status = 'Aktif';
                                 }
                             @endphp
                             <label>{{ __('Status') }}</label>

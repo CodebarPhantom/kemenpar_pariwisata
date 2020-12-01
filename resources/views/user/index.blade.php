@@ -26,7 +26,7 @@
                             &nbsp; {{ __('Users') }}
                     </h3>
 
-                    <a href="{{ route('user.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Add User') }}</a>                    
+                    <a href="{{ route('user.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{__('Create').' '.__('User') }}</a>                    
                 </div>
             </div>
             <div class="card-body">                     

@@ -61,7 +61,7 @@
 	}
 
 	@media print {
-		body { text-transform: uppercase; }
+		
 		#buttons { display: none; }
 		#wrapper { width: 95%; font-size:12px; }
 		#wrapper img { max-width:300px; width: 80%; }
@@ -72,7 +72,7 @@
 </style>
 </head>
 
-<body>
+<body onload="window.print()">
 <div id="wrapper">
 	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
 	    <tr>
@@ -84,7 +84,8 @@
 	    </tr>
 	    <tr>
 		    <td width="100%" align="center">
-			    <h2 style="padding-top: 0px; font-size: 20px;"><strong>{{ $tourismInfo->name }}</strong></h2>
+				<h2 style="padding-top: 0px; font-size: 20px;"><strong>{{ $tourismInfo->name }}</strong></h2>
+			    <h4 style="margin: 0px; font-size: 12px;"><strong>{{ $tourismInfo->manage_by }}</strong></h4>				
             </td>
             
         </tr>
@@ -102,7 +103,7 @@
 	<table class="table" cellspacing="0"  border="0"> 
 		<thead> 
 			<tr> 
-				<th width="10%">Code</th> 
+				<th width="10%">Kode</th> 
 				<th width="25%" align="right">Harga</th>
 			</tr> 
 		</thead> 
@@ -125,9 +126,37 @@
 			<tr> 
 				<th width="10%">Total</th> 
 				<th width="25%" align="right">{{ number_format($ticketTotalPrice) }}</th>
-			</tr> 
+			</tr>
 		</thead> 
 	</table>  
+
+	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
+		@if ($tourismInfo->insurance != NULL)
+		<tr>
+			<td width="100%">
+				<span class="left" style="text-align: center;">Asuransi Kecelakan Diri diterbikan oleh {{ $tourismInfo->insurance }}</span>	
+			</td>
+		</tr>  
+		@endif
+		@if ($ticketPromotion != NULL)
+			<tr colspan="2"> 
+				<td width="100%">{{ $ticketPromotion->name }}</td> 
+			</tr> 
+		@endif	
+		<tr>
+			<td></td>
+		</tr>		
+	    <tr>
+		    <td width="100%" align="center">
+			    <center>
+			    	<img src="{{ asset('assets/images/master/pemda.png') }}" style=" width:30px;" />
+			    	<img src="{{ asset('assets/images/master/wonderful_indonesia_logo.webp') }}" style="width: 100px;" />
+			    </center>
+		    </td>
+	    </tr> 
+		<tr>
+		</tr>   
+    </table>
     	
     </div>
 

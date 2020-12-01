@@ -5,11 +5,11 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Report</h1>
+            <h1 class="m-0 text-dark">{{ __('Report') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Report</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ __('Report') }}</a></li>
             </ol>
         </div>
     </div>
@@ -90,7 +90,7 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-ticket-alt"></i>
-                            &nbsp; {{ __('Tickets').' '.__('Summary') }} @php echo Carbon::createFromDate($yearReport, $monthReport)->format('F Y'); @endphp
+                            &nbsp; {{ __('Summary').' '.__('Ticket') }} @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp
                     </h3>                
                 </div>
             </div>

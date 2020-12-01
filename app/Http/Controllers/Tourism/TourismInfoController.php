@@ -32,7 +32,7 @@ class TourismInfoController extends Controller
                 }elseif($tourismInfo->is_active == 0){
                     $color = 'danger'; $status = 'Inactive';
                 }
-                return '<span class="badge bg-'.$color.' align-middle">'.$status.'</span>';
+                return '<span class="badge bg-'.$color.' align-middle">'.Lang::get($status).'</span>';
             })  
             ->editColumn('price',function($tourismInfo){                
                 return '<div class="align-middle">'.number_format($tourismInfo->price).'</div>';
@@ -74,7 +74,9 @@ class TourismInfoController extends Controller
             'tourismLogo'=>'required',
             'tourismAddress'=>'required',
             'tourismCode'=>'required',
-            'tourismPosition'=>'required'
+            'tourismPosition'=>'required',
+            'tourismManageBy'=>'required',
+
         ]);  
         $tourismPosition = explode(",", $request->tourismPosition);
         DB::beginTransaction();
@@ -91,6 +93,8 @@ class TourismInfoController extends Controller
             $tourismInfo->is_active = 1;
             $tourismInfo->latitude = $tourismPosition[0];
             $tourismInfo->longitude = $tourismPosition[1];
+            $tourismInfo->manage_by = $request->tourismManageBy;
+            $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : NULL;
             $tourismInfo->save();
         } catch (Exception $e) {
             DB::rollBack();
@@ -111,7 +115,8 @@ class TourismInfoController extends Controller
             'tourismName'=> 'required',
             'tourismPrice'=>'required',
             'tourismAddress'=>'required',
-            'tourismPosition'=>'required'
+            'tourismPosition'=>'required',
+            'tourismManageBy'=>'required',
         ]);  
         $tourismInfo = TourismInfo::findOrFail($id);
         
@@ -130,6 +135,8 @@ class TourismInfoController extends Controller
             $tourismInfo->is_active = $request->is_active;            
             $tourismInfo->latitude = $tourismPosition[0];
             $tourismInfo->longitude = $tourismPosition[1];
+            $tourismInfo->manage_by = $request->tourismManageBy;
+            $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : NULL;
             $tourismInfo->save();
             
         } catch (Exception $e) {

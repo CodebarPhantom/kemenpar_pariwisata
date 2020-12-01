@@ -87,7 +87,7 @@
     <div class="col-12">
         <div class="card card-info card-outline">
             <div class="card-header">
-                <h3 class="card-title">Graph Visitor @php echo Carbon::createFromDate($yearReport, $monthReport)->format('F Y'); @endphp</h3>
+                <h3 class="card-title">Grafik Pengunjung @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
 
                 <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -108,7 +108,7 @@
     <div class="col-12">
         <div class="card card-info card-outline">
             <div class="card-header">
-                <h3 class="card-title">Graph Revenue  @php echo Carbon::createFromDate($yearReport, $monthReport)->format('F Y'); @endphp</h3>
+                <h3 class="card-title">Grafik Pendapatan  @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
 
                 <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>

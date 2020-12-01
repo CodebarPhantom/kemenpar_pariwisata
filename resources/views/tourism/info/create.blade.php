@@ -6,12 +6,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">{{ __('Add').' '.__('Tourism') }}</h1>
+            <h1 class="m-0 text-dark">{{ __('Create').' '.__('Tourism') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">{{ __('Master').' '.__('Tourism') }}</a></li>
-                <li class="breadcrumb-item"><a href="#">{{ __('Add').' '.__('Tourism') }}</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ __('Create').' '.__('Tourism') }}</a></li>
             </ol>
         </div>
     </div>
@@ -28,7 +28,7 @@
                         <div class="mr-auto">
                             <h3 class="card-title mt-1">
                                 <i class="fa fa-store-alt"></i>
-                                    &nbsp; {{ __('Add').' '.__('Tourism') }}
+                                    &nbsp; {{ __('Create').' '.__('Tourism') }}
                             </h3>
                         </div>
                         <div class="mr-1">
@@ -56,7 +56,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ __('Price') }}</label>
-                                <input id="price-separator" type="text" class="form-control" placeholder="Price....">
+                                <input id="price-separator" type="text" class="form-control" placeholder="Harga....">
                                 <input id="price" type="hidden" name="tourismPrice" class="form-control">
 
                             </div>
@@ -82,10 +82,25 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>{{ __('Insurance') }}</label>
+                                <input type="text" class="form-control" name="tourismInsurance" placeholder="{{ __('Name').' '.__('Insurance') }}....">
+                                <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label> {{ __('Manage').' '.__('By') }} </label>
+                                <input type="text" name="tourismManageBy" class="form-control" placeholder="{{ __('Name').' '.__('Manage') }}...."  required>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>{{ __('Address') }}</label>
-                                <textarea class="form-control" name="tourismAddress" rows="3" placeholder="Enter ..."></textarea>
+                                <textarea class="form-control" name="tourismAddress" rows="3" placeholder="Address ..."></textarea>
                               </div>
                         </div>
                     </div>
@@ -94,7 +109,7 @@
                         <div class="form-group col-md-12">
                             <label for="searchAddress" class="control-label">Lokasi</label>
                             <div class="input-group">
-                                <input id="searchAddress" type="text" class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
+                                <input id="searchAddress" type="text" required class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
                                 <span class="input-group-btn">
                                     <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
                                 </span>

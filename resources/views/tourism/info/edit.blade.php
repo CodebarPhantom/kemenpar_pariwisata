@@ -48,6 +48,14 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label> {{ __('Code')}} </label>
+                                <input type="text" name="tourismCode" class="form-control" minlength="5" maxlength="5" value="{{  $tourismInfo->code }}" placeholder="{{ __('Code').' '.__('Tourism') }}...."  required>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('Name').' '.__('Tourism') }} </label>
@@ -62,6 +70,21 @@
 
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>{{ __('Insurance') }}</label>
+                                <input type="text" class="form-control" name="tourismInsurance" value="{{ $tourismInfo->insurance}}" placeholder="{{ __('Name').' '.__('Insurance') }}....">
+                                <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label> {{ __('Manage').' '.__('By') }} </label>
+                                <input type="text" name="tourismManageBy" class="form-control" value="{{ $tourismInfo->manage_by}}" placeholder="{{ __('Name').' Pengelola' }}...."  required>
+                            </div>
+                        </div>                                              
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
@@ -116,7 +139,7 @@
     
                         <div class="form-group col-md-12">
                             <label class="control-label">Koordinat Lokasi</label>
-                            <input id="position" type="text" class="form-control" name="tourismPosition" value="{{ old('tourismPosition') }}" readonly>
+                            <input id="position" type="text" class="form-control" name="tourismPosition" value="{{ old('tourismPosition',$tourismInfo->latitude.','.$tourismInfo->longitude) }}" readonly>
                         </div>
                     </div>
                     

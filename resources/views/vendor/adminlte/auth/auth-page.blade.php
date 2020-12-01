@@ -20,12 +20,16 @@
 
         {{-- Logo --}}
         <div class="{{ $auth_type ?? 'login' }}-logo">
-            <a href="{{ $dashboard_url }}">
-                <img src="{{ asset(config('adminlte.logo_img')) }}" height="50">
-                {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
-            </a>
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <a href="{{ $dashboard_url }}">
+                        <img class="img-responsive center-block" src="{{ asset(config('adminlte.logo_img')) }}" height="180">                   
+                    </a>
+                </div>                
+            </div>
+            {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
         </div>
-
+        
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
 
@@ -50,6 +54,16 @@
                 </div>
             @endif
 
+        </div>
+
+        <div class="{{ $auth_type ?? 'login' }}-logo">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <a href="{{ $dashboard_url }}">
+                        <img class="img-responsive center-block" src="{{ asset('assets/images/master/wonderful_indonesia_logo.webp') }}" height="50">                   
+                    </a>
+                </div>                
+            </div>
         </div>
 
     </div>

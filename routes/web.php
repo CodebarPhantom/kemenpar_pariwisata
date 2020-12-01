@@ -47,7 +47,16 @@ Route::middleware(['auth'])->group(function(){
     Route::namespace('Tourism')->group(function() {
         Route::middleware('permission:view-tourism-info')->group(function() {
             Route::post('/tourism-info/data-tourism', 'TourismInfoController@tourismInfoData')->name('tourism-info.data');
-            Route::resource('tourism-info', 'TourismInfoController'); 
+            Route::resource('tourism-info', 'TourismInfoController')->except('destroy'); 
+        });
+    });
+
+    Route::namespace('Promotion')->group(function() {
+        Route::middleware('permission:view-ticket-promotion')->group(function() {
+            Route::post('/ticket-promotion/data-ticket-promotion', 'TicketPromotionController@data')->name('ticket-promotion.data');
+            Route::post('/ticket-promotion/data-tourism', 'TicketPromotionController@dataTourisms')->name('ticket-promotion.tourism');
+
+            Route::resource('ticket-promotion', 'TicketPromotionController')->except('destroy'); 
         });
     });
 

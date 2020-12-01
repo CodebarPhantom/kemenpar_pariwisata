@@ -17,7 +17,7 @@ class DashboardController extends Controller
         if(Laratrust::isAbleTo('view-dashboard-administrator')){
             return redirect()->route('dashboard.administrator');
         }elseif(Laratrust::isAbleTo('view-dashboard-user')){
-            return redirect()->route('dashboard.user');
+            return redirect()->route('ticket.index');
         };
 
     }
@@ -42,6 +42,7 @@ class DashboardController extends Controller
             $join->on('ti.tourism_info_id', '=', 'tourism_infos.id');
             $join->whereMonth('ti.created_at', '=', $monthReport)->whereYear('ti.created_at', '=', $yearReport)->where('ti.status',1);
         })        
+        ->where('tourism_infos.is_active',1)
         ->groupby('tourism_infos.id','tourism_infos.name')->get();
         return view('dashboard.administrator',compact('visitorRevenueTourisms','monthReport','yearReport'));
     }

@@ -23,10 +23,10 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-store-alt"></i>
-                            &nbsp; {{ __('Tourism') }}
+                            &nbsp; {{ 'Master'.' '.__('Tourism') }}
                     </h3>
 
-                    <a href="{{ route('tourism-info.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Add').' '. __('Tourism') }}</a>                    
+                    <a href="{{ route('tourism-info.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Create').' '. __('Tourism') }}</a>                    
                 </div>
             </div>
             <div class="card-body">                     

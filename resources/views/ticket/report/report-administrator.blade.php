@@ -5,11 +5,11 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Report</h1>
+            <h1 class="m-0 text-dark">{{ __('Report') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Report</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ __('Report') }}</a></li>
             </ol>
         </div>
     </div>
@@ -158,7 +158,7 @@
                     zeroRecords: "{{ __('No matching records found') }}"
                 },
                 columns: [
-                    { title: "{{ __('Date') }}", defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
+                    { title: "{{ __('Pariwisata') }}", defaultContent: '-', class: 'text-center'},
                     { title: "{{ __('Visitor') }}", defaultContent: ' ', class: 'text-center' },
                     { title: "{{ __('Revenue') }}",defaultContent: '-', class: 'text-center' },
 

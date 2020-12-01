@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'KEMENPAR',
+    'title' => 'DISPARBUD',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -45,8 +45,8 @@ return [
     |
     */
 
-    'logo' => '<b>KEMENPAR</b>',
-    'logo_img' => 'assets/images/master/kemenpar.png',
+    'logo' => '<strong style="font-size: 0.7em;" class="text-center">Dinas Pariwisata dan Kebudayaan</strong>',
+    'logo_img' => 'assets/images/master/pemda.png',
     'logo_img_class' => 'brand-image img-circle',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -233,21 +233,21 @@ return [
     'menu' => [
         ['header' => 'main_navigation'],
         [
-            'text' => 'Dashboard',
+            'text' => 'Beranda',
             'url' => '/dashboard-administrator',
             'icon' => 'fas fa-fw fa-chart-bar',
             'active' => ['dashboard-*'],
             'permission'=>'view-dashboard-administrator',
         ],
         [
-            'text' => 'Dashboard',
+            'text' => 'Beranda',
             'url' => '/dashboard-user',
             'icon' => 'fas fa-fw fa-chart-bar',
             'active' => ['dashboard-*'],
             'permission'=>'view-dashboard-user'
         ],
         [
-            'text' => 'Ticket',
+            'text' => 'Tiket',
             'url' => '/ticket',
             'icon' => 'fas fa-fw fa-ticket-alt',
             'active' => ['ticket*'],
@@ -261,36 +261,41 @@ return [
             'permission'=>'view-tourism-info'
         ],
         [
+            'text' => 'Master Promosi',
+            'url' => '/ticket-promotion',
+            'icon' => 'fas fa-fw fa-percentage',
+            'active' => ['ticket-promotion*'],
+            'permission'=>'view-ticket-promotion'
+        ],
+        [
             'text' => 'Master User',
             'url' => '/user',
             'icon' => 'fas fa-fw fa-users',
             'active' => ['user/*','user'],
             'permission'=>'view-user'
         ],
-        [
+        /*[
             'text' => 'Master Roles',
             'url' => '/role',
             'icon' => 'fas fa-fw fa-user-lock',
             'active' => ['role*'],
             'permission'=>'view-role'
-        ],
-        
-
+        ],*/
         [
-            'text' => 'Report',
+            'text' => 'Laporan',
             'icon' => 'fas fa-fw fa-calendar-alt',
             'active' => ['report-administrator*'],
             'permission'=>'view-report-ticket-administrator',
 
             'submenu' => [
                 [
-                    'text' => 'Report Harian',
+                    'text' => 'Laporan Harian',
                     'url'  => '/report-ticket-administrator-daily',
                     'permission'=>'view-report-ticket-administrator'
 
                 ],
                 [
-                    'text' => 'Report Bulanan',
+                    'text' => 'Laporan Bulanan',
                     'url'  => '/report-ticket-administrator',
                     'permission'=>'view-report-ticket-administrator'
 
@@ -301,7 +306,7 @@ return [
 
 
         [
-            'text' => 'Report',
+            'text' => 'Laporan',
             'url' => '/report-ticket-user',
             'icon' => 'fas fa-fw fa-calendar-alt',
             'active' => ['report-user*'],

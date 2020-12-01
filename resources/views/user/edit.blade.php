@@ -6,12 +6,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">{{ __('Edit User') }}</h1>
+            <h1 class="m-0 text-dark">{{ __('Edit').' '.__('User') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">{{ __('Master User') }}</a></li>
-                <li class="breadcrumb-item"><a href="#">{{ __('Edit User') }}</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ __('Edit').' '.__('User') }}</a></li>
             </ol>
         </div>
     </div>
@@ -29,7 +29,7 @@
                         <div class="mr-auto">
                             <h3 class="card-title mt-1">
                                 <i class="fa fa-users"></i>
-                                    &nbsp; {{ __('Edit Users') }}
+                                    &nbsp; {{ __('Edit').' '.__('User') }}
                             </h3>
                         </div>
                         <div class="mr-1">
@@ -51,8 +51,8 @@
                         <div class="col-sm-6">
                         <!-- text input -->
                         <div class="form-group">
-                            <label> {{ __('PIC Name') }} </label>
-                            <input type="text" name="pic_name" class="form-control" placeholder="Name ..." value="{{ $userData->name }}" required>
+                            <label> {{ __('Name') }} </label>
+                            <input type="text" name="pic_name" class="form-control" placeholder="Nama ..." value="{{ $userData->name }}" required>
                         </div>
                         </div>
                         <div class="col-sm-6">
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>{{ __('Type User') }}</label>
+                            <label>{{ __('Type').' '.__('User') }}</label>
                             <div class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" @if ($userData->user_type == 1 ) checked @endif name="type_user" value="1">
@@ -149,6 +149,7 @@
                 placeholder: 'Pilih Tempat Wisata',
                 minimumInputLength: 2,                
                 theme: 'bootstrap4',
+                allowClear: true,
                 ajax: {
                     url : "{{ route('user.tourism') }}",
                     method : "POST",
