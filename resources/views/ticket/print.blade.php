@@ -72,7 +72,7 @@
 </style>
 </head>
 
-<body onload="window.print()">
+<body onload="window.print();">
 <div id="wrapper">
 	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
 	    <tr>
@@ -132,27 +132,35 @@
 
 	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
 		@if ($tourismInfo->insurance != NULL)
-		<tr>
-			<td width="100%">
-				<span class="left" style="text-align: center;">Asuransi Kecelakan Diri diterbikan oleh {{ $tourismInfo->insurance }}</span>	
+		<tr >
+			<td width="100%" colspan="2">
+				<span class="left" style="text-align: center;">Termasuk Asuransi {{ $tourismInfo->insurance }}</span>	
+			</td>
+			<td>
+
 			</td>
 		</tr>  
 		@endif
 		@if ($ticketPromotion != NULL)
-			<tr colspan="2"> 
-				<td width="100%">{{ $ticketPromotion->name }}</td> 
+			<tr > 
+				<td width="100%" colspan="2">{{ $ticketPromotion->name }}</td> 
+				<td></td>
 			</tr> 
-		@endif	
+		@endif
 		<tr>
-			<td></td>
+			<td><br/></td>
+			<td><br/></td>
 		</tr>		
 	    <tr>
-		    <td width="100%" align="center">
-			    <center>
-			    	<img src="{{ asset('assets/images/master/pemda.png') }}" style=" width:30px;" />
-			    	<img src="{{ asset('assets/images/master/wonderful_indonesia_logo.webp') }}" style="width: 100px;" />
-			    </center>
-		    </td>
+		    <td align="left">
+			 
+			    	<img src="{{ asset('assets/images/master/pemda.png') }}" style=" width:30px;" />			    	
+			  
+			</td>
+			<td align="right">
+					<img src="{{ asset('assets/images/master/wonderful_indonesia_logo.webp') }}" style="width: 100px;" />
+				
+			</td>
 	    </tr> 
 		<tr>
 		</tr>   

@@ -35,11 +35,13 @@
     "Summary":"Ringkasan",
     "Visitor":"Pengunjung",
     "Revenue":"Pendapatan",
-    "Quantity":"Kuantitas",
+    "Quantity":"Jumlah",
     "Print":"Cetak",
     "Today":"Hari Ini",
     "Void":"Batal",
-    "Paid":"Terbayar"
+    "Paid":"Terbayar",
+    "Activity":"Aktifitas",
+    "Information":"Informasi"
 
 
 

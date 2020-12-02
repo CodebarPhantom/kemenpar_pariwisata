@@ -26,12 +26,12 @@
         .calc-row div.screen {
             font-family: Droid Sans Mono;
             display: table;
-            width: 85%;
+            width: 97%;
             background-color: #aaa;
-            text-align: right;
-            font-size: 2em;
-            min-height: 1.2em;
-            margin-left: 0.5em;
+            text-align: center;
+            font-size: 1.5em;
+            min-height: 1.0em;
+            margin-right: 0.5em;
             padding-right: 0.5em;
             border: 1px solid #888;
             color: #333;
@@ -40,7 +40,7 @@
         .calc-row div {
             text-align: center;
             display: inline-block;
-            font-weight: bold;
+            font-weight: 900;
             border: 1px solid #555;
             background-color: #eee;
             padding: 10px 0;
@@ -89,11 +89,12 @@
                 </div>
                 <div class="card-body">                     
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label> {{ __('Quantity').' '.__('Ticket') }} </label>
-                                <input type="number" readonly min="1" value="1" name="qty" class="form-control screen"  required>
+                        <div class="col-12 text-center text-lg">
+                            <label> {{ __('Quantity').' '.__('Ticket') }} </label>
+                            <div class="calc-row">
+                                <div class="screen">0123456789</div>
                             </div>
+                            <input type="hidden" readonly min="1" value="1" name="qty" class="form-control screen"  required>
                         </div>
                         <div class="col-12">   
                             <div class="calculator">                             
@@ -219,6 +220,8 @@
         updateScreen = function(displayValue) {
             var displayValue = displayValue.toString();
             $('.screen').val(displayValue.substring(0, 10));
+            $('.screen').text(displayValue.substring(0, 10));
+
         };
 
         isNumber = function(value) {

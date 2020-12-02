@@ -315,7 +315,7 @@ return [
 
        
         [
-            'text' => 'Log Activity',
+            'text' => 'Log Aktifitas',
             'url' => '/user-log-activity',
             'icon' => 'fas fa-fw fa-database',
             'active' => ['user-log-activity*'],
