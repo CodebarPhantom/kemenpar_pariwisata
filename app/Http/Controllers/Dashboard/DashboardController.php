@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Emergency\EmergencyReport;
 use App\Models\Ticket\Ticket;
 use App\Models\Tourism\TourismInfo;
 use Lang, Auth, DB, Exception,Storage, Laratrust, DataTables, Alert;
@@ -32,6 +33,13 @@ class DashboardController extends Controller
             $yearReport = $request->year;
         }
 
+        $emergencyReports = EmergencyReport::select('emergency_reports.id','us.name as user_name','ti.name as tourism_name','emergency_reports.title','emergency_reports.status','emergency_reports.created_at','emergency_reports.description')
+        ->leftJoin('users as us','us.id','=','emergency_reports.user_id')
+        ->leftJoin('tourism_infos as ti','ti.id','=','emergency_reports.tourism_info_id')
+        ->where('emergency_reports.status',1)
+        ->orderBy('emergency_reports.created_at','DESC')
+        ->limit(3); 
+
        /* $visitorRevenueTourisms = Ticket::select('ti.name as tourism_name',DB::raw('count(tickets.id) as count_visitor, ifnull(sum(tickets.price),0) as sum_price'))
         ->leftJoin('tourism_infos as ti','ti.id','=','tickets.tourism_info_id')     
         ->where('tickets.status',1)
@@ -44,7 +52,8 @@ class DashboardController extends Controller
         })        
         ->where('tourism_infos.is_active',1)
         ->groupby('tourism_infos.id','tourism_infos.name')->get();
-        return view('dashboard.administrator',compact('visitorRevenueTourisms','monthReport','yearReport'));
+        
+        return view('dashboard.administrator',compact('visitorRevenueTourisms','monthReport','yearReport','emergencyReports'));
     }
 
 

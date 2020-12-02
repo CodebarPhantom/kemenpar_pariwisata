@@ -41,7 +41,18 @@
     "Void":"Batal",
     "Paid":"Terbayar",
     "Activity":"Aktifitas",
-    "Information":"Informasi"
+    "Information":"Informasi",
+    "Emergency":"Keadaan Darurat",
+    "Reporting":"Pelaporan",
+    "New":"Baru",
+    "Done":"Selesai",
+    "In Handling":"Dalam Penanganan",
+    "Respond":"Tanggapi",
+    "Title":"Judul",
+    "Description":"Deskripsi",
+    "Response":"Tanggapan",
+    "Choose":"Pilih",
+    "Reporter":"Pelapor"
 
 
 

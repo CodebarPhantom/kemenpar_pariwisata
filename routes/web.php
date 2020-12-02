@@ -76,5 +76,10 @@ Route::middleware(['auth'])->group(function(){
 
         });
     });
+
+    Route::namespace('Emergency')->group(function() {        
+        Route::post('/report-emergency/report-emergency', 'EmergencyReportController@data')->name('report-emergency.data');
+        Route::resource('report-emergency', 'EmergencyReportController')->except('destroy'); 
+    });
     
  });

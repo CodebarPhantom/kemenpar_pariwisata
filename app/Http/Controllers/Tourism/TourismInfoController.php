@@ -145,7 +145,7 @@ class TourismInfoController extends Controller
             return abort(500);
         }
         DB::commit();
-        $this->userLog('Mengubah Tempat Pariwisata'.$request->tourismName);
+        $this->userLog('Mengubah Tempat Pariwisata '.$request->tourismName);
 
         Alert::alert('Success', 'Pariwisata '.$tourismInfo->name.' Telah di Ubah', 'info');
         return redirect()->route('tourism-info.index');

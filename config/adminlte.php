@@ -289,15 +289,27 @@ return [
 
             'submenu' => [
                 [
-                    'text' => 'Laporan Harian',
+                    'text' => 'Laporan Pariwisata Harian',
                     'url'  => '/report-ticket-administrator-daily',
-                    'permission'=>'view-report-ticket-administrator'
+                    'permission'=>'view-report-ticket-administrator',
+                    'active' => ['report-administrator*'],
+
 
                 ],
                 [
-                    'text' => 'Laporan Bulanan',
+                    'text' => 'Laporan Pariwisata Bulanan',
                     'url'  => '/report-ticket-administrator',
-                    'permission'=>'view-report-ticket-administrator'
+                    'permission'=>'view-report-ticket-administrator',
+                    'active' => ['report-administrator*'],
+
+
+                ],
+                [
+                    'text' => 'Laporan Keadaan Darurat',
+                    'url'  => '/report-emergency',
+                    'permission'=>'view-emergency-report',
+                    'active' => ['report-emergency*'],
+
 
                 ],
                 
@@ -310,6 +322,14 @@ return [
             'url' => '/report-ticket-user',
             'icon' => 'fas fa-fw fa-calendar-alt',
             'active' => ['report-user*'],
+            'permission'=>'view-report-ticket-user'
+        ],
+
+        [
+            'text' => 'Laporkan Keadaan Darurat',
+            'url' => '/report-emergency/create',
+            'icon' => 'fas fa-fw fa-bullhorn',
+            'active' => ['report-emergency*'],
             'permission'=>'view-report-ticket-user'
         ],
 

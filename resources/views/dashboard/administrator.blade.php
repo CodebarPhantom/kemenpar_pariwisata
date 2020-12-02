@@ -19,6 +19,58 @@
 @php
     use Carbon\Carbon;
 @endphp
+
+<div class="row">
+    <div class="col-4" >
+        <div class="small-box bg-danger" >
+          <div class="inner">
+            <h3>{{ $emergencyReports->count() }}</h3>
+            <p>Keadaan Darurat Belum di Tanggapi</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-bullhorn"></i>
+          </div>
+          <a href="{{ route('report-emergency.index') }}" class="small-box-footer">{{ __('Respond').' ' }}<i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    @if($emergencyReports->count() != 0)
+        <div class="col-8">
+            <div class="card card-danger card-outline">
+                <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-valign-middle table-sm">
+                    <thead>                    
+                    <tr>
+                    <th>{{ __('Reporter') }}</th>
+                    <th>{{ __('Name').' '.__('Tourism') }}</th>
+                    <th>{{ __('Summary') }}</th>
+                    <th>{{ __('Date').' '.__('Reporting') }}</th>
+                    <th>{{ __('Action') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        
+                            @foreach ($emergencyReports->get() as $emergencyReport)
+                            <tr>
+                                <td>{{ $emergencyReport->user_name }}</td>
+                                <td>{{ $emergencyReport->tourism_name }}</td>
+                                <td>{{ $emergencyReport->title }}</td>
+                                <td>{{ $emergencyReport->created_at->translatedFormat('D, d-m-Y H:i') }}</td>
+                                <td>
+                                    <a href="{{ route('report-emergency.show',$emergencyReport->id) }}" class="btn btn-info btn-flat btn-xs align-middle" title="{{ __('Show') }}"><i class="fa fa-eye fa-sm"></i></a>
+                                    <a href="{{ route('report-emergency.edit',$emergencyReport->id) }}" class="btn btn-danger btn-flat btn-xs align-middle" title="{{ __('Respond') }}"><i class="fa fa-exclamation-triangle fa-sm"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                               
+                                    
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    @endif
+    
+</div>
 <div class="row">
     <form role="form" id="form_1" action="{{ route('dashboard.administrator') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
         @csrf
@@ -136,6 +188,9 @@
     $dayInMonth = cal_days_in_month(CAL_GREGORIAN,$monthReport, $yearReport);
 @endphp
 <script>
+
+   
+
     $(".select2-eryan").select2({
         placeholder: 'Pilih Bulan',           
         theme: 'bootstrap4',
@@ -264,5 +319,7 @@
             }
         }
     });
+
+
 </script>
 @endsection
