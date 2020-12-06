@@ -27,7 +27,7 @@ class EmergencyReportController extends Controller
         $emergencyReports = EmergencyReport::select('emergency_reports.id','us.name as user_name','ti.name as tourism_name','emergency_reports.title','emergency_reports.status','emergency_reports.created_at')
         ->leftJoin('users as us','us.id','=','emergency_reports.user_id')
         ->leftJoin('tourism_infos as ti','ti.id','=','emergency_reports.tourism_info_id')
-        ->orderBy('emergency_reports.created_at','ASC');        
+        ->orderBy('emergency_reports.created_at','DESC');        
         return DataTables::of($emergencyReports) 
             ->editColumn('user_name',function($emergencyReport){
                return $emergencyReport->user_name;
