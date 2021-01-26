@@ -32,10 +32,10 @@ Route::middleware(['auth'])->group(function(){
         });
 
 
-        Route::middleware('permission:view-role')->group(function() {
+        //Route::middleware('permission:view-role')->group(function() {
             Route::post('/role/data-role', 'RoleController@dataRole')->name('role.data');
             Route::resource('role', 'RoleController')->except(['create','store','destroy']); 
-        });
+        //});
 
         Route::middleware('permission:view-user-log')->group(function() {
             Route::post('/user-log-activity/data-log', 'UserActivityLogController@dataLog')->name('user-log.data');
