@@ -24,12 +24,12 @@ Route::middleware(['auth'])->group(function(){
             
     });
     Route::namespace('User')->group(function() {
-        Route::middleware('permission:view-user')->group(function() {
+        //Route::middleware('permission:view-user')->group(function() {
             Route::post('/user/data-user', 'UserController@dataUsers')->name('user.data');
             Route::post('/user/data-tourism', 'UserController@dataTourisms')->name('user.tourism');
 
             Route::resource('user', 'UserController')->except('destroy'); 
-        });
+        //});
 
 
         //Route::middleware('permission:view-role')->group(function() {
