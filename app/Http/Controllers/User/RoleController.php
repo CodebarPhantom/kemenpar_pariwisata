@@ -14,13 +14,13 @@ class RoleController extends Controller
 {
     public function index()
     {      
-        if (!Laratrust::isAbleTo('view-role')) return abort(404);
+       // if (!Laratrust::isAbleTo('view-role')) return abort(404);
         return view('user.role.index');
     }
 
     public function dataRole()
     {      
-        if (!Laratrust::isAbleTo('view-role')) return abort(404);
+       // if (!Laratrust::isAbleTo('view-role')) return abort(404);
 
         $roles = Role::orderBy('name','ASC');
         return DataTables::of($roles)    
@@ -35,7 +35,7 @@ class RoleController extends Controller
 
     public function show($id)
     {
-        if (!Laratrust::isAbleTo('view-role')) return abort(404);
+       // if (!Laratrust::isAbleTo('view-role')) return abort(404);
 
         $role = Role::findOrFail($id);
         $rolePermissions = $role->permissions()->select('id')->pluck('id')->toArray();
@@ -45,7 +45,7 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        if (!Laratrust::isAbleTo('view-role')) return abort(404);
+        //if (!Laratrust::isAbleTo('view-role')) return abort(404);
 
         $role = Role::findOrFail($id);
         $rolePermissions = $role->permissions()->select('id')->pluck('id')->toArray();
@@ -56,7 +56,7 @@ class RoleController extends Controller
 
     public function update($id, Request $request)
     {
-        if (!Laratrust::isAbleTo('view-role')) return abort(404);
+       // if (!Laratrust::isAbleTo('view-role')) return abort(404);
         
         $role = Role::findOrFail($id);
         $this->validate($request, [
