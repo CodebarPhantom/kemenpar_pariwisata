@@ -21,6 +21,7 @@
 <div class="row">
     <form role="form" action="{{ route('ticket-promotion.update',$ticketPromotion->id) }}" method="POST" class="col-md-12" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="">
             <div class="card card-info card-outline">
                 <div class="card-header"> 

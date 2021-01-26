@@ -150,7 +150,12 @@ class TicketPromotionController extends Controller
         DB::beginTransaction();
         try {
             $ticketPromotion = TicketPromotion::findOrFail($id);
-
+            $ticketPromotion->name = $request->promotion_name;
+            $ticketPromotion->tourism_info_id = $request->tourism_place;
+            $ticketPromotion->start_date = Carbon::parse($request->start_date);            
+            $ticketPromotion->end_date = Carbon::parse($request->end_date);
+            $ticketPromotion->disc_percentage = $request->percentage;
+            $ticketPromotion->save();
 
         } catch (Exception $e) {
             DB::rollBack();
