@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-       // if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         return view('user.index');
 
@@ -23,14 +23,14 @@ class UserController extends Controller
 
     public function create()
     {
-       // if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         return view('user.create');
     }
 
     public function store(Request $request)
     {
-        //if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         $this->validate($request, [
             'type_user' => 'required',
@@ -73,7 +73,7 @@ class UserController extends Controller
 
     public function show($id)
     {
-        //if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         $userData = User::select('users.id','users.name','users.email','users.url_photo','users.is_active','users.user_type','ti.name as tourism_name')
                     ->leftJoin('tourism_infos as ti','ti.id','=','users.tourism_info_id')->where('users.id',$id)->first();
@@ -83,7 +83,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        //if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         $userData = User::select('users.id as idUser','users.tourism_info_id','users.name','users.email','users.url_photo','users.is_active','users.user_type','ti.name as tourism_name')
                     ->leftJoin('tourism_infos as ti','ti.id','=','users.tourism_info_id')->where('users.id',$id)->first();
@@ -93,7 +93,7 @@ class UserController extends Controller
 
     public function update($id, Request $request)
     {
-        //if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         $this->validate($request, [
             'type_user' => 'required',
@@ -133,7 +133,7 @@ class UserController extends Controller
 
     public function dataUsers()
     {
-       // if (!Laratrust::isAbleTo('view-user')) return abort(404);
+        if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
         $users = User::select('users.id','users.tourism_info_id','users.name','users.email','users.url_photo','users.is_active','users.user_type','ti.name as tourism_name')
                 ->leftJoin('tourism_infos as ti','ti.id','=','users.tourism_info_id')->orderBy('name','ASC');
