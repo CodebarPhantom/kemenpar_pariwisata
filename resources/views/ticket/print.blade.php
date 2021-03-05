@@ -131,6 +131,16 @@
 	</table>  
 
 	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
+		@if ($tourismInfo->note1 != NULL)
+		<tr >
+			<td width="100%" colspan="2">
+				<span class="left" style="text-align: justify;">{{ $tourismInfo->note1 }}</span>	
+			</td>
+			<td>
+
+			</td>
+		</tr>  
+		@endif
 		@if ($tourismInfo->insurance != NULL)
 		<tr >
 			<td width="100%" colspan="2">

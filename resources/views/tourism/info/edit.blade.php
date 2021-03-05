@@ -87,10 +87,18 @@
                         </div>                                              
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ __('Address') }}</label>
-                                <textarea class="form-control" name="tourismAddress" rows="3" placeholder="Enter ...">{{ $tourismInfo->address  }}</textarea>
+                                <textarea class="form-control" name="tourismAddress" rows="3" placeholder="Address ...">{{ $tourismInfo->address  }}</textarea>
+                              </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>{{ __('Perda') }}</label>
+                                <textarea class="form-control" name="tourismNote1" rows="3" placeholder="Perda ...">{{ $tourismInfo->note1  }}</textarea>
+                                <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
+
                               </div>
                         </div>
                     </div>

@@ -95,6 +95,7 @@ class TourismInfoController extends Controller
             $tourismInfo->longitude = $tourismPosition[1];
             $tourismInfo->manage_by = $request->tourismManageBy;
             $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : NULL;
+            $tourismInfo->note1 = $request->tourismNote1 ?  $request->tourismNote1 : NULL;
             $tourismInfo->save();
         } catch (Exception $e) {
             DB::rollBack();
@@ -137,6 +138,7 @@ class TourismInfoController extends Controller
             $tourismInfo->longitude = $tourismPosition[1];
             $tourismInfo->manage_by = $request->tourismManageBy;
             $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : NULL;
+            $tourismInfo->note1 = $request->tourismNote1 ?  $request->tourismNote1 : NULL;
             $tourismInfo->save();
             
         } catch (Exception $e) {
