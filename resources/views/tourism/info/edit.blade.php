@@ -103,14 +103,28 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="logoFile">Logo</label><br/>
+                                <label for="logoFile">Logo Pariwisata</label><br/>
                                 <a href="{{ $tourismInfo->url_logo }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $tourismInfo->url_logo  }}"></a>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="tourismLogo" accept="image/*" id="logoFile">
                                         <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="logoFile">Logo Bumdes</label><br/>
+                                @if ($tourismInfo->logo_bumdes != NULL)
+                                    <a href="{{ $tourismInfo->logo_bumdes }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $tourismInfo->logo_bumdes  }}"></a>
+                                @endif
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="tourismLogoBumdes" accept="image/*" id="logoFile">
+                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
                                     </div>
                                 </div>
                             </div>

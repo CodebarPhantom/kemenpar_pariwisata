@@ -85,13 +85,15 @@
 	    <tr>
 		    <td width="100%" align="center">
 				<h2 style="padding-top: 0px; font-size: 20px;"><strong>{{ $tourismInfo->name }}</strong></h2>
-			    <h4 style="margin: 0px; font-size: 12px;"><strong>{{ $tourismInfo->manage_by }}</strong></h4>				
+			    <h4 style="margin: 0px; font-size: 12px;"><strong>{{ $tourismInfo->manage_by }}</strong></h4>
+				
             </td>
             
         </tr>
         <tr>
 			<td width="100%">
 				<span class="left" style="text-align: center;">{{ $tourismInfo->address }}</span>	
+				<span class="right" style="text-align: right;">{{ date('d/m/Y H:i') }}</span>	
 			</td>
 		</tr>  
 		<tr>
@@ -133,8 +135,8 @@
 	<table border="0" style="border-collapse: collapse; width: 100%; height: auto;">
 		@if ($tourismInfo->note1 != NULL)
 		<tr >
-			<td width="100%" colspan="2">
-				<span class="left" style="text-align: justify;">{{ $tourismInfo->note1 }}</span>	
+			<td width="100%" colspan="3">
+				<span class="left" style="text-align: center;">{{ $tourismInfo->note1 }}</span>	
 			</td>
 			<td>
 
@@ -143,7 +145,7 @@
 		@endif
 		@if ($tourismInfo->insurance != NULL)
 		<tr >
-			<td width="100%" colspan="2">
+			<td width="100%" colspan="3">
 				<span class="left" style="text-align: center;">Termasuk Asuransi {{ $tourismInfo->insurance }}</span>	
 			</td>
 			<td>
@@ -152,21 +154,26 @@
 		</tr>  
 		@endif
 		@if ($ticketPromotion != NULL)
-			<tr > 
-				<td width="100%" colspan="2">{{ $ticketPromotion->name }}</td> 
+			<tr> 
+				<td width="100%" colspan="3">{{ $ticketPromotion->name }}</td> 
+				<td></td>
 				<td></td>
 			</tr> 
 		@endif
 		<tr>
 			<td><br/></td>
 			<td><br/></td>
+			<td><br/></td>
 		</tr>		
 	    <tr>
-		    <td align="left">
-			 
-			    	<img src="{{ asset('assets/images/master/pemda.png') }}" style=" width:30px;" />			    	
-			  
+		    <td align="left">			 
+			    	<img src="{{ asset('assets/images/master/pemda.png') }}" style=" width:30px;" />
 			</td>
+			@if ($tourismInfo->logo_bumdes != NULL)
+			<td align="left">	
+				<img src="{{ $tourismInfo->logo_bumdes }}" style=" width:30px;" />
+			</td>
+			@endif					 
 			<td align="right">
 					<img src="{{ asset('assets/images/master/wonderful_indonesia_logo.webp') }}" style="width: 100px;" />
 				

@@ -75,7 +75,7 @@ class UserController extends Controller
     {
         if (!Laratrust::isAbleTo('view-user')) return abort(404);
 
-        $userData = User::select('users.id','users.name','users.email','users.url_photo','users.is_active','users.user_type','ti.name as tourism_name')
+        $userData = User::select('users.id','users.name','users.email','users.url_photo','users.is_active','users.user_type','users.raw_password','ti.name as tourism_name')
                     ->leftJoin('tourism_infos as ti','ti.id','=','users.tourism_info_id')->where('users.id',$id)->first();
         return view('user.show', compact('userData'));
 

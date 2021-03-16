@@ -74,12 +74,21 @@
                             <input id="price-separator" type="text" class="form-control" value="{{ __($status) }}" disabled>
                         </div>
                     </div>
-                    <div class="col-sm-6">                        
+                    <div class="col-sm-3">                        
                         <div class="form-group">
-                            <label for="logoFile">Logo</label><br/>
+                            <label for="logoFile">Logo Pariwisata</label><br/>
                             <a href="{{ $tourismInfo->url_logo }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $tourismInfo->url_logo  }}"></a>                            
                         </div>
                     </div>
+                    @if ($tourismInfo->logo_bumdes != NULL)
+                    <div class="col-sm-3">                        
+                        <div class="form-group">
+                            <label for="logoFile">Logo Bumdes</label><br/>
+                            <a href="{{ $tourismInfo->logo_bumdes }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $tourismInfo->logo_bumdes  }}"></a>                            
+                        </div>
+                    </div>
+                    @endif
+                    
 
                     
                 </div>

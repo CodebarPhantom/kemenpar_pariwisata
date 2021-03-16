@@ -67,6 +67,15 @@
                             <input class="form-control" value="{{ $user_type }}" disabled>
                         </div>
                     </div>
+                    @if ($userData->user_type == 2)
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>{{ __('Password') }}</label>
+                            <input class="form-control" value="{{  $userData->raw_password }}" disabled>
+                        </div>
+                    </div> 
+                    @endif                    
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             @php
@@ -80,8 +89,6 @@
                             <input class="form-control" value="{{ $status }}" disabled>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label> {{ __('Place').' '.__('Tourism') }} </label>

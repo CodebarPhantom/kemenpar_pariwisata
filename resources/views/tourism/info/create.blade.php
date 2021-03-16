@@ -69,15 +69,28 @@
                                 <input type="text" name="tourismCode" class="form-control" minlength="5" maxlength="5" placeholder="{{ __('Code').' '.__('Tourism') }}...."  required>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="logoFile">Logo</label>
+                                <label for="logoFile">Logo Pariwisata</label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="tourismLogo" accept="image/*" id="logoFile" required>
-                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo</label>
+                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Pariwisata</label>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="logoFile">Logo Bumdes</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="tourismLogoBumdes" accept="image/*" id="logoFile">
+                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
+                                    </div>
+                                </div>
+                                <span class="form-text text-muted">Jika tidak ada Logo Bumdes maka dikosongkan saja kolom ini.</span>
+
                             </div>
                         </div>
                     </div>

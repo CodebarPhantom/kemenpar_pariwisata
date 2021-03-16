@@ -96,6 +96,11 @@ class TourismInfoController extends Controller
             $tourismInfo->manage_by = $request->tourismManageBy;
             $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : NULL;
             $tourismInfo->note1 = $request->tourismNote1 ?  $request->tourismNote1 : NULL;
+            if($request->tourismLogoBumdes){
+                $filePathPhotoBumdes = $request->tourismLogoBumdes->store('public/logos/bumdes');
+                $fileUrlPhotoBumdes= url('/storage') . str_replace('public','', $filePathPhotoBumdes); 
+                $tourismInfo->logo_bumdes =  $fileUrlPhotoBumdes;
+            }
             $tourismInfo->save();
         } catch (Exception $e) {
             DB::rollBack();
@@ -129,6 +134,12 @@ class TourismInfoController extends Controller
                 $filePathLogo = $request->tourismLogo->store('public/logos');
                 $fileUrlLogo= url('/storage') . str_replace('public','', $filePathLogo);
                 $tourismInfo->url_logo = $fileUrlLogo;
+            }
+            if($request->tourismLogoBumdes){                
+                Storage::delete(str_replace(url('storage'), 'public', $tourismInfo->logo_bumdes));
+                $filePathPhotoBumdes = $request->tourismLogoBumdes->store('public/logos/bumdes');
+                $fileUrlPhotoBumdes= url('/storage') . str_replace('public','', $filePathPhotoBumdes);
+                $tourismInfo->logo_bumdes = $fileUrlPhotoBumdes;
             }
             $tourismInfo->name = $request->tourismName;
             $tourismInfo->address = $request->tourismAddress;
