@@ -7,11 +7,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex">
-    <meta name="googlebot" content="noindex">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="author" content="Eryan Fauzan">
-    <meta name="description" content="WebApps Dinas Pariwisata dan Kebudayaan Karawang">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Custom Meta Tags --}}
@@ -79,13 +74,13 @@
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
-    @include('sweetalert::alert')
+
     {{-- Body Content --}}
     @yield('body')
 
     {{-- Base Scripts --}}
     @if(!config('adminlte.enabled_laravel_mix'))
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 
@@ -108,9 +103,7 @@
 
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
-    <script type="text/javascript">
-        console.log('%c Halo Kenalin ane Eryan Fauzan bisa cek profile ane disini https://www.linkedin.com/in/eryan-fauzan-1ba086190/ ! ', 'background: #222; color: #bada55');
-    </script>
+
 </body>
-    
+
 </html>

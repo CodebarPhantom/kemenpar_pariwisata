@@ -77,7 +77,7 @@
                 { title: "{{ __('Email') }}", data: 'email', name: 'email', defaultContent: '-', class: 'text-center' },
                 { title: "{{ __('Place') }}", data: 'tourism_name', name: 'tourism_name', defaultContent: '-', class: 'text-center' },
                 { title: "{{ __('Status') }}", data: 'user_type', name: 'user_type', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
-                { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' ', class: 'text-center',searchable:false, orderable: false },
+                { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' - ', class: 'text-center',searchable:false, orderable: false },
 
             ]
         });

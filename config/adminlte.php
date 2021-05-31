@@ -274,13 +274,13 @@ return [
             'active' => ['user/*','user'],
             'permission'=>'view-user'
         ],
-        /*[
+        [
             'text' => 'Master Roles',
             'url' => '/role',
             'icon' => 'fas fa-fw fa-user-lock',
             'active' => ['role*'],
             'permission'=>'view-role'
-        ],*/
+        ],
         [
             'text' => 'Laporan',
             'icon' => 'fas fa-fw fa-calendar-alt',
