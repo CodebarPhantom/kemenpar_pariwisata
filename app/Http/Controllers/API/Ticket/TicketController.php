@@ -39,7 +39,7 @@ class TicketController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'receipt_number' => 'required',
+            'receipt_number' => 'required|unique:primary_tests,receipt_number',
             'quantity' => 'required|min:1',
         ]);
 
