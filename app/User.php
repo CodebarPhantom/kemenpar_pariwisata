@@ -2,15 +2,19 @@
 
 namespace App;
 
+use App\Models\Ticket\PrimaryTests;
+use App\Models\Ticket\SecondaryTests;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
 
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
     use Notifiable;
     use LaratrustUserTrait;
 
@@ -63,5 +67,15 @@ class User extends Authenticatable
     {
         //for this feature, you will need to add an extra function named adminlte_image() inside the User model, usually located on the app/User.php file. The recommend image size is: 160x160px.
         return(Auth::user()->url_photo);
+    }
+
+    public function primary_tests()
+    {
+        return $this->hasMany(PrimaryTests::class);
+    }
+
+    public function secondary_tests()
+    {
+        return $this->hasManyThrough(SecondaryTests::class, PrimaryTests::class);
     }
 }

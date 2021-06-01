@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\Auth\LoginController;
+// use App\Http\Controllers\API\Ticket\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::namespace('API')->group(function () {
+    Route::namespace('Auth')->group(function () {
+        Route::group(['prefix' => 'auth'], function () {
+            Route::post('/login', [LoginController::class, 'index']);
+
+            Route::middleware('auth:sanctum')->group(function () {
+                Route::get('/show', [LoginController::class, 'show']);
+            });
+        });
+    });
+
+    Route::namespace('Ticket')->group(function () {
+        Route::group(['prefix' => 'ticket'], function () {
+            Route::middleware('auth:sanctum')->group(function () {
+                Route::get('/{id}', [App\Http\Controllers\API\Ticket\TicketController::class, 'show']);
+                Route::resource('/', TicketController::class)->only('index', 'store', 'destroy', 'update');
+            });
+        });
+    });
 });
