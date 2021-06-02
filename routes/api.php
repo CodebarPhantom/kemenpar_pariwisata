@@ -30,7 +30,8 @@ Route::namespace('API')->group(function () {
         Route::group(['prefix' => 'ticket'], function () {
             Route::middleware('auth:sanctum')->group(function () {
                 Route::get('/{id}', [App\Http\Controllers\API\Ticket\TicketController::class, 'show']);
-                Route::resource('/', TicketController::class)->only('index', 'store', 'destroy', 'update');
+                Route::post('/', [App\Http\Controllers\API\Ticket\TicketController::class, 'store']);
+                Route::resource('/', TicketController::class)->only('index', 'destroy', 'update');
             });
         });
     });

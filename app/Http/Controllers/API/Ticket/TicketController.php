@@ -73,8 +73,6 @@ class TicketController extends Controller
             'quantity' => 'required|array|min:1',
         ]);
 
-        dd($request);
-
         $receipt_numbers = [];
         $checking_cursor = null;
 
