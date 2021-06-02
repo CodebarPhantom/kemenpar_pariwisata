@@ -110,6 +110,7 @@ class TicketController extends Controller
                 $ticket->user_id = auth()->user()->id;
                 $ticket->name = $name;
                 $ticket->receipt_number = $request->receipt_number[$i];
+                $ticket->status = 1;
                 $ticket->save();
 
                 array_push($storedTickets, $ticket->id);
