@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket\PrimaryTests;
 use App\Models\Ticket\SecondaryTests;
-use Lang, Exception, ErrorException;
+use Exception, ErrorException;
 
 class TicketController extends Controller
 {
