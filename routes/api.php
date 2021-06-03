@@ -38,7 +38,7 @@ Route::namespace('API')->group(function () {
                     return Artisan::call('db:seed --class PrimaryTestsSeeder');
                 });
 
-                Route::resource('/', TicketController::class)->only('index', 'store', 'show', 'destroy', 'update');
+                Route::resource('/', TicketController::class)->except('create', 'edit', 'destroy', 'update');
             });
         });
     });
