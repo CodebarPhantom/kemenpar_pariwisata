@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket\PrimaryTests;
 use App\Models\Ticket\SecondaryTests;
+use Illuminate\Support\Facades\Schema;
 use Exception, ErrorException;
 
 class TicketController extends Controller
@@ -218,8 +219,11 @@ class TicketController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function truncate()
     {
-        //
+        Schema::disableForeignKeyConstraints();
+        PrimaryTests::truncate();
+        SecondaryTests::truncate();
+        Schema::enableForeignKeyConstraints();
     }
 }
