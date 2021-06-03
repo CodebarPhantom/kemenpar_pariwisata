@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 $factory->define(PrimaryTests::class, function (Faker $faker) {
     return [
-        'user_id' => 6,
+        'user_id' => auth()->user()->id,
         'name' => $faker->name,
         'receipt_number' => Str::random(10),
         'status' => 1,
