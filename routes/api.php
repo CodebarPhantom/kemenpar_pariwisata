@@ -32,15 +32,13 @@ Route::namespace('API')->group(function () {
     Route::namespace('Ticket')->group(function () {
         Route::group(['prefix' => 'ticket'], function () {
             Route::middleware('auth:sanctum')->group(function () {
-                Route::resource('/', TicketController::class)->only('index', 'destroy', 'update');
-
-                Route::get('/{id}', [App\Http\Controllers\API\Ticket\TicketController::class, 'show']);
-                Route::post('/store', [App\Http\Controllers\API\Ticket\TicketController::class, 'store']);
                 Route::post('/store-bulk', [App\Http\Controllers\API\Ticket\TicketController::class, 'storeBulk']);
                 Route::delete('/truncate', [App\Http\Controllers\API\Ticket\TicketController::class, 'truncate']);
                 Route::post('/seed', function () {
                     return Artisan::call('db:seed --class PrimaryTestsSeeder');
                 });
+
+                Route::resource('/', TicketController::class)->only('index', 'store', 'show', 'destroy', 'update');
             });
         });
     });
