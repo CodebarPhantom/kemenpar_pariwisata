@@ -32,18 +32,26 @@ class TicketController extends Controller
         $primary_fields = $this->primary_fields;
         $secondary_fields = $this->secondary_fields;
 
-        $result = [
-            'tickets' => PrimaryTests::select($primary_fields)
-                ->where('user_id', auth()->user()->id)
-                ->with([
-                    'secondary_tests' => function ($query) use ($secondary_fields) {
-                        $query->select($secondary_fields);
-                    },
-                ])
-                ->get(),
-        ];
+        try {
+            $result = [
+                'tickets' => PrimaryTests::select($primary_fields)
+                    ->where('user_id', auth()->user()->id)
+                    ->with([
+                        'secondary_tests' => function ($query) use ($secondary_fields) {
+                            $query->select($secondary_fields);
+                        },
+                    ])
+                    ->get(),
+            ];
+        } catch (\Throwable $th) {
+            $result = [
+                'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
+                    ->with('secondary_tests')
+                    ->get(),
+            ];
+        }
 
-        return $result;
+        return response()->json($result, 200);
     }
 
     public function show($id)
@@ -51,19 +59,28 @@ class TicketController extends Controller
         $primary_fields = $this->primary_fields;
         $secondary_fields = $this->secondary_fields;
 
-        $result = [
-            'tickets' => PrimaryTests::select($primary_fields)
-                ->where('user_id', auth()->user()->id)
-                ->where('id', $id)
-                ->with([
-                    'secondary_tests' => function ($query) use ($secondary_fields) {
-                        $query->select($secondary_fields);
-                    },
-                ])
-                ->get(),
-        ];
+        try {
+            $result = [
+                'tickets' => PrimaryTests::select($primary_fields)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('id', $id)
+                    ->with([
+                        'secondary_tests' => function ($query) use ($secondary_fields) {
+                            $query->select($secondary_fields);
+                        },
+                    ])
+                    ->get(),
+            ];
+        } catch (\Throwable $th) {
+            $result = [
+                'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
+                    ->where('id', $id)
+                    ->with('secondary_tests')
+                    ->get(),
+            ];
+        }
 
-        return $result;
+        return response()->json($result, 200);
     }
 
     public function store(Request $request)
@@ -83,7 +100,7 @@ class TicketController extends Controller
             $ticket->status = 1;
             $ticket->save();
 
-            foreach ($request->input('quantity', []) as $i => $quantity){
+            foreach ($request->input('quantity', []) as $i => $quantity) {
                 $ticketsDetail = new SecondaryTests();
                 $ticketsDetail->primary_tests_id = $ticket->id;
                 $ticketsDetail->quantity = $request->quantity[$i];
