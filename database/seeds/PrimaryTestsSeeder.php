@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeds;
+
 use Illuminate\Database\Seeder;
 use App\Models\Ticket\PrimaryTests;
 use App\Models\Ticket\SecondaryTests;
