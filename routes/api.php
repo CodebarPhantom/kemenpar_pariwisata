@@ -23,7 +23,7 @@ Route::namespace('API')->group(function () {
             Route::post('/login', [LoginController::class, 'index']);
 
             Route::middleware('auth:sanctum')->group(function () {
-                Route::get('/show', [LoginController::class, 'show']);
+                Route::get('/data', [LoginController::class, 'show']);
                 Route::post('/logout', [LogoutController::class, 'index']);
             });
         });
