@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 
 class LogoutController extends Controller
 {
-    public function index(Request $request) {
-        return $request->user()->tokens()->delete();
+    public function index(Request $request)
+    {
+        return $request
+            ->user()
+            ->tokens()
+            ->delete();
     }
 }

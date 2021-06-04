@@ -2,16 +2,17 @@
 
 namespace App;
 
-use App\Models\Ticket\PrimaryTests;
-use App\Models\Ticket\SecondaryTests;
-use App\Models\Tourism\TourismInfo;
-use App\Models\User\UserActivityLog;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Test\PrimaryTests;
+use App\Models\Test\SecondaryTests;
+use App\Models\Ticket\Ticket;
+use App\Models\Tourism\TourismInfo;
+use App\Models\User\UserActivityLog;
 
 class User extends Authenticatable
 {
@@ -76,6 +77,11 @@ class User extends Authenticatable
     public function tourism_info()
     {
         return $this->belongsTo(TourismInfo::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 
     public function primary_tests()
