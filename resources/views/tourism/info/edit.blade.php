@@ -24,7 +24,7 @@
         @csrf
         <div class="">
             <div class="card card-info card-outline">
-                <div class="card-header"> 
+                <div class="card-header">
                     <div class="d-flex">
                         <div class="mr-auto">
                             <h3 class="card-title mt-1">
@@ -36,24 +36,34 @@
                             <a href="{{ route('tourism-info.index') }}" class="btn btn-secondary btn-flat btn-sm">
                                 <i class="fa fa-arrow-left"></i>
                                 &nbsp;&nbsp;{{ __('Back') }}
-                            </a>  
+                            </a>
                         </div>
                         <div class="">
-                            <button type="submit" class="btn btn-info btn-flat btn-sm">
+                            <button id="submit_tourism" type="submit" class="btn btn-info btn-flat btn-sm">
                                 <i class="fa fa-check"></i>
                                 &nbsp;&nbsp;{{ __('Save') }}
                             </button>
                         </div>
-                    </div>               
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <button id="add-category" class="btn btn-success btn-flat btn-sm ">
+                                <i class="fa fa-plus"></i>
+                                {{ __('Add').' '.__('Category') }}
+                            </button>
+                            <button id="remove-category" class="btn btn-danger btn-flat btn-sm ">
+                                <i class="fa fa-minus"></i>
+                                {{ __('Remove').' '.__('Category') }}
+                            </button>
+                        </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label> {{ __('Code')}} </label>
                                 <input type="text" name="tourismCode" class="form-control" minlength="5" maxlength="5" value="{{  $tourismInfo->code }}" placeholder="{{ __('Code').' '.__('Tourism') }}...."  required>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
@@ -62,13 +72,47 @@
                                 <input type="text" name="tourismName" class="form-control" placeholder="{{ __('Name').' '.__('Tourism') }}...." value="{{  $tourismInfo->name }}"  required>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        {{-- <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ __('Price') }}</label>
                                 <input id="price-separator" type="text" class="form-control" value="{{ number_format($tourismInfo->price) }}" placeholder="Price....">
                                 <input id="price" type="hidden" name="tourismPrice" value="{{ $tourismInfo->price}}" class="form-control">
 
                             </div>
+                        </div> --}}
+                        <div class="col-sm-3" id="category">
+                            @if (count($tourismInfoCategories))
+                                @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
+                                <div class="form-group">
+                                    <label>{{ __('Category'). ' ' . ($i+1) }}</label>
+                                    <input id="category[{{ $i }}]" type="text" name="tourismCategories[{{ $i }}]" class="form-control" value="{{ $tourismInfoCategory->name }}" placeholder="{{ __('Name').' '.__('Category') }}....">
+                                    <input type="hidden" name="tourismCategoriesId[{{ $i }}]"  value="{{ $tourismInfoCategory->id }}" class="form-control">
+                                </div>
+                                @endforeach
+                            @else
+                                <div class="form-group">
+                                    <label>{{ __('Category'). ' ' . (1) }}</label>
+                                    <input id="category[{{ 0 }}]" type="text" name="tourismCategories[{{ 0 }}]" class="form-control" value="Umum" placeholder="{{ __('Name').' '.__('Category') }}....">
+                                    <input type="hidden" name="tourismCategoriesId[{{ 0 }}]"  value="" class="form-control">
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-sm-3" id="price">
+                            @if (count($tourismInfoCategories))
+                                @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
+                                    <div class="form-group">
+                                        <label>{{ __('Price') }}</label>
+                                        <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control" value="{{ $tourismInfoCategory->price }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep=".">
+                                        <input id="price[{{ $i }}]" type="hidden" name="tourismPrice[{{ $i }}]"  value="{{ $tourismInfoCategory->price }}" class="form-control">
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="form-group">
+                                    <label>{{ __('Price') }}</label>
+                                    <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control" value="{{ $tourismInfo->price }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep=".">
+                                    <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ $tourismInfo->price }}" class="form-control">
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -84,7 +128,7 @@
                                 <label> {{ __('Manage').' '.__('By') }} </label>
                                 <input type="text" name="tourismManageBy" class="form-control" value="{{ $tourismInfo->manage_by}}" placeholder="{{ __('Name').' Pengelola' }}...."  required>
                             </div>
-                        </div>                                              
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
@@ -152,26 +196,26 @@
                                 <span class="input-group-btn">
                                     <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
                                 </span>
-                            </div>    
+                            </div>
                         </div>
-    
+
                         <div class="form-group col-md-12">
                             <div id="map" style="width:100%;height:380px;"></div>
                         </div>
-    
+
                         <div class="form-group col-md-12">
                             <label class="control-label">Koordinat Lokasi</label>
                             <input id="position" type="text" class="form-control" name="tourismPosition" value="{{ old('tourismPosition',$tourismInfo->latitude.','.$tourismInfo->longitude) }}" readonly>
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
-            </div>  
+            </div>
         </div>
     </form>
 </div>
-    
+
 @stop
 
 @section('plugins.Datatables', true)
@@ -179,31 +223,73 @@
 
 @section('adminlte_js')
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&language=id&region=ID"></script>
+    <script src="{{ asset(mix('js/autonumeric/autonumeric.js')) }}" type="text/javascript"></script>
 
-    <script type="text/javascript">       
+    <script type="text/javascript">
 
         $(document).ready(function() {
             bsCustomFileInput.init();
             var $form = $( "#form_1" );
-            var $input = $form.find( "#price-separator");
-            var $input_hidden = $form.find("#price");
+            $form.find('[name^="priceSeparator"]').autoNumeric('init');
 
-            $input.on( "keyup", function( event ) {
-                if (event.which >= 37 && event.which <= 40) return;
-                $(this).val(function(index, value) {
-                    return value
-                    // Keep only digits and decimal points:
-                    .replace(/[^\d.]/g, "")
-                    // Remove duplicated decimal point, if one exists:
-                    .replace(/^(\d*\.)(.*)\.(.*)$/, '$1$2$3')
-                    // Keep only two digits past the decimal point:
-                    .replace(/\.(\d{2})\d+/, '.$1')
-                    // Adds thousands separators:
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                });    
-                parseFloat($input_hidden.val($(this).val().replace(/,/g, '')));
+            var $category = document.getElementById("category");
+            var $price = document.getElementById("price");
 
+            var $add_category = $form.find("#add-category");
+            var $remove_category = $form.find("#remove-category");
+            var $submit_tourism = $form.find("#submit_tourism");
+
+            $add_category.on("click", function(event) {
+                event.preventDefault();
+
+                $arrCategory = [];
+                $arrPrice = [];
+
+                for (i = 0; i < $category.childElementCount; i++) {
+                    $catVal = $form.find('[name^="tourismCategories['+i+']"]').val();
+                    $arrCategory.push($catVal);
+
+                    $priceVal = $form.find('[name^="priceSeparator['+i+']"]').autoNumeric('get');
+                    $arrPrice.push($priceVal);
+                }
+
+                if ($category.childElementCount == $price.childElementCount) {
+                    $category.innerHTML += '<div class="form-group">' +
+                                                '<label>{{ __("Category") }} ' + ($category.childElementCount+1) + ' </label>' +
+                                                '<input id="category['+($category.childElementCount)+']" type="text" name="tourismCategories['+($category.childElementCount)+']" class="form-control" placeholder="{{ __("Name").' '.__("Category") }}....">' +
+                                                '<input type="hidden" name="tourismCategoriesId['+($category.childElementCount)+']"  value="" class="form-control">'+
+                                            '</div>';
+                    $price.innerHTML += '<div class="form-group">' +
+                                            '<label>{{ __("Price") }}</label>' +
+                                            '<input id="price-separator['+($price.childElementCount)+']" name="priceSeparator['+($price.childElementCount)+']" type="text" class="form-control" placeholder="Harga...." data-a-sign="Rp. " data-a-dec="," data-a-sep=".">' +
+                                            '<input id="price['+($price.childElementCount)+']" type="hidden" name="tourismPrice['+($price.childElementCount)+']" class="form-control">' +
+                                        '</div>';
+                }
+
+                for (i = 0; i < $category.childElementCount; i++) {
+                    $form.find('[name^="tourismCategories['+i+']"]').val($arrCategory[i]);
+
+                    $form.find('[name^="priceSeparator['+i+']"]').autoNumeric('init');
+                    $form.find('[name^="priceSeparator['+i+']"]').autoNumeric('set', $arrPrice[i]);
+                }
             });
+
+            $remove_category.on("click", function(event) {
+                event.preventDefault();
+                if (($category.childElementCount == $price.childElementCount) && $category.childElementCount > 1){
+                    $category.removeChild($category.lastChild);
+                    $price.removeChild($price.lastChild);
+                }
+            });
+
+            $submit_tourism.on("click", function(event) {
+                for (i = 0; i < $category.childElementCount; i++) {
+                    $value = $form.find('[name^="priceSeparator['+i+']"]').autoNumeric('get');
+                    $form.find('[name^="tourismPrice['+i+']"]').val($value);
+                }
+
+                return true;
+           });
         });
 
         var map, infoWindow, marker, geocoder;
@@ -214,7 +300,7 @@
             var defaultPosition = {lat:defaultLatitude, lng:defaultLongitude};
 
             document.getElementById('position').value = defaultLatitude + ',' + defaultLongitude;
-            
+
             map = new google.maps.Map(document.getElementById('map'), {
                 center: defaultPosition,
                 zoom: 16
@@ -237,7 +323,7 @@
                 map.setCenter(marker.position);
                 marker.setMap(map);
             });
-        
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var pos = {
