@@ -8,6 +8,10 @@ use App\Models\Tourism\TourismInfoCategories;
 
 class TicketItems extends Model
 {
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);

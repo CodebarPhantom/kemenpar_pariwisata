@@ -11,6 +11,7 @@ class Ticket extends Model
 {
     protected $casts = [
         'created_at' => 'datetime',
+        'price' => 'float',
     ];
 
     public function user()

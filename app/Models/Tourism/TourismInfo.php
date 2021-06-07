@@ -10,6 +10,10 @@ use App\Models\Promotion\TicketPromotion;
 
 class TourismInfo extends Model
 {
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     public function user()
     {
         return $this->hasOne(User::class);
