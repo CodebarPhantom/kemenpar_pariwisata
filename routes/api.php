@@ -34,10 +34,30 @@ Route::namespace('API')->group(function () {
             Route::post('/ticket/store-bulk', [App\Http\Controllers\API\Ticket\TicketController::class, 'storeBulk']);
             Route::delete('/ticket/truncate', [App\Http\Controllers\API\Ticket\TicketController::class, 'truncate']);
             Route::post('/ticket/seed', function () {
-                return Artisan::call('db:seed --class PrimaryTestsSeeder');
+                if (getenv('APP_DEBUG')) {
+                    return Artisan::call('db:seed --class TicketsSeeder');
+                } else {
+                    return abort(404);
+                }
             });
 
-            Route::apiResources(['/ticket' => 'TicketController']);
+            Route::apiResources(['/ticket' => 'TicketController', 'middleware' => 'throttle:10000,1']);
+        });
+    });
+
+    Route::namespace('Test')->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/test/store-bulk', [App\Http\Controllers\API\Test\TestController::class, 'storeBulk']);
+            Route::delete('/test/truncate', [App\Http\Controllers\API\Test\TestController::class, 'truncate']);
+            Route::post('/test/seed', function () {
+                if (getenv('APP_DEBUG')) {
+                    return Artisan::call('db:seed --class PrimaryTestsSeeder');
+                } else {
+                    return abort(404);
+                }
+            });
+
+            Route::apiResources(['/test' => 'TestController', 'middleware' => 'throttle:10000,1']);
         });
     });
 });

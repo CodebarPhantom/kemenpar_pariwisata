@@ -5,48 +5,70 @@ namespace App\Http\Controllers\API\Ticket;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Ticket\PrimaryTests;
-use App\Models\Ticket\SecondaryTests;
+use App\Models\Ticket\Ticket;
+use App\Models\Ticket\TicketItems;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Lang;
 use Exception, ErrorException;
 
 class TicketController extends Controller
 {
     public function __construct(Request $request)
     {
-        $this->primary_fields = '*';
-        $this->secondary_fields = '*';
+        $this->ticket_fields = '*';
+        $this->items_fields = '*';
+        $this->categories_fields = '*';
 
-        if (!!$request->primary_fields) {
-            $this->primary_fields = $request->primary_fields;
+        if (!!$request->ticket_fields) {
+            $this->ticket_fields = $request->ticket_fields;
+
+            foreach ($this->ticket_fields as $i => $ticket_fields) {
+                $this->ticket_fields[$i] = 'tickets.' . $ticket_fields;
+            }
         }
 
-        if (!!$request->secondary_fields) {
-            $this->secondary_fields = $request->secondary_fields;
-            array_push($this->secondary_fields, 'primary_tests_id');
+        if (!!$request->items_fields) {
+            $this->items_fields = $request->items_fields;
+
+            foreach ($this->items_fields as $i => $items_fields) {
+                $this->items_fields[$i] = 'ticket_items.' . $items_fields;
+            }
+
+            array_push($this->items_fields, 'ticket_items.id');
+        }
+
+        if (!!$request->categories_fields) {
+            $this->categories_fields = $request->categories_fields;
+
+            foreach ($this->categories_fields as $i => $categories_fields) {
+                $this->categories_fields[$i] = 'tourism_info_categories.' . $categories_fields;
+            }
+
+            array_push($this->categories_fields, 'tourism_info_categories.id');
         }
     }
 
     public function index()
     {
-        $primary_fields = $this->primary_fields;
-        $secondary_fields = $this->secondary_fields;
+        $ticket_fields = $this->ticket_fields;
+        $items_field = $this->items_field;
 
         try {
             $result = [
-                'tickets' => PrimaryTests::select($primary_fields)
+                'tickets' => Ticket::select($ticket_fields)
                     ->where('user_id', auth()->user()->id)
                     ->with([
-                        'secondary_tests' => function ($query) use ($secondary_fields) {
-                            $query->select($secondary_fields);
+                        'items' => function ($query) use ($items_field) {
+                            $query->select($items_field);
                         },
                     ])
                     ->get(),
             ];
         } catch (\Throwable $th) {
+            //select all field if fields specified in $ticket_fields or $items_field not exist
             $result = [
-                'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
-                    ->with('secondary_tests')
+                'tickets' => Ticket::where('user_id', auth()->user()->id)
+                    ->with('items')
                     ->get(),
             ];
         }
@@ -56,26 +78,26 @@ class TicketController extends Controller
 
     public function show($id)
     {
-        $primary_fields = $this->primary_fields;
-        $secondary_fields = $this->secondary_fields;
+        $ticket_fields = $this->ticket_fields;
+        $items_field = $this->items_field;
 
         try {
             $result = [
-                'tickets' => PrimaryTests::select($primary_fields)
+                'tickets' => Ticket::select($ticket_fields)
                     ->where('user_id', auth()->user()->id)
                     ->where('id', $id)
                     ->with([
-                        'secondary_tests' => function ($query) use ($secondary_fields) {
-                            $query->select($secondary_fields);
+                        'items' => function ($query) use ($items_field) {
+                            $query->select($items_field);
                         },
                     ])
                     ->get(),
             ];
         } catch (\Throwable $th) {
             $result = [
-                'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
+                'tickets' => Ticket::where('user_id', auth()->user()->id)
                     ->where('id', $id)
-                    ->with('secondary_tests')
+                    ->with('items')
                     ->get(),
             ];
         }
@@ -85,25 +107,38 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'receipt_number' => 'required|string|unique:primary_tests,receipt_number',
-            'quantity' => 'required|min:1',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'name' => 'required|alpha|max:255',
+                'code' => 'required|alpha_num|unique:tickets,code',
+                'tourism_info_id' => 'required|exists:App\Models\Tourism\TourismInfo,id',
+                'tourism_info_category_id' => 'required|exists:App\Models\Tourism\TourismInfoCategories,id',
+                'price' => 'required|array|min:1',
+                'quantity' => 'required|array|min:1',
+            ],
+            [
+                'code.unique' => ['message' => Lang::get('validation.unique'), 'value' => ':input'],
+                'tourism_info_id.exists' => ['message' => Lang::get('validation.exists'), 'value' => ':input'],
+            ]
+        );
 
         DB::beginTransaction();
         try {
-            $ticket = new PrimaryTests();
+            $ticket = new Ticket();
             $ticket->user_id = auth()->user()->id;
-            $ticket->name = $request->name;
-            $ticket->receipt_number = $request->receipt_number;
+            $ticket->code = $request->name;
+            $ticket->name = $request->code;
+            $ticket->tourism_info_id = $request->tourism_info_id;
             $ticket->status = 1;
             $ticket->save();
 
-            foreach ($request->input('quantity', []) as $i => $quantity) {
-                $ticketsDetail = new SecondaryTests();
-                $ticketsDetail->primary_tests_id = $ticket->id;
+            foreach ($request->tourism_info_category_id as $i => $category_id) {
+                $ticketsDetail = new TicketItems();
+                $ticketsDetail->ticket_id = $ticket->id;
+                $ticketsDetail->tourism_info_category_id = $category_id;
                 $ticketsDetail->quantity = $request->quantity[$i];
+                $ticketsDetail->price = $request->price[$i];
                 $ticketsDetail->save();
             }
 
@@ -111,27 +146,28 @@ class TicketController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
         } finally {
-            $primary_fields = $this->primary_fields;
-            $secondary_fields = $this->secondary_fields;
+            $ticket_fields = $this->ticket_fields;
+            $items_fields = $this->items_fields;
 
             try {
                 $result = [
-                    'tickets' => PrimaryTests::select($primary_fields)
+                    'tickets' => Ticket::select($ticket_fields)
                         ->where('user_id', auth()->user()->id)
                         ->where('id', $ticket->id)
                         ->with([
-                            'secondary_tests' => function ($query) use ($secondary_fields) {
-                                $query->select($secondary_fields);
+                            'items' => function ($query) use ($items_fields) {
+                                $query->select($items_fields);
                             },
                         ])
                         ->get(),
                 ];
             } catch (\Throwable $th) {
-                //select all field if fields specified in $primary_fields or $secondary_fields not exist
                 $result = [
-                    'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
+                    'tickets' => Ticket::where('user_id', auth()->user()->id)
                         ->where('id', $ticket->id)
-                        ->with('secondary_tests')
+                        ->with('items')
+                        ->with('items.categories')
+
                         ->get(),
                 ];
             }
@@ -144,75 +180,126 @@ class TicketController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|array|max:255',
-            'receipt_number' => 'required|array|unique:primary_tests,receipt_number',
+            'code' => 'required|array|max:255',
+            'tourism_info_id' => 'required|array',
+            'tourism_info_category_id' => 'required|array',
+            'price' => 'required|array|min:1',
             'quantity' => 'required|array|min:1',
         ]);
 
-        $receipt_numbers = [];
-        $checking_cursor = null;
+        $codes = [];
+        $checking_cursor = '';
+        $checking_cursor_name = null;
 
         try {
             foreach ($request->input('name', []) as $i => $name) {
-                $checking_cursor = 'Receipt number';
-                if (array_search($request->receipt_number[$i], $receipt_numbers) === 0) {
-                    throw new ErrorException($checking_cursor . ' tidak boleh sama');
+                $checking_cursor = 'code';
+                $checking_cursor_name = 'Code';
+                if (array_search($request->code[$i], $codes) === 0) {
+                    throw new ErrorException($checking_cursor_name . ' tidak boleh sama');
                 } else {
-                    array_push($receipt_numbers, $request->receipt_number[$i]);
-                }
-
-                $checking_cursor = 'Quantity';
-                if (!$request->input('quantity', [])[$i]) {
-                    throw new ErrorException($checking_cursor . ' tidak valid');
+                    array_push($codes, $request->code[$i]);
                 }
             }
         } catch (ErrorException $e) {
+            $errors = (object) [
+                $checking_cursor => str_contains($e->getMessage(), 'Undefined offset')
+                    ? $checking_cursor_name . ' tidak valid.'
+                    : $e->getMessage(),
+            ];
+
             return response()->json(
                 [
-                    'message' => str_contains($e->getMessage(), 'Undefined offset')
-                        ? $checking_cursor . ' tidak valid'
-                        : $e->getMessage(),
+                    'message' => 'The given data was invalid.',
+                    'errors' => $errors,
                 ],
                 422
             );
+        }
+
+        foreach ($request->name as $i => $name) {
+            $req = new \Illuminate\Http\Request();
+            $req->merge([
+                'name' => $name,
+                'code' => $request->code[$i],
+                'tourism_info_id' => $request->tourism_info_id[$i],
+            ]);
+
+            $this->validate(
+                $req,
+                [
+                    'name' => 'required|alpha|max:255',
+                    'code' => 'required|alpha_num|unique:tickets,code',
+                    'tourism_info_id' => 'required|exists:App\Models\Tourism\TourismInfo,id',
+                ],
+                [
+                    'code.unique' => ['message' => Lang::get('validation.unique'), 'value' => ':input'],
+                ]
+            );
+
+            foreach ($request->price[$i] as $j => $price) {
+                $reqItems = new \Illuminate\Http\Request();
+                $reqItems->merge([
+                    'price' => $price,
+                    'quantity' => $request->quantity[$j][$j],
+                    'tourism_info_category_id' => $request->tourism_info_category_id[$i][$j],
+                ]);
+
+                $this->validate($reqItems, [
+                    'price' => 'required|numeric|min:1',
+                    'quantity' => 'required|numeric|min:1',
+                    'tourism_info_category_id' => 'required|exists:App\Models\Tourism\TourismInfoCategories,id',
+                ]);
+            }
         }
 
         $storedTickets = [];
 
         DB::beginTransaction();
         try {
-            foreach ($request->input('name', []) as $i => $name) {
-                $ticket = new PrimaryTests();
+            foreach ($request->name as $i => $name) {
+                $ticket = new Ticket();
                 $ticket->user_id = auth()->user()->id;
                 $ticket->name = $name;
-                $ticket->receipt_number = $request->receipt_number[$i];
+                $ticket->code = $request->code[$i];
+                $ticket->tourism_info_id = $request->tourism_info_id[$i];
                 $ticket->status = 1;
                 $ticket->save();
 
                 array_push($storedTickets, $ticket->id);
 
-                foreach ($request->input('quantity', [])[$i] as $quantity) {
-                    $ticketsDetail = new SecondaryTests();
-                    $ticketsDetail->primary_tests_id = $ticket->id;
-                    $ticketsDetail->quantity = $quantity;
-                    $ticketsDetail->save();
+                foreach ($request->quantity[$i] as $j => $quantity) {
+                    $ticketsItems = new TicketItems();
+                    $ticketsItems->ticket_id = $ticket->id;
+                    $ticketsItems->tourism_info_category_id = $request->tourism_info_category_id[$i][$j];
+                    $ticketsItems->price = $request->price[$i][$j];
+                    $ticketsItems->quantity = $quantity;
+                    $ticketsItems->save();
                 }
             }
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             $storedTickets = [];
         } finally {
-            $primary_fields = $this->primary_fields;
-            $secondary_fields = $this->secondary_fields;
+            $ticket_fields = $this->ticket_fields;
+            $items_fields = $this->items_fields;
+            $categories_fields = $this->categories_fields;
 
             try {
                 $result = [
-                    'tickets' => PrimaryTests::select($primary_fields)
+                    'tickets' => Ticket::select($ticket_fields)
                         ->where('user_id', auth()->user()->id)
                         ->whereIn('id', $storedTickets)
                         ->with([
-                            'secondary_tests' => function ($query) use ($secondary_fields) {
-                                $query->select($secondary_fields);
+                            'items' => function ($query) use ($items_fields, $categories_fields) {
+                                $query->select($items_fields);
+                            },
+                        ])
+                        ->with([
+                            'items.categories' => function ($query) use ($items_fields, $categories_fields) {
+                                $query->select($categories_fields);
                             },
                         ])
                         ->get(),
@@ -220,9 +307,9 @@ class TicketController extends Controller
             } catch (\Throwable $th) {
                 //select all field if fields specified in $primary_fields or $secondary_fields not exist
                 $result = [
-                    'tickets' => PrimaryTests::where('user_id', auth()->user()->id)
+                    'tickets' => Ticket::where('user_id', auth()->user()->id)
                         ->whereIn('id', $storedTickets)
-                        ->with('secondary_tests')
+                        ->with('items.categories')
                         ->get(),
                 ];
             }
@@ -243,9 +330,13 @@ class TicketController extends Controller
 
     public function truncate()
     {
-        Schema::disableForeignKeyConstraints();
-        PrimaryTests::truncate();
-        SecondaryTests::truncate();
-        Schema::enableForeignKeyConstraints();
+        if (getenv('APP_DEBUG')) {
+            Schema::disableForeignKeyConstraints();
+            Ticket::truncate();
+            TicketItems::truncate();
+            Schema::enableForeignKeyConstraints();
+        } else {
+            abort(404);
+        }
     }
 }

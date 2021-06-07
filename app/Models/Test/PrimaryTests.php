@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models\Ticket;
+namespace App\Models\Test;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class PrimaryTests extends Model
 {
