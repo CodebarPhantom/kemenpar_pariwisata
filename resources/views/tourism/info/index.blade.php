@@ -19,27 +19,28 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card card-info card-outline">
-            <div class="card-header">                
+            <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-store-alt"></i>
                             &nbsp; {{ 'Master'.' '.__('Tourism') }}
                     </h3>
-
-                    <a href="{{ route('tourism-info.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Create').' '. __('Tourism') }}</a>                    
+                    @if(Laratrust::hasRole('superadmin'))
+                        <a href="{{ route('tourism-info.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Create').' '. __('Tourism') }}</a>
+                    @endif
                 </div>
             </div>
-            <div class="card-body">                     
+            <div class="card-body">
                 <div class="row">
-                    <div class="table-responsive">  
+                    <div class="table-responsive">
                         <table class="table table-striped table-bordered dt-responsive nowrap table-sm" width="100%" id="datatable_1"></table>
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 </div>
-    
+
 @stop
 
 @section('plugins.Datatables', true)
@@ -80,8 +81,8 @@
 
             ]
         });
-            
-        
+
+
         });
     </script>
 @endsection

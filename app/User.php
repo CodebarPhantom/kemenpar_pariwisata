@@ -57,8 +57,10 @@ class User extends Authenticatable
             ->first();
         if ($description->user_type == 1) {
             $typeUser = 'Administrator';
-        } else {
+        } elseif ($description->user_type == 2) {
             $typeUser = 'User';
+        } else {
+            $typeUser = 'Super Administrator';
         }
         return $typeUser . ' - ' . $description->tourism_name;
     }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\LogoutController;
+use App\Http\Controllers\API\Report\Ticket\ReportTicketController;
 // use App\Http\Controllers\API\Ticket\TicketController;
 
 /*
@@ -58,6 +59,15 @@ Route::namespace('API')->group(function () {
             });
 
             Route::apiResources(['/test' => 'TestController', 'middleware' => 'throttle:10000,1']);
+        });
+    });
+
+    Route::namespace('Report')->group(function () {
+        Route::namespace('Ticket')->group(function () {
+            Route::middleware('auth:sanctum')->group(function () {
+                Route::get('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name('report.ticket.daily');
+                Route::get('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name('report.ticket.monthly');
+            });
         });
     });
 });

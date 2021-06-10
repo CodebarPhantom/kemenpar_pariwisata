@@ -24,7 +24,7 @@
         @method('PUT')
         <div class="">
             <div class="card card-info card-outline">
-                <div class="card-header"> 
+                <div class="card-header">
                     <div class="d-flex">
                         <div class="mr-auto">
                             <h3 class="card-title mt-1">
@@ -36,7 +36,7 @@
                             <a href="{{ route('ticket-promotion.index') }}" class="btn btn-secondary btn-flat btn-sm">
                                 <i class="fa fa-arrow-left"></i>
                                 &nbsp;&nbsp;{{ __('Back') }}
-                            </a>  
+                            </a>
                         </div>
                         <div class="">
                             <button type="submit" class="btn btn-info btn-flat btn-sm">
@@ -44,22 +44,38 @@
                                 &nbsp;&nbsp;{{ __('Save') }}
                             </button>
                         </div>
-                    </div>               
+                    </div>
                 </div>
                 <div class="card-body">
+                    @if ($errors->all())
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('Name').' '.__('Promotion') }} </label>
-                                <input type="text" name="promotion_name" class="form-control" placeholder="Nama Promosi ..." value="{{ $ticketPromotion->name }}" required>
+                                <input type="text" name="promotion_name" class="form-control @error('promotion_name') is-invalid @enderror" placeholder="Nama Promosi ..." value="{{ old('promotion_name', $ticketPromotion->name) }}" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ __('Place').' '.__('Tourism') }}</label>
-                                <select class="form-control select2-eryan" style="width: 100%;" name="tourism_place">   
-                                    <option value="{{ $ticketPromotion->tourism_info_id }}" selected>{{$ticketPromotion->tourism_code.' - '.$ticketPromotion->tourism_name.' ('.number_format($ticketPromotion->tourism_price).')'}}</option>                             
-                                </select>
+                                @if (Laratrust::hasRole('superadmin'))
+                                    <select class="form-control select2-eryan @error('tourism_place') is-invalid @enderror" style="width: 100%;" name="tourism_place">
+                                        <option value="{{ $ticketPromotion->tourism_info_id }}" selected> {{$ticketPromotion->tourism_code.' - '.$ticketPromotion->tourism_name }}</option>
+                                    </select>
+                                @else
+                                    <input type="text" class="form-control @error('tourism_place') is-invalid @enderror" value="{{ auth()->user()->tourism_info()->first()->code.' - '.auth()->user()->tourism_info()->first()->name }}" required disabled>
+                                    <input type="hidden" name="tourism_place" class="form-control" value="{{ auth()->user()->tourism_info()->first()->id }}">
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -67,13 +83,13 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('Start').' '.__('Date') }} </label>
-                                <input type="text"  name="start_date" class="form-control daterange-single" value="{{  $ticketPromotion->start_date->translatedFormat('D, d-m-Y H:i') }}" readonly />
+                                <input type="text"  name="start_date" class="form-control daterange-single @error('start_date') is-invalid @enderror" value="{{ old('start_date', $ticketPromotion->start_date->translatedFormat('D, d-m-Y H:i')) }}" readonly required/>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('End').' '.__('Date') }} </label>
-                                <input type="text" name="end_date" class="form-control daterange-single" value="{{ $ticketPromotion->end_date->translatedFormat('D, d-m-Y H:i') }}" readonly />
+                                <input type="text" name="end_date" class="form-control daterange-single @error('end_date') is-invalid @enderror" value="{{ old('end_date', $ticketPromotion->end_date->translatedFormat('D, d-m-Y H:i')) }}" readonly required/>
                             </div>
                         </div>
                     </div>
@@ -81,20 +97,16 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ __('Percentage').' %' }}</label>
-                                <input type="number" min="0" max="100" name="percentage" class="form-control" value="{{ $ticketPromotion->disc_percentage}}" placeholder="Persentase....">
-
+                                <input type="number" min="0" max="100" name="percentage" class="form-control @error('percentage') is-invalid @enderror" value="{{ old('percentage', $ticketPromotion->disc_percentage) }}" placeholder="Persentase...." required>
                             </div>
                         </div>
                     </div>
-
-
-                    
                 </div>
-            </div>  
+            </div>
         </div>
     </form>
 </div>
-    
+
 @stop
 
 @section('plugins.bsCustomFileInput', true)
@@ -119,11 +131,11 @@
             initailizeSelect2();
             bsCustomFileInput.init();
 
-            
-            
+
+
         });
 
-        $('.daterange-single').daterangepicker({ 
+        $('.daterange-single').daterangepicker({
                 singleDatePicker: true,
                 autoApply: true,
                 timePicker:true,
@@ -136,7 +148,7 @@
         function initailizeSelect2(){
             $(".select2-eryan").select2({
                 placeholder: 'Pilih Tempat Wisata',
-                minimumInputLength: 2,                
+                minimumInputLength: 2,
                 theme: 'bootstrap4',
                 allowClear: true,
                 ajax: {

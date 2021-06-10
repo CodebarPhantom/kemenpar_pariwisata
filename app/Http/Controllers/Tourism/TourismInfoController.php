@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tourism\TourismInfo;
 use App\Models\Tourism\TourismInfoCategories;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use RealRashid\SweetAlert\Facades\Alert;
 use DataTables, Laratrust;
 
 class TourismInfoController extends Controller
@@ -31,6 +31,11 @@ class TourismInfoController extends Controller
         }
 
         $tourismInfos = TourismInfo::orderBy('name', 'ASC');
+
+        if (!Laratrust::hasRole('superadmin')) {
+            $tourismInfos = $tourismInfos->where('id', auth()->user()->tourism_info_id);
+        }
+
         return DataTables::of($tourismInfos)
             ->editColumn('name', function ($tourismInfo) {
                 return '<a href="' .
@@ -57,11 +62,16 @@ class TourismInfoController extends Controller
                 $priceField = '';
 
                 if (count($tourismInfoCategories) == 0) {
-                    $priceField = '<div class="align-middle">Rp. ' . number_format($tourismInfo->price, 2, ',', '.') . '</div>';
+                    $priceField =
+                        '<div class="align-middle">Rp. ' . number_format($tourismInfo->price, 2, ',', '.') . '</div>';
                 } else {
                     foreach ($tourismInfoCategories as $tourismInfoCategory) {
                         $priceField .=
-                            '<div class="align-middle">' . $tourismInfoCategory->name . ': Rp. ' . number_format($tourismInfoCategory->price, 2, ',', '.') . '</div>';
+                            '<div class="align-middle">' .
+                            $tourismInfoCategory->name .
+                            ': Rp. ' .
+                            number_format($tourismInfoCategory->price, 2, ',', '.') .
+                            '</div>';
                     }
                 }
 
@@ -88,6 +98,8 @@ class TourismInfoController extends Controller
 
     public function show($id)
     {
+        $this->checkPermission($id);
+
         $tourismInfo = TourismInfo::findOrFail($id);
         $tourismInfoCategories = TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)->get();
 
@@ -95,6 +107,8 @@ class TourismInfoController extends Controller
     }
     public function edit($id)
     {
+        $this->checkPermission($id);
+
         $tourismInfo = TourismInfo::findOrFail($id);
         $tourismInfoCategories = TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)->get();
 
@@ -103,7 +117,8 @@ class TourismInfoController extends Controller
 
     public function create()
     {
-        if (!Laratrust::isAbleTo('view-tourism-info')) {
+        if (!Laratrust::hasRole('superadmin')) {
+            // if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
         return view('tourism.info.create');
@@ -111,7 +126,8 @@ class TourismInfoController extends Controller
 
     public function store(Request $request)
     {
-        if (!Laratrust::isAbleTo('view-tourism-info')) {
+        if (!Laratrust::hasRole('superadmin')) {
+            // if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
         $this->validate($request, [
@@ -151,11 +167,13 @@ class TourismInfoController extends Controller
             $tourismInfo->save();
 
             foreach ($request->tourismCategories as $i => $tourismName) {
-                $tourismInfoCategories = new TourismInfoCategories();
-                $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
-                $tourismInfoCategories->name = $tourismName;
-                $tourismInfoCategories->price = $request->tourismPrice[$i];
-                $tourismInfoCategories->save();
+                if (!!$tourismName && $request->tourismPrice[$i] > 0) {
+                    $tourismInfoCategories = new TourismInfoCategories();
+                    $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
+                    $tourismInfoCategories->name = $tourismName;
+                    $tourismInfoCategories->price = $request->tourismPrice[$i];
+                    $tourismInfoCategories->save();
+                }
             }
         } catch (Exception $e) {
             DB::rollBack();
@@ -170,9 +188,12 @@ class TourismInfoController extends Controller
 
     public function update($id, Request $request)
     {
+        $this->checkPermission($id);
+
         if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
+
         $this->validate($request, [
             'tourismName' => 'required',
             'tourismCategories' => 'required',
@@ -209,21 +230,27 @@ class TourismInfoController extends Controller
             $tourismInfo->note1 = $request->tourismNote1 ? $request->tourismNote1 : null;
             $tourismInfo->save();
 
-            foreach ($request->tourismCategories as $i => $tourismCategory) {
-                $tourismInfoCategories = TourismInfoCategories::find($request->tourismCategoriesId[$i]);
-                if (!$tourismInfoCategories) {
-                    $tourismInfoCategories = new TourismInfoCategories();
-                }
+            $categories = [];
 
-                $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
-                $tourismInfoCategories->name = $request->tourismCategories[$i];
-                $tourismInfoCategories->price = $request->tourismPrice[$i];
-                $tourismInfoCategories->save();
+            foreach ($request->tourismCategories as $i => $tourismCategory) {
+                if (!!$tourismCategory && $request->tourismPrice[$i] > 0) {
+                    $tourismInfoCategories = TourismInfoCategories::find($request->tourismCategoriesId[$i]);
+                    if (!$tourismInfoCategories) {
+                        $tourismInfoCategories = new TourismInfoCategories();
+                    }
+
+                    $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
+                    $tourismInfoCategories->name = $request->tourismCategories[$i];
+                    $tourismInfoCategories->price = $request->tourismPrice[$i];
+                    $tourismInfoCategories->save();
+
+                    array_push($categories, $tourismInfoCategories->id);
+                }
             }
 
             Schema::disableForeignKeyConstraints();
             TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)
-                ->whereNotIn('id', $request->tourismCategoriesId)
+                ->whereNotIn('id', $categories)
                 ->delete();
             Schema::enableForeignKeyConstraints();
         } catch (Exception $e) {
@@ -236,5 +263,15 @@ class TourismInfoController extends Controller
 
         Alert::alert('Success', 'Pariwisata ' . $tourismInfo->name . ' Telah di Ubah', 'info');
         return redirect()->route('tourism-info.index');
+    }
+
+    private function checkPermission($id)
+    {
+        if (!Laratrust::hasRole('superadmin') && $id != auth()->user()->tourism_info_id) {
+            return abort(
+                config('laratrust.middleware.handlers.abort.code'),
+                config('laratrust.middleware.handlers.abort.message')
+            );
+        }
     }
 }

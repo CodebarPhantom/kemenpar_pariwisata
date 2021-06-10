@@ -55,5 +55,6 @@
     "Reporter": "Pelapor",
     "Add": "Tambah",
     "Remove": "Hapus",
-    "Category": "Kategori"
+    "Category": "Kategori",
+    "USER_LOGIN_NOTICE": "Silahkan login menggunakan aplikasi"
 }

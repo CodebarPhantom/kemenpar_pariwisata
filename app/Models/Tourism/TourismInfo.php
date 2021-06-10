@@ -12,6 +12,8 @@ class TourismInfo extends Model
 {
     protected $casts = [
         'price' => 'float',
+        'count_visitor' => 'integer',
+        'sum_price' => 'float'
     ];
 
     public function user()

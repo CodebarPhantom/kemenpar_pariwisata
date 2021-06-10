@@ -38,7 +38,7 @@
             <div class="card card-danger card-outline">
                 <div class="card-body table-responsive p-0">
                 <table class="table table-striped table-valign-middle table-sm">
-                    <thead>                    
+                    <thead>
                     <tr>
                     <th>{{ __('Reporter') }}</th>
                     <th>{{ __('Name').' '.__('Tourism') }}</th>
@@ -48,7 +48,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        
+
                             @foreach ($emergencyReports->get() as $emergencyReport)
                             <tr>
                                 <td>{{ $emergencyReport->user_name }}</td>
@@ -61,47 +61,48 @@
                                 </td>
                             </tr>
                             @endforeach
-                               
-                                    
+
+
                     </tbody>
                 </table>
                 </div>
             </div>
         </div>
     @endif
-    
+
 </div>
+@if (Laratrust::hasRole('superadmin'))
 <div class="row">
     <form role="form" id="form_1" action="{{ route('dashboard.administrator') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
         @csrf
         <div class="">
             <div class="card card-info card-outline">
-                <div class="card-header">                
+                <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h3 class="card-title mt-1">
                             <i class="fa fa-chart-bar"></i>
                                 &nbsp; {{ __('Option').' '.__('Search') }}
-                        </h3>                
+                        </h3>
                     </div>
                 </div>
-                <div class="card-body">                     
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('Month') }} </label>
-                                <select class="form-control select2-eryan" style="width: 100%;" name="month">  
+                                <select class="form-control select2-eryan" style="width: 100%;" name="month">
                                     <option value="01" @if ($monthReport == "01") {{ 'selected' }} @endif >Januari</option>
-                                    <option value="02" @if ($monthReport == "02") {{ 'selected' }} @endif>Februari</option>                              
-                                    <option value="03" @if ($monthReport == "03") {{ 'selected' }} @endif>Maret</option>                              
-                                    <option value="04" @if ($monthReport == "04") {{ 'selected' }} @endif>April</option>                              
-                                    <option value="05" @if ($monthReport == "05") {{ 'selected' }} @endif>Mei</option>                              
-                                    <option value="06" @if ($monthReport == "06") {{ 'selected' }} @endif>Juni</option>                              
-                                    <option value="07" @if ($monthReport == "07") {{ 'selected' }} @endif>Juli</option>                              
-                                    <option value="08" @if ($monthReport == "08") {{ 'selected' }} @endif>Agustus</option>                              
-                                    <option value="09" @if ($monthReport == "09") {{ 'selected' }} @endif>September</option>                              
-                                    <option value="10" @if ($monthReport == "10") {{ 'selected' }} @endif>Oktober</option> 
-                                    <option value="11" @if ($monthReport == "11") {{ 'selected' }} @endif>November</option>   
-                                    <option value="12" @if ($monthReport == "12") {{ 'selected' }} @endif>Desember</option>         
+                                    <option value="02" @if ($monthReport == "02") {{ 'selected' }} @endif>Februari</option>
+                                    <option value="03" @if ($monthReport == "03") {{ 'selected' }} @endif>Maret</option>
+                                    <option value="04" @if ($monthReport == "04") {{ 'selected' }} @endif>April</option>
+                                    <option value="05" @if ($monthReport == "05") {{ 'selected' }} @endif>Mei</option>
+                                    <option value="06" @if ($monthReport == "06") {{ 'selected' }} @endif>Juni</option>
+                                    <option value="07" @if ($monthReport == "07") {{ 'selected' }} @endif>Juli</option>
+                                    <option value="08" @if ($monthReport == "08") {{ 'selected' }} @endif>Agustus</option>
+                                    <option value="09" @if ($monthReport == "09") {{ 'selected' }} @endif>September</option>
+                                    <option value="10" @if ($monthReport == "10") {{ 'selected' }} @endif>Oktober</option>
+                                    <option value="11" @if ($monthReport == "11") {{ 'selected' }} @endif>November</option>
+                                    <option value="12" @if ($monthReport == "12") {{ 'selected' }} @endif>Desember</option>
                                 </select>
                             </div>
                         </div>
@@ -109,15 +110,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label> {{ __('Year') }} </label>
-                                <select class="form-control select2-eryan" style="width: 100%;" name="year">  
+                                <select class="form-control select2-eryan" style="width: 100%;" name="year">
                                     @php
                                     for($i=date('Y'); $i>=2018; $i--) {
                                         $selected = '';
-                                        if ($yearReport == $i){$selected = ' selected="selected"';} 
+                                        if ($yearReport == $i){$selected = ' selected="selected"';}
                                         print('<option value="'.$i.'"'.$selected.'>'.$i.'</option>'."\n");
                                         //print('<option value="'.$i.'">'.$i.'</option>'."\n");
-                                    }   
-                                    @endphp     
+                                    }
+                                    @endphp
                                 </select>
                             </div>
                         </div>
@@ -131,7 +132,7 @@
                         </div>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </form>
 </div>
@@ -140,7 +141,7 @@
     <div class="col-12">
         <div class="card card-info card-outline">
             <div class="card-header">
-                <h3 class="card-title">Grafik Pengunjung @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
+                <h3 class="card-title">Grafik Penjualan Tiket @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
 
                 <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -179,6 +180,90 @@
             </div>
     </div>
 </div>
+@else
+<div class="row">
+    <div class="col-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Grafik Penjualan Tiket @php echo Carbon::today()->translatedFormat('l, j M Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="donutChartVisitorDaily" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Grafik Penjualan Tiket @php echo Carbon::today()->translatedFormat('F Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="donutChartVisitorMonthly" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Grafik Pendapatan @php echo Carbon::today()->translatedFormat('l, j M Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="donutChartRevenueDaily" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Grafik Pendapatan @php echo Carbon::today()->translatedFormat('F Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="donutChartRevenueMonthly" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+</div>
+@endif
+
 @stop
 
 @section('plugins.Chartjs', true)
@@ -189,24 +274,25 @@
 @endphp
 <script>
 
-   
+
 
     $(".select2-eryan").select2({
-        placeholder: 'Pilih Bulan',           
+        placeholder: 'Pilih Bulan',
         theme: 'bootstrap4',
         dropdownPosition: 'below'
     });
 
+    @if (Laratrust::hasRole('superadmin'))
     var ctx = document.getElementById("barChart");
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels  : [  
+            labels  : [
                 @foreach ($visitorRevenueTourisms as $visitorRevenueTourism)
                     '{{$visitorRevenueTourism->tourism_name }}',
                 @endforeach
             ],
-            
+
             datasets: [
             {
             label               : 'Visitor',
@@ -268,13 +354,13 @@
     var myChart2 = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels  : [  
+            labels  : [
                 @foreach ($visitorRevenueTourisms as $visitorRevenueTourism)
                     '{{$visitorRevenueTourism->tourism_name }}',
                 @endforeach
             ],
-            
-            datasets: [            
+
+            datasets: [
             {
             label               : 'Revenue',
             backgroundColor     : 'rgba(210, 214, 222, 1)',
@@ -319,7 +405,218 @@
             }
         }
     });
+    @else
+
+    var chartVisitorDaily;
+    var chartVisitorMonthly;
+    var chartRevenueDaily;
+    var chartRevenueMonthly;
+
+    var chartDataColor = [];
+
+    function respondCanvasChartRevenueMonthly() {
+        var cm = $('#donutChartRevenueMonthly');
+        var ctxm = cm.get(0).getContext("2d");
+
+        var donutOptions = {
+            maintainAspectRatio : false,
+            responsive : true,
+            tooltips: {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                        return data['datasets'][0]['data'][tooltipItem['index']].toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+                    },
+                }
+            },
+        }
+
+        new Chart(ctxm, {
+            type: 'doughnut',
+            data: chartDataRevenueMonthly,
+            options: donutOptions
+        })
+    }
 
 
+    var GetChartDataVisitorDaily = function () {
+        $.ajax({
+            url: "{{ route('report.ticket.daily') }}",
+            method: 'GET',
+            dataType: 'json',
+            success: function (d) {
+                if (d.data.length != chartDataColor.length) {
+                    d.data.forEach(element => {
+                        chartDataColor.push(getRandomColor());
+                    });
+                }
+
+                chartDataVisitorDaily = {
+                    labels: d.data.map(function(a) {return a.category_name}),
+                    datasets: [
+                        {
+                            data: d.data.map(function(a) {return a.count_visitor}),
+                            backgroundColor : chartDataColor,
+                        }
+                    ]
+                };
+
+                if(chartVisitorDaily.data.datasets[0]?.data != ''+chartDataVisitorDaily.datasets[0].data) {
+                    chartVisitorDaily.data = chartDataVisitorDaily;
+                    chartVisitorDaily.update();
+                }
+
+                chartDataRevenueDaily = {
+                    labels: d.data.map(function(a) {return a.category_name}),
+                    datasets: [
+                        {
+                            data: d.data.map(function(a) {return a.sum_price}),
+                            backgroundColor : chartDataColor,
+                        }
+                    ]
+                };
+
+                if(chartRevenueDaily.data.datasets[0]?.data != ''+chartDataRevenueDaily.datasets[0].data) {
+                    chartRevenueDaily.data = chartDataRevenueDaily;
+                    chartRevenueDaily.update();
+                }
+            }
+        });
+    };
+
+    var GetChartDataVisitorMonthly = function () {
+        $.ajax({
+            url: "{{ route('report.ticket.monthly') }}",
+            method: 'GET',
+            dataType: 'json',
+            success: function (d) {
+                if (d.data.length != chartDataColor.length) {
+                    d.data.forEach(element => {
+                        chartDataColor.push(getRandomColor());
+                    });
+                }
+
+                chartDataVisitorMonthly = {
+                    labels: d.data.map(function(a) {return a.category_name}),
+                    datasets: [
+                        {
+                            data: d.data.map(function(a) {return a.count_visitor}),
+                            backgroundColor : chartDataColor,
+                        }
+                    ]
+                };
+
+                if(chartVisitorMonthly.data.datasets[0]?.data != ''+chartDataVisitorMonthly.datasets[0].data) {
+                    chartVisitorMonthly.data = chartDataVisitorMonthly;
+                    chartVisitorMonthly.update();
+                }
+
+                chartDataRevenueMonthly = {
+                    labels: d.data.map(function(a) {return a.category_name}),
+                    datasets: [
+                        {
+                            data: d.data.map(function(a) {return a.sum_price}),
+                            backgroundColor : chartDataColor,
+                        }
+                    ]
+                };
+
+
+                if(chartRevenueMonthly.data.datasets[0]?.data != ''+chartDataRevenueMonthly.datasets[0].data) {
+                    chartRevenueMonthly.data = chartDataRevenueMonthly;
+                    chartRevenueMonthly.update();
+                }
+            }
+        });
+    };
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    $(document).ready(function() {
+        var cvd = $('#donutChartVisitorDaily');
+        var ctxvd = cvd.get(0).getContext("2d");
+
+        var cvm = $('#donutChartVisitorMonthly');
+        var ctxvm = cvm.get(0).getContext("2d");
+
+        var donutOptions = {
+            maintainAspectRatio : false,
+            responsive : false,
+            animation: {
+                animateRotate : false,
+            }
+        }
+
+        chartVisitorDaily = new Chart(ctxvd, {
+            type: 'doughnut',
+            options: donutOptions
+        });
+
+        chartVisitorMonthly = new Chart(ctxvm, {
+            type: 'doughnut',
+            options: donutOptions
+        });
+
+
+        var crd = $('#donutChartRevenueDaily');
+        var ctxrd = crd.get(0).getContext("2d");
+
+        var crm = $('#donutChartRevenueMonthly');
+        var ctxrm = crm.get(0).getContext("2d");
+
+        var donutOptionsRevenue = {
+            maintainAspectRatio : false,
+            responsive : true,
+            animation: {
+                animateRotate : false,
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                        return data['datasets'][0]['data'][tooltipItem['index']].toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+                    },
+                }
+            },
+        }
+
+        chartRevenueDaily = new Chart(ctxrd, {
+            type: 'doughnut',
+            options: donutOptionsRevenue
+        })
+
+        chartRevenueMonthly = new Chart(ctxrm, {
+            type: 'doughnut',
+            options: donutOptionsRevenue
+        })
+
+        setTimeout(function() {
+            GetChartDataVisitorDaily();
+            GetChartDataVisitorMonthly();
+
+            setInterval(function() {
+                GetChartDataVisitorDaily();
+                GetChartDataVisitorMonthly();
+            }, 3000);
+
+        }, 1000)
+    });
+
+    @endif
 </script>
 @endsection

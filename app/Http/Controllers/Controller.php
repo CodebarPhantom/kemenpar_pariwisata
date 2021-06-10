@@ -38,5 +38,5 @@ class Controller extends BaseController
         $tanggal = substr($tgl,0,2);
         return $tahun.'-'.$bulan.'-'.$tanggal;
     }
-    
+
 }
