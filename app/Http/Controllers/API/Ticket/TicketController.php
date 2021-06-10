@@ -127,8 +127,8 @@ class TicketController extends Controller
         try {
             $ticket = new Ticket();
             $ticket->user_id = auth()->user()->id;
-            $ticket->code = $request->name;
-            $ticket->name = $request->code;
+            $ticket->name = $request->name;
+            $ticket->code = $request->code;
             $ticket->tourism_info_id = $request->tourism_info_id;
             $ticket->status = 1;
             $ticket->save();
