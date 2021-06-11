@@ -552,7 +552,7 @@
 
         var donutOptions = {
             maintainAspectRatio : false,
-            responsive : false,
+            responsive : true,
             animation: {
                 animateRotate : false,
             }
