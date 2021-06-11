@@ -52,21 +52,21 @@ class TicketController extends Controller
     public function index()
     {
         $ticket_fields = $this->ticket_fields;
-        $items_field = $this->items_field;
+        $items_fields = $this->items_fields;
 
         try {
             $result = [
                 'tickets' => Ticket::select($ticket_fields)
                     ->where('user_id', auth()->user()->id)
                     ->with([
-                        'items' => function ($query) use ($items_field) {
-                            $query->select($items_field);
+                        'items' => function ($query) use ($items_fields) {
+                            $query->select($items_fields);
                         },
                     ])
                     ->get(),
             ];
         } catch (\Throwable $th) {
-            //select all field if fields specified in $ticket_fields or $items_field not exist
+            //select all field if fields specified in $ticket_fields or $items_fields not exist
             $result = [
                 'tickets' => Ticket::where('user_id', auth()->user()->id)
                     ->with('items')
@@ -80,7 +80,7 @@ class TicketController extends Controller
     public function show($code)
     {
         $ticket_fields = $this->ticket_fields;
-        $items_field = $this->items_field;
+        $items_fields = $this->items_fields;
 
         try {
             $result = [
@@ -88,8 +88,8 @@ class TicketController extends Controller
                     ->where('user_id', auth()->user()->id)
                     ->where('code', $code)
                     ->with([
-                        'items' => function ($query) use ($items_field) {
-                            $query->select($items_field);
+                        'items' => function ($query) use ($items_fields) {
+                            $query->select($items_fields);
                         },
                     ])
                     ->get(),
