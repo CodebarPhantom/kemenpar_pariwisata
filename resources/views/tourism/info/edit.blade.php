@@ -112,7 +112,7 @@
                             @if (count($tourismInfoCategories))
                                 @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
                                     <div class="form-group">
-                                        <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
+                                        <label>{{ __('Price').' '.__('Ticket'). ' ' . ($i+1) }}</label>
                                         <div class="input-group">
                                             <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control @error('tourismPrice.'.$i) is-invalid @enderror" value="{{ old('priceSeparator.'.$i, $tourismInfoCategory->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
                                             <input id="price[{{ $i }}]" type="hidden" name="tourismPrice[{{ $i }}]"  value="{{ old('tourismPrice.'.$i, $tourismInfoCategory->price) }}" class="form-control">
@@ -126,7 +126,7 @@
                                 @endforeach
                             @else
                                 <div class="form-group">
-                                    <label>{{ __('Price') }}</label>
+                                    <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
                                     <div class="input-group">
                                         <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0', $tourismInfo->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
                                         <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0', $tourismInfo->price) }}" class="form-control">
