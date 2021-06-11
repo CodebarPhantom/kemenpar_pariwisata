@@ -77,7 +77,7 @@ class TicketController extends Controller
         return response()->json($result, 200);
     }
 
-    public function show($id)
+    public function show($code)
     {
         $ticket_fields = $this->ticket_fields;
         $items_field = $this->items_field;
@@ -86,7 +86,7 @@ class TicketController extends Controller
             $result = [
                 'tickets' => Ticket::select($ticket_fields)
                     ->where('user_id', auth()->user()->id)
-                    ->where('id', $id)
+                    ->where('code', $code)
                     ->with([
                         'items' => function ($query) use ($items_field) {
                             $query->select($items_field);
@@ -97,7 +97,7 @@ class TicketController extends Controller
         } catch (\Throwable $th) {
             $result = [
                 'tickets' => Ticket::where('user_id', auth()->user()->id)
-                    ->where('id', $id)
+                    ->where('code', $code)
                     ->with('items')
                     ->get(),
             ];
