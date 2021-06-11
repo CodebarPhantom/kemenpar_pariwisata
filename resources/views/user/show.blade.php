@@ -18,10 +18,10 @@
 @stop
 
 @section('content')
-<div class="row">    
+<div class="row">
     <div class="col-md-12">
         <div class="card card-info card-outline">
-            <div class="card-header"> 
+            <div class="card-header">
                 <div class="d-flex">
                     <div class="mr-auto">
                         <h3 class="card-title mt-1">
@@ -33,9 +33,9 @@
                         <a href="{{ route('user.index') }}" class="btn btn-secondary btn-flat btn-sm">
                             <i class="fa fa-arrow-left"></i>
                             &nbsp;&nbsp;{{ __('Back') }}
-                        </a>  
+                        </a>
                     </div>
-                </div>               
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -56,25 +56,18 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            @php
-                                if($userData->user_type == 1){
-                                    $user_type = 'Administrator';
-                                }elseif($userData->user_type == 2){
-                                    $user_type = 'User';
-                                }
-                            @endphp
                             <label>{{ __('User Type') }}</label>
-                            <input class="form-control" value="{{ $user_type }}" disabled>
+                            <input class="form-control" value="{{ $userData->roles->first()->display_name }}" disabled>
                         </div>
                     </div>
-                    @if ($userData->user_type == 2)
+                    @if ($userData->roles->first()->name == 'user')
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>{{ __('Password') }}</label>
                             <input class="form-control" value="{{  $userData->raw_password }}" disabled>
                         </div>
-                    </div> 
-                    @endif                    
+                    </div>
+                    @endif
 
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -93,22 +86,22 @@
                         <div class="form-group">
                             <label> {{ __('Place').' '.__('Tourism') }} </label>
                             <input class="form-control" value="{{ $userData->tourism_name }}" disabled>
-                            
+
                         </div>
                     </div>
-                    <div class="col-sm-6">                        
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label for="photoFile">Photo</label><br/>
-                            <a href="{{ $userData->url_photo }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $userData->url_photo  }}"></a>                            
+                            <a href="{{ $userData->url_photo }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ $userData->url_photo  }}"></a>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-        </div>  
+        </div>
     </div>
 </div>
-    
+
 @stop
 
 

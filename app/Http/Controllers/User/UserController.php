@@ -80,7 +80,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->url_photo = $fileUrlPhoto;
             $user->user_type = $request->type_user;
-            if ($user->user_type == 2) {
+            if ($user->roles->first()->name == 'user') {
                 $user->raw_password = $request->password;
             }
             $user->save();
@@ -238,15 +238,12 @@ class UserController extends Controller
                     $user->name;
             })
             ->editColumn('user_type', function ($user) {
-                if ($user->user_type == 1) {
+                if ($user->roles->first()->name == 'administrator') {
                     $color = 'success';
-                    $type = 'Administrator';
-                } elseif ($user->user_type == 2) {
+                } elseif ($user->roles->first()->name == 'user') {
                     $color = 'info';
-                    $type = 'User';
-                } elseif ($user->user_type == 3) {
+                } elseif ($user->roles->first()->name == 'superadmin') {
                     $color = 'danger';
-                    $type = 'Super Administrator';
                 }
                 if ($user->is_active == 0) {
                     $color1 = 'danger';
@@ -259,7 +256,7 @@ class UserController extends Controller
                 return '<span class="badge bg-' .
                     $color .
                     '">' .
-                    $type .
+                    $user->roles->first()->display_name .
                     '</span> <span class="badge bg-' .
                     $color1 .
                     '">' .

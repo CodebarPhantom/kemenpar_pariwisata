@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\TicketItems;
+use App\Models\Tourism\TourismInfoCategories;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Lang;
 use Exception, ErrorException;
@@ -107,13 +108,15 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        $categories = TourismInfoCategories::where("tourism_info_id", $request->tourism_info_id)->pluck('id')->toArray();
+
         $this->validate(
             $request,
             [
                 'name' => 'required|alpha|max:255',
                 'code' => 'required|alpha_num|unique:tickets,code',
                 'tourism_info_id' => 'required|exists:App\Models\Tourism\TourismInfo,id',
-                'tourism_info_category_id' => 'required|exists:App\Models\Tourism\TourismInfoCategories,id',
+                'tourism_info_category_id.*' => 'required|distinct|in:'.implode(',', $categories),
                 'price' => 'required|array|min:1',
                 'quantity' => 'required|array|min:1',
             ],
@@ -237,6 +240,8 @@ class TicketController extends Controller
                 ]
             );
 
+            $categories = TourismInfoCategories::where("tourism_info_id", $req->tourism_info_id)->pluck('id')->toArray();
+
             foreach ($request->price[$i] as $j => $price) {
                 $reqItems = new \Illuminate\Http\Request();
                 $reqItems->merge([
@@ -248,7 +253,7 @@ class TicketController extends Controller
                 $this->validate($reqItems, [
                     'price' => 'required|numeric|min:1',
                     'quantity' => 'required|numeric|min:1',
-                    'tourism_info_category_id' => 'required|exists:App\Models\Tourism\TourismInfoCategories,id',
+                    'tourism_info_category_id' => 'required|in:'.implode(',', $categories),
                 ]);
             }
         }

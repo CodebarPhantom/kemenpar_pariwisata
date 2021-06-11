@@ -13,6 +13,8 @@ use App\Models\Test\SecondaryTests;
 use App\Models\Ticket\Ticket;
 use App\Models\Tourism\TourismInfo;
 use App\Models\User\UserActivityLog;
+use App\Models\Role;
+use App\Models\Permission;
 
 class User extends Authenticatable
 {
@@ -55,14 +57,7 @@ class User extends Authenticatable
             ->leftJoin('tourism_infos as ti', 'ti.id', '=', 'users.tourism_info_id')
             ->where('users.id', Auth::user()->id)
             ->first();
-        if ($description->user_type == 1) {
-            $typeUser = 'Administrator';
-        } elseif ($description->user_type == 2) {
-            $typeUser = 'User';
-        } else {
-            $typeUser = 'Super Administrator';
-        }
-        return $typeUser . ' - ' . $description->tourism_name;
+        return $description->roles->first()->display_name . ' - ' . $description->tourism_name;
     }
 
     public function adminlte_image()

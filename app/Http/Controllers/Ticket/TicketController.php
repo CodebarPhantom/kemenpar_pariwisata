@@ -26,9 +26,7 @@ class TicketController extends Controller
 
         $this->validate($request, [
             'qty' => 'required'
-        ]); 
-
-        
+        ]);
 
         DB::beginTransaction();
         try {
@@ -41,7 +39,7 @@ class TicketController extends Controller
             ->where('tourism_info_id',Auth::user()->tourism_info_id)
             ->where('end_date','>',date('Y-m-d H:i'))
             ->orderBy('end_date','desc')->first();
-            
+
             if($ticketPromotion != NULL){
                 $discPrice = ($ticketPromotion->disc_percentage/100)*$ticketPrice;
                 $ticketPromotionId = $ticketPromotion->id;
@@ -63,7 +61,7 @@ class TicketController extends Controller
                 $this->userLog('Membuat Tiket Masuk '.$this->setCodeTicket());
 
             }
-           
+
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -79,7 +77,7 @@ class TicketController extends Controller
                            ->whereIn('tickets.code',$ticketCodePrint)
                            ->get();
         return view('ticket.print',compact('ticketShowPrints','tourismInfo','ticketTotalPrice','ticketPromotion'));
-        
+
 
     }
 
@@ -88,8 +86,8 @@ class TicketController extends Controller
         if (!Laratrust::isAbleTo('view-ticket')) return abort(404);
 
         $tickets = Ticket::select('id','code','status','created_at')->where('user_id',Auth::user()->id)->whereDay('created_at', '=', date('d'))->orderBy('created_at','DESC')->orderBy('id','DESC');
-        return DataTables::of($tickets)             
-            ->editColumn('status',function($ticket){                
+        return DataTables::of($tickets)
+            ->editColumn('status',function($ticket){
                 if($ticket->status == 0){
                     $color = 'danger'; $status = 'Void';
                 }elseif($ticket->status == 1){
@@ -147,15 +145,15 @@ class TicketController extends Controller
     }
 
     private function setCodeTicket()
-    {       
+    {
         $codeTicket = TourismInfo::select('id','name','code')->whereId(Auth::user()->tourism_info_id)->first()->code;
         $check = Ticket::select(DB::raw('count(created_at) as count_ticket'))->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->where('tourism_info_id',Auth::user()->tourism_info_id)->first()->count_ticket;
-        if($check > 0){                
-            $number = ((int)$check)+1;                
+        if($check > 0){
+            $number = ((int)$check)+1;
         }else{
-            $number = 1;	
+            $number = 1;
         }
-        $identityCode = $codeTicket;       
+        $identityCode = $codeTicket;
         $uniquecode = str_pad($number,4,"0",STR_PAD_LEFT);
         return  $identityCode.date('m').date('Y').$uniquecode;
     }
