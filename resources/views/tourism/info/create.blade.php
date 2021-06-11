@@ -82,7 +82,7 @@
                         </div>
                         <div class="col-sm-3" id="price">
                             <div class="form-group">
-                                <label>{{ __('Price') }}</label>
+                                <label>{{ __('Price').' '.__('Ticket'). ' ' . '1' }}</label>
                                 <div class="input-group">
                                     <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0') }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
                                     <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0') }}" class="form-control">
@@ -240,12 +240,12 @@
 
                 if ($category.childElementCount == $price.childElementCount) {
                     $category.innerHTML += '<div class="form-group" data-index="' + (lastIndex + 1) + '">' +
-                                                '<label>{{ __("Category")." ".__("Ticket"). " " }}' + (lastIndex + 2) + ' </label>' +
+                                                '<label>{{ __("Category")." ".__("Ticket"). " " }}' + (lastIndex + 2) + '</label>' +
                                                 '<input id="category[' + (lastIndex + 1) + ']" type="text" name="tourismCategories[' + (lastIndex + 1) + ']" class="form-control" placeholder="{{ __("Name").' '.__("Category") }}...." required>' +
                                                 '<input type="hidden" name="tourismCategoriesId[' + (lastIndex + 1) + ']"  value="" class="form-control">'+
                                             '</div>';
                     $price.innerHTML += '<div class="form-group">' +
-                                            '<label>{{ __("Price") }}</label>' +
+                                            '<label>{{ __("Price")." ".__("Ticket"). " " }}' + (lastIndex + 2) + '</label>' +
                                             '<div class="input-group">' +
                                                 '<input id="price-separator[' + (lastIndex + 1) + ']" name="priceSeparator[' + (lastIndex + 1) + ']" type="text" class="form-control" placeholder="Harga...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>' +
                                                 '<input id="price[' + (lastIndex + 1) + ']" type="hidden" name="tourismPrice[' + (lastIndex + 1) + ']" class="form-control">' +

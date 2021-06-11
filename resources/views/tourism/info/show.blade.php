@@ -55,13 +55,13 @@
                         @if (count($tourismInfoCategories))
                             @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
                             <div class="form-group">
-                                <label>{{ __('Category'). ' ' . ($i+1) }}</label>
+                                <label>{{ __('Category').' '.__('Ticket'). ' ' . ($i+1) }}</label>
                                 <input id="category[{{ $i }}]" type="text" name="tourismCategories[{{ $i }}]" class="form-control" value="{{ $tourismInfoCategory->name }}" placeholder="{{ __('Name').' '.__('Category') }}...." disabled>
                             </div>
                             @endforeach
                         @else
                             <div class="form-group">
-                                <label>{{ __('Category'). ' ' . (1) }}</label>
+                                <label>{{ __('Category').' '.__('Ticket'). ' ' . (1) }}</label>
                                 <input id="category[{{ 0 }}]" type="text" name="tourismCategories[{{ 0 }}]" class="form-control" value="Umum" placeholder="{{ __('Name').' '.__('Category') }}...." disabled>
                             </div>
                         @endif
@@ -70,13 +70,13 @@
                         @if (count($tourismInfoCategories))
                             @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
                                 <div class="form-group">
-                                    <label>{{ __('Price') }}</label>
+                                    <label>{{ __('Price').' '.__('Ticket'). ' ' . ($i+1) }}</label>
                                     <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control" value="{{ $tourismInfoCategory->price }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." disabled>
                                 </div>
                             @endforeach
                         @else
                             <div class="form-group">
-                                <label>{{ __('Price') }}</label>
+                                <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
                                 <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control" value="{{ $tourismInfo->price }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." disabled>
                             </div>
                         @endif

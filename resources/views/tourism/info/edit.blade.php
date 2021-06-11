@@ -112,7 +112,7 @@
                             @if (count($tourismInfoCategories))
                                 @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
                                     <div class="form-group">
-                                        <label>{{ __('Price') }}</label>
+                                        <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
                                         <div class="input-group">
                                             <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control @error('tourismPrice.'.$i) is-invalid @enderror" value="{{ old('priceSeparator.'.$i, $tourismInfoCategory->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
                                             <input id="price[{{ $i }}]" type="hidden" name="tourismPrice[{{ $i }}]"  value="{{ old('tourismPrice.'.$i, $tourismInfoCategory->price) }}" class="form-control">
@@ -291,12 +291,12 @@
 
                 if ($category.childElementCount == $price.childElementCount) {
                     $category.innerHTML += '<div class="form-group" data-index="' + (lastIndex + 1) + '">' +
-                                                '<label>{{ __("Category")." ".__("Ticket"). " " }}' + (lastIndex + 2) + ' </label>' +
+                                                '<label>{{ __("Category")." ".__("Ticket"). " " }}' + (lastIndex + 2) + '</label>' +
                                                 '<input id="category[' + (lastIndex + 1) + ']" type="text" name="tourismCategories[' + (lastIndex + 1) + ']" class="form-control" placeholder="{{ __("Name").' '.__("Category") }}...." required>' +
                                                 '<input type="hidden" name="tourismCategoriesId[' + (lastIndex + 1) + ']"  value="" class="form-control">'+
                                             '</div>';
                     $price.innerHTML += '<div class="form-group">' +
-                                            '<label>{{ __("Price") }}</label>' +
+                                            '<label>{{ __("Price")." ".__("Ticket"). " " }}' + (lastIndex + 2) + '</label>' +
                                             '<div class="input-group">' +
                                                 '<input id="price-separator[' + (lastIndex + 1) + ']" name="priceSeparator[' + (lastIndex + 1) + ']" type="text" class="form-control" placeholder="Harga...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>' +
                                                 '<input id="price[' + (lastIndex + 1) + ']" type="hidden" name="tourismPrice[' + (lastIndex + 1) + ']" class="form-control">' +
