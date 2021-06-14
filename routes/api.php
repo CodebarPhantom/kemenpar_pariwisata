@@ -65,9 +65,19 @@ Route::namespace('API')->group(function () {
     Route::namespace('Report')->group(function () {
         Route::namespace('Ticket')->group(function () {
             Route::middleware('auth:sanctum')->group(function () {
-                Route::get('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name('report.ticket.daily');
-                Route::get('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name('report.ticket.monthly');
+                Route::get('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name(
+                    'report.ticket.daily'
+                );
+                Route::get('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name(
+                    'report.ticket.monthly'
+                );
             });
+        });
+    });
+
+    Route::namespace('Emergency')->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::apiResources(['/emergency' => 'EmergencyController']);
         });
     });
 });
