@@ -80,7 +80,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->url_photo = $fileUrlPhoto;
             $user->user_type = $request->type_user;
-            if ($user->roles->first()->name == 'user') {
+            if ($user->user_type == 2) {
                 $user->raw_password = $request->password;
             }
             $user->save();
