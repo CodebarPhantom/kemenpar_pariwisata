@@ -9,9 +9,21 @@ class LogoutController extends Controller
 {
     public function index(Request $request)
     {
-        return $request
-            ->user()
-            ->tokens()
-            ->delete();
+        // Revoke all tokens...
+        // return $request
+        //     ->user()
+        //     ->tokens()
+        //     ->delete();
+
+        // Revoke the user's current token...
+        return response(
+            [
+                'status' => $request
+                    ->user()
+                    ->currentAccessToken()
+                    ->delete(),
+            ],
+            200
+        );
     }
 }
