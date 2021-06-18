@@ -23,7 +23,7 @@ Route::namespace('API')->group(function () {
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/login', [LoginController::class, 'index']);
 
-            Route::middleware('auth:sanctum')->group(function () {
+            Route::middleware('auth:sanctum', 'api.user')->group(function () {
                 Route::get('/data', [LoginController::class, 'show']);
                 Route::post('/logout', [LogoutController::class, 'index']);
             });
@@ -31,7 +31,7 @@ Route::namespace('API')->group(function () {
     });
 
     Route::namespace('Ticket')->group(function () {
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware('auth:sanctum', 'api.user')->group(function () {
             Route::post('/ticket/store-bulk', [App\Http\Controllers\API\Ticket\TicketController::class, 'storeBulk']);
             Route::delete('/ticket/truncate', [App\Http\Controllers\API\Ticket\TicketController::class, 'truncate']);
             Route::post('/ticket/seed', function () {
@@ -47,7 +47,7 @@ Route::namespace('API')->group(function () {
     });
 
     Route::namespace('Test')->group(function () {
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware('auth:sanctum', 'api.user')->group(function () {
             Route::post('/test/store-bulk', [App\Http\Controllers\API\Test\TestController::class, 'storeBulk']);
             Route::delete('/test/truncate', [App\Http\Controllers\API\Test\TestController::class, 'truncate']);
             Route::post('/test/seed', function () {
@@ -64,7 +64,7 @@ Route::namespace('API')->group(function () {
 
     Route::namespace('Report')->group(function () {
         Route::namespace('Ticket')->group(function () {
-            Route::middleware('auth:sanctum')->group(function () {
+            Route::middleware('auth:sanctum', 'api.user')->group(function () {
                 Route::get('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name(
                     'report.ticket.daily'
                 );
@@ -76,7 +76,7 @@ Route::namespace('API')->group(function () {
     });
 
     Route::namespace('Emergency')->group(function () {
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware('auth:sanctum', 'api.user')->group(function () {
             Route::apiResources(['/emergency' => 'EmergencyController']);
         });
     });
