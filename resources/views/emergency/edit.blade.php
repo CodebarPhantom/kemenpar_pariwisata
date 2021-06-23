@@ -95,6 +95,12 @@
                             <textarea name="description" class="form-control" rows="3" disabled>{{ $emergencyReport->description }}</textarea>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="logoFile">{{ __('Photo') }}</label><br/>
+                            <a href="{{ $emergencyReport->url_photo }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="500px" src="{{ $emergencyReport->url_photo  }}"></a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">

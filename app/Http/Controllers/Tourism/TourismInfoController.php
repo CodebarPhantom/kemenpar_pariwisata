@@ -21,6 +21,10 @@ class TourismInfoController extends Controller
         if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
+        if (!Laratrust::hasRole('superadmin')) {
+            return redirect()->route('tourism-info.edit',auth()->user()->tourism_info_id);
+        }
+        
         return view('tourism.info.index');
     }
 

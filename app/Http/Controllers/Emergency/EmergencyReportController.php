@@ -154,6 +154,7 @@ class EmergencyReportController extends Controller
             'emergency_reports.title',
             'emergency_reports.status',
             'emergency_reports.created_at',
+            'emergency_reports.url_photo',
             'emergency_reports.description'
         )
             ->leftJoin('users as us', 'us.id', '=', 'emergency_reports.user_id')
@@ -173,6 +174,7 @@ class EmergencyReportController extends Controller
             'emergency_reports.title',
             'emergency_reports.status',
             'emergency_reports.created_at',
+            'emergency_reports.url_photo',
             'emergency_reports.description'
         )
             ->leftJoin('users as us', 'us.id', '=', 'emergency_reports.user_id')
