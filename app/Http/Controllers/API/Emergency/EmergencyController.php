@@ -21,15 +21,21 @@ class EmergencyController extends Controller
         $this->validate($request, [
             'description' => 'required',
             'title' => 'required',
+            'url_photo' => 'required'
+
         ]);
 
         DB::beginTransaction();
         try {
+            $photoPath = $request->file('url_photo')->store('public/emergency');
+            $photoUrl = url('/storage') . str_replace('public', '', $photoPath);
+
             $emergencyReport = new EmergencyReport();
             $emergencyReport->title = $request->title;
             $emergencyReport->description = $request->description;
             $emergencyReport->user_id = auth()->user()->id;
             $emergencyReport->tourism_info_id = auth()->user()->tourism_info_id;
+            $emergencyReport->url_photo = $photoUrl;
             $emergencyReport->save();
 
             DB::commit();
