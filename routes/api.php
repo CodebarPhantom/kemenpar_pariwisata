@@ -22,10 +22,10 @@ Route::namespace('API')->group(function () {
     Route::namespace('Auth')->group(function () {
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/login', [LoginController::class, 'index']);
-            Route::post('/logout', [LogoutController::class, 'index']);
 
             Route::middleware('auth:sanctum', 'api.user')->group(function () {
                 Route::get('/data', [LoginController::class, 'show']);
+                Route::post('/logout', [LogoutController::class, 'index']);
             });
         });
     });
