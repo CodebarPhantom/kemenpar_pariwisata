@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes(['register' => false]);
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'hasRole.user'])->group(function () {
     Route::namespace('Dashboard')->group(function () {
         Route::redirect('/', url('/dashboard'));
         Route::redirect('/home', url('/dashboard'));
