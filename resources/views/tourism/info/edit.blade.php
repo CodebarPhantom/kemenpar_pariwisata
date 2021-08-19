@@ -18,226 +18,353 @@
 @stop
 
 @section('content')
-<div class="row">
-    <form role="form" id="form_1" action="{{ route('tourism-info.update',$tourismInfo->id) }}" method="POST" class="col-md-12" enctype="multipart/form-data">
+<div class="container-fluid">
+    <form role="form" id="form_1" action="{{ route('tourism-info.update',$tourismInfo->id) }}" method="POST" class="" enctype="multipart/form-data">
         @method('PUT')
         @csrf
-        <div class="">
-            <div class="card card-info card-outline">
-                <div class="card-header">
-                    <div class="d-flex">
-                        <div class="mr-auto">
-                            <h3 class="card-title mt-1">
-                                <i class="fa fa-store-alt"></i>
-                                    &nbsp; {{ __('Edit').' '.__('Tourism') }}
-                            </h3>
-                        </div>
-                        <div class="mr-1">
-                            <a href="{{ route('tourism-info.index') }}" class="btn btn-secondary btn-flat btn-sm">
-                                <i class="fa fa-arrow-left"></i>
-                                &nbsp;&nbsp;{{ __('Back') }}
-                            </a>
-                        </div>
-                        <div class="">
-                            <button id="submit_tourism" type="submit" class="btn btn-info btn-flat btn-sm">
-                                <i class="fa fa-check"></i>
-                                &nbsp;&nbsp;{{ __('Save') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if ($errors->all())
-                    <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
-                        <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                    <div class="row">
-                        <div class="col-sm-12 text-right">
-                            <button id="add-category" class="btn btn-success btn-flat btn-sm ">
-                                <i class="fa fa-plus"></i>
-                                {{ __('Add').' '.__('Category') }}
-                            </button>
-                            {{-- <button id="remove-category" class="btn btn-danger btn-flat btn-sm ">
-                                <i class="fa fa-minus"></i>
-                                {{ __('Remove').' '.__('Category') }}
-                            </button> --}}
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label> {{ __('Code')}} </label>
-                                <input type="text" name="tourismCode" class="form-control @error('tourismCode') is-invalid @enderror" minlength="5" maxlength="5" value="{{ old('tourismCode', $tourismInfo->code) }}" placeholder="{{ __('Code').' '.__('Tourism') }}...."  required>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <div class="d-flex">
+                            <div class="mr-auto">
+                                <h3 class="card-title mt-1">
+                                    <i class="fa fa-store-alt"></i>
+                                        &nbsp; {{ __('Edit').' '.__('Tourism') }}
+                                </h3>
+                            </div>
+                            <div class="mr-1">
+                                <a href="{{ route('tourism-info.index') }}" class="btn btn-secondary btn-flat btn-sm">
+                                    <i class="fa fa-arrow-left"></i>
+                                    &nbsp;&nbsp;{{ __('Back') }}
+                                </a>
+                            </div>
+                            <div class="">
+                                <button id="submit_tourism" type="submit" class="btn btn-info btn-flat btn-sm">
+                                    <i class="fa fa-check"></i>
+                                    &nbsp;&nbsp;{{ __('Save') }}
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('Name').' '.__('Tourism') }} </label>
-                                <input type="text" name="tourismName" class="form-control @error('tourismName') is-invalid @enderror" placeholder="{{ __('Name').' '.__('Tourism') }}...." value="{{ old('tourismName', $tourismInfo->name) }}"  required>
-                            </div>
+                    <div class="card-body">
+                        @if ($errors->all())
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                            <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                            </ul>
                         </div>
-                        {{-- <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Price') }}</label>
-                                <input id="price-separator" type="text" class="form-control" value="{{ old('tourismPrice', number_format($tourismInfo->price) ) }}" placeholder="Price....">
-                                <input id="price" type="hidden" name="tourismPrice" value="{{ old('tourismPrice', $tourismInfo->price ) }}" class="form-control">
-
+                        @endif
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                <button id="add-category" class="btn btn-success btn-flat btn-sm ">
+                                    <i class="fa fa-plus"></i>
+                                    {{ __('Add').' '.__('Category') }}
+                                </button>
+                                {{-- <button id="remove-category" class="btn btn-danger btn-flat btn-sm ">
+                                    <i class="fa fa-minus"></i>
+                                    {{ __('Remove').' '.__('Category') }}
+                                </button> --}}
                             </div>
-                        </div> --}}
-                        <div class="col-sm-3" id="category">
-                            @if (count($tourismInfoCategories))
-                                @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
-                                <div class="form-group" data-index="{{ $i }}">
-                                    <label>{{ __('Category').' '.__('Ticket'). ' ' . ($i+1) }}</label>
-                                    <input id="category[{{ $i }}]" type="text" name="tourismCategories[{{ $i }}]" class="form-control @error('tourismCategories.'.$i) is-invalid @enderror" value="{{ old('tourismCategories.'.$i, $tourismInfoCategory->name) }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
-                                    <input type="hidden" name="tourismCategoriesId[{{ $i }}]"  value="{{ $tourismInfoCategory->id }}" class="form-control">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label> {{ __('Code')}} </label>
+                                    <input type="text" name="tourismCode" class="form-control @error('tourismCode') is-invalid @enderror" minlength="5" maxlength="5" value="{{ old('tourismCode', $tourismInfo->code) }}" placeholder="{{ __('Code').' '.__('Tourism') }}...."  required>
                                 </div>
-                                @endforeach
-                            @else
-                                <div class="form-group" data-index="{{ 0 }}">
-                                    <label>{{ __('Category').' '.__('Ticket'). ' ' . (1) }}</label>
-                                    <input id="category[{{ 0 }}]" type="text" name="tourismCategories[{{ 0 }}]" class="form-control @error('tourismCategories.'.$i) is-invalid @enderror" value="{{ old('tourismCategories.0', 'Umum' ) }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
-                                    <input type="hidden" name="tourismCategoriesId[{{ 0 }}]"  value="" class="form-control">
-                                </div>
-                            @endif
+                            </div>
                         </div>
-                        <div class="col-sm-3" id="price">
-                            @if (count($tourismInfoCategories))
-                                @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label> {{ __('Name').' '.__('Tourism') }} </label>
+                                    <input type="text" name="tourismName" class="form-control @error('tourismName') is-invalid @enderror" placeholder="{{ __('Name').' '.__('Tourism') }}...." value="{{ old('tourismName', $tourismInfo->name) }}"  required>
+                                </div>
+                            </div>
+                            {{-- <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ __('Price') }}</label>
+                                    <input id="price-separator" type="text" class="form-control" value="{{ old('tourismPrice', number_format($tourismInfo->price) ) }}" placeholder="Price....">
+                                    <input id="price" type="hidden" name="tourismPrice" value="{{ old('tourismPrice', $tourismInfo->price ) }}" class="form-control">
+    
+                                </div>
+                            </div> --}}
+                            <div class="col-sm-3" id="category">
+                                @if (count($tourismInfoCategories))
+                                    @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
+                                    <div class="form-group" data-index="{{ $i }}">
+                                        <label>{{ __('Category').' '.__('Ticket'). ' ' . ($i+1) }}</label>
+                                        <input id="category[{{ $i }}]" type="text" name="tourismCategories[{{ $i }}]" class="form-control @error('tourismCategories.'.$i) is-invalid @enderror" value="{{ old('tourismCategories.'.$i, $tourismInfoCategory->name) }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
+                                        <input type="hidden" name="tourismCategoriesId[{{ $i }}]"  value="{{ $tourismInfoCategory->id }}" class="form-control">
+                                    </div>
+                                    @endforeach
+                                @else
+                                    <div class="form-group" data-index="{{ 0 }}">
+                                        <label>{{ __('Category').' '.__('Ticket'). ' ' . (1) }}</label>
+                                        <input id="category[{{ 0 }}]" type="text" name="tourismCategories[{{ 0 }}]" class="form-control @error('tourismCategories.0') is-invalid @enderror" value="{{ old('tourismCategories.0', 'Umum' ) }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
+                                        <input type="hidden" name="tourismCategoriesId[{{ 0 }}]"  value="" class="form-control">
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="col-sm-3" id="price">
+                                @if (count($tourismInfoCategories))
+                                    @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
+                                        <div class="form-group">
+                                            <label>{{ __('Price').' '.__('Ticket'). ' ' . ($i+1) }}</label>
+                                            <div class="input-group">
+                                                <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control @error('tourismPrice.'.$i) is-invalid @enderror" value="{{ old('priceSeparator.'.$i, $tourismInfoCategory->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
+                                                <input id="price[{{ $i }}]" type="hidden" name="tourismPrice[{{ $i }}]"  value="{{ old('tourismPrice.'.$i, $tourismInfoCategory->price) }}" class="form-control">
+                                                <span class="input-group-append">
+                                                    <button type="button" onClick="removeCategory({{ $i }})" class="btn btn-danger btn-flat">
+                                                        {{ __('Remove') }}
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
                                     <div class="form-group">
-                                        <label>{{ __('Price').' '.__('Ticket'). ' ' . ($i+1) }}</label>
+                                        <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
                                         <div class="input-group">
-                                            <input id="price-separator[{{ $i }}]" name="priceSeparator[{{ $i }}]" type="text" class="form-control @error('tourismPrice.'.$i) is-invalid @enderror" value="{{ old('priceSeparator.'.$i, $tourismInfoCategory->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
-                                            <input id="price[{{ $i }}]" type="hidden" name="tourismPrice[{{ $i }}]"  value="{{ old('tourismPrice.'.$i, $tourismInfoCategory->price) }}" class="form-control">
+                                            <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0', $tourismInfo->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
+                                            <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0', $tourismInfo->price) }}" class="form-control">
                                             <span class="input-group-append">
-                                                <button type="button" onClick="removeCategory({{ $i }})" class="btn btn-danger btn-flat">
+                                                <button type="button" onClick="removeCategory({{ 0 }})"  class="btn btn-danger btn-flat">
                                                     {{ __('Remove') }}
                                                 </button>
                                             </span>
                                         </div>
                                     </div>
-                                @endforeach
-                            @else
-                                <div class="form-group">
-                                    <label>{{ __('Price').' '.__('Ticket'). ' ' . (1) }}</label>
-                                    <div class="input-group">
-                                        <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0', $tourismInfo->price) }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
-                                        <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0', $tourismInfo->price) }}" class="form-control">
-                                        <span class="input-group-append">
-                                            <button type="button" onClick="removeCategory({{ 0 }})"  class="btn btn-danger btn-flat">
-                                                {{ __('Remove') }}
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Insurance') }}</label>
-                                <input type="text" class="form-control @error('tourismInsurance') is-invalid @enderror" name="tourismInsurance" value="{{ old('tourismInsurance', $tourismInfo->insurance) }}" placeholder="{{ __('Name').' '.__('Insurance') }}....">
-                                <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('Manage').' '.__('By') }} </label>
-                                <input type="text" name="tourismManageBy" class="form-control @error('tourismManageBy') is-invalid @enderror" value="{{ old('tourismManageBy', $tourismInfo->manage_by) }}" placeholder="{{ __('Name').' Pengelola' }}...."  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Address') }}</label>
-                                <textarea class="form-control @error('tourismAddress') is-invalid @enderror" name="tourismAddress" rows="3" placeholder="Address ...">{{ old('tourismAddress', $tourismInfo->address) }}</textarea>
-                              </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Perda') }}</label>
-                                <textarea class="form-control @error('tourismNote1') is-invalid @enderror" name="tourismNote1" rows="3" placeholder="Perda ...">{{ old('tourismNote1', $tourismInfo->note1) }}</textarea>
-                                <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
-
-                              </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="logoFile">Logo Pariwisata</label><br/>
-                                <a href="{{ old('tourismLogo', $tourismInfo->url_logo ) }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ old('tourismLogo', $tourismInfo->url_logo) }}"></a>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('tourismLogo') is-invalid @enderror" name="tourismLogo" accept="image/*" id="logoFile">
-                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="logoFile">Logo Bumdes</label><br/>
-                                @if (old('tourismLogoBumdes', $tourismInfo->logo_bumdes) != NULL)
-                                    <a href="{{ old('tourismLogoBumdes', $tourismInfo->logo_bumdes) }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ old('tourismLogoBumdes', $tourismInfo->logo_bumdes) }}"></a>
                                 @endif
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('tourismLogoBumdes') is-invalid @enderror" name="tourismLogoBumdes" accept="image/*" id="logoFile">
-                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
+                            </div>
+                        </div>
+                        <div class="row">                        
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label> {{ __('Manage').' '.__('By') }} </label>
+                                    <input type="text" name="tourismManageBy" class="form-control @error('tourismManageBy') is-invalid @enderror" value="{{ old('tourismManageBy', $tourismInfo->manage_by) }}" placeholder="{{ __('Name').' Pengelola' }}...."  required>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Insurance') }}</label>
+                                    <input type="text" class="form-control @error('tourismInsurance') is-invalid @enderror" name="tourismInsurance" value="{{ old('tourismInsurance', $tourismInfo->insurance) }}" placeholder="{{ __('Name').' '.__('Insurance') }}....">
+                                    <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Perda') }}</label>
+                                    <input class="form-control @error('tourismNote1') is-invalid @enderror" name="tourismNote1" value="{{ old('tourismNote1', $tourismInfo->note1) }}" placeholder="Perda ...">
+                                    <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
+    
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Phone') }}</label>
+                                    <input type="text" class="form-control @error('tourismPhone') is-invalid @enderror" value="{{ old('tourismPhone', $tourismInfo->phone) }}" name="tourismPhone"  placeholder="{{ __('Phone').' '.__('Pariwisata') }}....">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label> {{ __('Facebook') }} </label>
+                                    <input type="text" name="tourismFacebook" class="form-control @error('tourismFacebook') is-invalid @enderror" value="{{ old('tourismFacebook', $tourismInfo->facebook) }}" placeholder="{{ __('Facebook') }}...." >
+                                    <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>                                
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Instagram') }}</label>
+                                    <input class="form-control @error('tourismInstagram') is-invalid @enderror" name="tourismInstagram" value="{{ old('tourismInstagram', $tourismInfo->instagram) }}" placeholder="Instagram...." />
+                                    <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
+    
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ __('Alamat') }}</label>
+                                    <textarea class="form-control @error('tourismAddress') is-invalid @enderror" name="tourismAddress" rows="3" placeholder="Address ...">{{ old('tourismAddress', $tourismInfo->address) }}</textarea>
+                                  </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ __('Gambaran Singkat Pariwisata') }}</label>
+                                    <textarea class="form-control @error('tourismOverview') is-invalid @enderror" name="tourismOverview" rows="3" placeholder="Gambaran Singkat Pariwisata ..."> {{ old('tourismOverview',$tourismInfo->overview) }}</textarea>
+                                  </div>
+                            </div>                             
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="logoFile">Gambar Cover</label><br/>
+                                    @if (old('tourismCoverImage', $tourismInfo->url_cover_image) != NULL)
+                                        <a href="{{ old('tourismCoverImage', $tourismInfo->url_cover_image ) }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ old('tourismCoverImage', $tourismInfo->url_cover_image) }}"></a>
+                                    @endif
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismCoverImage') is-invalid @enderror" name="tourismCoverImage" accept="image/*" id="logoFile">
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">                            
+                                <div class="form-group">
+                                    <label for="logoFile">Logo Pariwisata</label><br/>
+                                    <a href="{{ old('tourismLogo', $tourismInfo->url_logo ) }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ old('tourismLogo', $tourismInfo->url_logo) }}"></a>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismLogo') is-invalid @enderror" name="tourismLogo" accept="image/*" id="logoFile">
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="logoFile">Logo Bumdes</label><br/>
+                                    @if (old('tourismLogoBumdes', $tourismInfo->logo_bumdes) != NULL)
+                                        <a href="{{ old('tourismLogoBumdes', $tourismInfo->logo_bumdes) }}" target="_blank"><img alt="Avatar" class="table-avatar align-middle rounded" width="100px" height="100px" src="{{ old('tourismLogoBumdes', $tourismInfo->logo_bumdes) }}"></a>
+                                    @endif
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismLogoBumdes') is-invalid @enderror" name="tourismLogoBumdes" accept="image/*" id="logoFile">
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>{{ __('Status') }}</label>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input @error('is_active') is-invalid @enderror" type="radio" @if (old('is_active', $tourismInfo->is_active) == 1) checked @endif name="is_active" value="1">
+                                        <label class="form-check-label">{{ __('Active') }}</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input @error('is_active') is-invalid @enderror" type="radio" @if (old('is_active', $tourismInfo->is_active) == 0) checked @endif name="is_active" value="0">
+                                        <label class="form-check-label">{{ __('Inactive') }}</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label>{{ __('Status') }}</label>
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input @error('is_active') is-invalid @enderror" type="radio" @if (old('is_active', $tourismInfo->is_active) == 1) checked @endif name="is_active" value="1">
-                                    <label class="form-check-label">{{ __('Active') }}</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input @error('is_active') is-invalid @enderror" type="radio" @if (old('is_active', $tourismInfo->is_active) == 0) checked @endif name="is_active" value="0">
-                                    <label class="form-check-label">{{ __('Inactive') }}</label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label for="searchAddress" class="control-label">Lokasi</label>
-                            <div class="input-group">
-                                <input id="searchAddress" type="text" class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
-                                <span class="input-group-btn">
-                                    <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <div id="map" style="width:100%;height:380px;"></div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Koordinat Lokasi</label>
-                            <input id="position" type="text" class="form-control @error('tourismPosition') is-invalid @enderror" name="tourismPosition" value="{{ old('tourismPosition',$tourismInfo->latitude.','.$tourismInfo->longitude) }}" readonly>
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Jam Operasional</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    @php
+                        $operationalTourism = json_decode($tourismInfo->opening_hour);
+                    @endphp
+                    <div class="card-body">
+                        <div class="col-lg-12" style="float:none;margin:auto;">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Senin</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[0]" class="form-control" value="{{ old('day[0]',$operationalTourism[0]->day) }}">
+                                    <input type="text" name="opening_hour[0]" class="form-control" value="{{ old('opening_hour[0]',$operationalTourism[0]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Selasa</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[1]" class="form-control" value="{{ old('day[1]',$operationalTourism[1]->day) }}">
+                                    <input type="text" name="opening_hour[1]" class="form-control" value="{{ old('opening_hour[1]',$operationalTourism[1]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Rabu</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[2]" class="form-control" value="{{ old('day[2]',$operationalTourism[2]->day) }}">
+                                    <input type="text" name="opening_hour[2]" class="form-control" value="{{ old('opening_hour[2]',$operationalTourism[2]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Kamis</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[3]" class="form-control" value="{{ old('day[3]',$operationalTourism[3]->day) }}">
+                                    <input type="text" name="opening_hour[3]" class="form-control" value="{{ old('opening_hour[3]',$operationalTourism[3]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Jumat</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[4]" class="form-control" value="{{ old('day[4]',$operationalTourism[4]->day) }}">
+                                    <input type="text" name="opening_hour[4]" class="form-control" value="{{ old('opening_hour[4]',$operationalTourism[4]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Sabtu</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[5]" class="form-control" value="{{ old('day[5]',$operationalTourism[5]->day) }}">
+                                    <input type="text" name="opening_hour[5]" class="form-control" value="{{ old('opening_hour[5]',$operationalTourism[5]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+    
+                            <div class="form-group row">
+                                <label for="" class="col-sm-3 col-form-label">Minggu</label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" name="day[6]" class="form-control" value="{{ old('day[6]',$operationalTourism[6]->day) }}">
+                                    <input type="text" name="opening_hour[6]" class="form-control" value="{{ old('opening_hour[6]',$operationalTourism[6]->opening_hour) }}" required placeholder="10.00 - 23.50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"> Lokasi</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="searchAddress" class="control-label">Lokasi</label>
+                                <div class="input-group">
+                                    <input id="searchAddress" type="text" class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
+                                    <span class="input-group-btn">
+                                        <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
+                                    </span>
+                                </div>
+                            </div>
+    
+                            <div class="form-group col-md-12">
+                                <div id="map" style="width:100%;height:380px;"></div>
+                            </div>
+    
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Koordinat Lokasi</label>
+                                <input id="position" type="text" class="form-control @error('tourismPosition') is-invalid @enderror" name="tourismPosition" value="{{ old('tourismPosition',$tourismInfo->latitude.','.$tourismInfo->longitude) }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>  
         </div>
+        
     </form>
 </div>
 

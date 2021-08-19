@@ -18,173 +18,297 @@
 @stop
 
 @section('content')
-<div class="row">
-    <form role="form" id="form_1" action="{{ route('tourism-info.store') }}" method="POST" class="col-md-12" enctype="multipart/form-data">
+<div class="container-fluid">
+    <form role="form" id="form_1" action="{{ route('tourism-info.store') }}" method="POST" class="" enctype="multipart/form-data">
         @csrf
-        <div class="">
-            <div class="card card-info card-outline">
-                <div class="card-header">
-                    <div class="d-flex">
-                        <div class="mr-auto">
-                            <h3 class="card-title mt-1">
-                                <i class="fa fa-store-alt"></i>
-                                    &nbsp; {{ __('Create').' '.__('Tourism') }}
-                            </h3>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <div class="d-flex">
+                            <div class="mr-auto">
+                                <h3 class="card-title mt-1">
+                                    <i class="fa fa-store-alt"></i>
+                                        &nbsp; {{ __('Create').' '.__('Tourism') }}
+                                </h3>
+                            </div>
+                            <div class="mr-1">
+                                <a href="{{ route('tourism-info.index') }}" class="btn btn-secondary btn-flat btn-sm">
+                                    <i class="fa fa-arrow-left"></i>
+                                    &nbsp;&nbsp;{{ __('Back') }}
+                                </a>
+                            </div>
+                            <div class="">
+                                <button id="submit_tourism" type="submit" class="btn btn-info btn-flat btn-sm">
+                                    <i class="fa fa-check"></i>
+                                    &nbsp;&nbsp;{{ __('Save') }}
+                                </button>
+                            </div>
                         </div>
-                        <div class="mr-1">
-                            <a href="{{ route('tourism-info.index') }}" class="btn btn-secondary btn-flat btn-sm">
-                                <i class="fa fa-arrow-left"></i>
-                                &nbsp;&nbsp;{{ __('Back') }}
-                            </a>
+                    </div>
+                    <div class="card-body">
+                        @if ($errors->all())
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                            <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                            </ul>
                         </div>
-                        <div class="">
-                            <button id="submit_tourism" type="submit" class="btn btn-info btn-flat btn-sm">
-                                <i class="fa fa-check"></i>
-                                &nbsp;&nbsp;{{ __('Save') }}
-                            </button>
+                        @endif
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                <button id="add-category" class="btn btn-success btn-flat btn-sm ">
+                                    <i class="fa fa-plus"></i>
+                                    {{ __('Add').' '.__('Category') }}
+                                </button>
+                                {{-- <button id="remove-category" class="btn btn-danger btn-flat btn-sm ">
+                                    <i class="fa fa-minus"></i>
+                                    {{ __('Remove').' '.__('Category') }}
+                                </button> --}}
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label> {{ __('Name').' '.__('Tourism') }} </label>
+                                    <input type="text" name="tourismName" class="form-control @error('tourismName') is-invalid @enderror" value="{{ old('tourismName') }}" placeholder="{{ __('Name').' '.__('Tourism') }}....">
+                                </div>
+                            </div>
+                            <div class="col-sm-3" id="category">
+                                <div class="form-group" data-index="0">
+                                    <label>{{ __('Category').' '.__('Ticket'). ' ' . '1' }}</label>
+                                    <input id="category[0]" type="text" name="tourismCategories[0]" class="form-control @error('tourismCategories') is-invalid @enderror" value="{{ old('tourismCategories.0') }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" id="price">
+                                <div class="form-group">
+                                    <label>{{ __('Price').' '.__('Ticket'). ' ' . '1' }}</label>
+                                    <div class="input-group">
+                                        <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0') }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
+                                        <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0') }}" class="form-control">
+                                        <span class="input-group-append">
+                                            <button type="button" onClick="removeCategory({{ 0 }})"  class="btn btn-danger btn-flat">
+                                                {{ __('Remove') }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label> {{ __('Code')}} </label>
+                                    <input type="text" name="tourismCode" class="form-control @error('tourismCode') is-invalid @enderror" minlength="5" maxlength="5" value="{{ old('tourismCode') }}" placeholder="{{ __('Code').' '.__('Tourism') }}...." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="logoFile">Gambar Cover</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismCoverImage') is-invalid @enderror" name="tourismCoverImage" value="{{ old('tourismCoverImage') }}" accept="image/*" id="logoFile" required>
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Gambar Cover</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="logoFile">Logo Pariwisata</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismLogo') is-invalid @enderror" name="tourismLogo" value="{{ old('tourismLogo') }}" accept="image/*" id="logoFile" required>
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Pariwisata</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="logoFile">Logo Bumdes</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('tourismLogoBumdes') is-invalid @enderror" name="tourismLogoBumdes" value="{{ old('tourismLogoBumdes') }}" accept="image/*" id="logoFile">
+                                            <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
+                                        </div>
+                                    </div>
+                                    <span class="form-text text-muted">Jika tidak ada maka dikosongkan saja.</span>
+        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label> {{ __('Manage').' '.__('By') }} </label>
+                                    <input type="text" name="tourismManageBy" value="{{ old('tourismManageBy') }}" class="form-control @error('tourismManageBy') is-invalid @enderror" placeholder="{{ __('Name').' '.__('Pengelola') }}...."  required>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Insurance') }}</label>
+                                    <input type="text" class="form-control @error('tourismInsurance') is-invalid @enderror" name="tourismInsurance" value="{{ old('tourismInsurance') }}" placeholder="{{ __('Name').' '.__('Insurance') }}....">
+                                    <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Perda') }}</label>
+                                    <input class="form-control @error('tourismNote1') is-invalid @enderror" name="tourismNote1" value="{{ old('tourismNote1') }}" placeholder="Perda ..." />
+                                    <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
+        
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Phone') }}</label>
+                                    <input type="text" class="form-control @error('tourismPhone') is-invalid @enderror" name="tourismPhone" value="{{ old('tourismPhone') }}" placeholder="{{ __('Phone').' '.__('Pariwisata') }}....">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label> {{ __('Facebook') }} </label>
+                                    <input type="text" name="tourismFacebook" value="{{ old('tourismFacebook') }}" class="form-control @error('tourismFacebook') is-invalid @enderror" placeholder="{{ __('Facebook') }}...." >
+                                    <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>                                
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>{{ __('Instagram') }}</label>
+                                    <input class="form-control @error('tourismInstagram') is-invalid @enderror" name="tourismInstagram" value="{{ old('tourismInstagram') }}" placeholder="Instagram...." />
+                                    <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
+        
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ __('Alamat') }}</label>
+                                    <textarea class="form-control @error('tourismAddress') is-invalid @enderror" name="tourismAddress" rows="3" value="{{ old('tourismAddress') }}" placeholder="Alamat ..."></textarea>
+                                    </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ __('Gambaran Singkat Pariwisata') }}</label>
+                                    <textarea class="form-control @error('tourismOverview') is-invalid @enderror" name="tourismOverview" rows="3" value="{{ old('tourismOverview') }}" placeholder="Gambaran Singkat Pariwisata ..."></textarea>
+                                    </div>
+                            </div>                        
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    @if ($errors->all())
-                    <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h5><i class="icon fas fa-ban"></i> Alert!</h5>
-                        <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                        </ul>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Jam Operasional</h3>
                     </div>
-                    @endif
-                    <div class="row">
-                        <div class="col-sm-12 text-right">
-                            <button id="add-category" class="btn btn-success btn-flat btn-sm ">
-                                <i class="fa fa-plus"></i>
-                                {{ __('Add').' '.__('Category') }}
-                            </button>
-                            {{-- <button id="remove-category" class="btn btn-danger btn-flat btn-sm ">
-                                <i class="fa fa-minus"></i>
-                                {{ __('Remove').' '.__('Category') }}
-                            </button> --}}
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('Name').' '.__('Tourism') }} </label>
-                                <input type="text" name="tourismName" class="form-control @error('tourismName') is-invalid @enderror" value="{{ old('tourismName') }}" placeholder="{{ __('Name').' '.__('Tourism') }}....">
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                            <div class="col-lg-12" style="float:none;margin:auto;">
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Senin</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[0]" class="form-control" value="Senin">
+                                        <input type="text" name="opening_hour[0]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Selasa</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[1]" class="form-control" value="Selasa">
+                                        <input type="text" name="opening_hour[1]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Rabu</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[2]" class="form-control" value="Rabu">
+                                        <input type="text" name="opening_hour[2]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Kamis</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[3]" class="form-control" value="Kamis">
+                                        <input type="text" name="opening_hour[3]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Jumat</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[4]" class="form-control" value="Jumat">
+                                        <input type="text" name="opening_hour[4]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Sabtu</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[5]" class="form-control" value="Sabtu">
+                                        <input type="text" name="opening_hour[5]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-3 col-form-label">Minggu</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="day[6]" class="form-control" value="Minggu">
+                                        <input type="text" name="opening_hour[6]" class="form-control" value="10.00 - 23.50" required placeholder="10.00 - 23.50">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3" id="category">
-                            <div class="form-group" data-index="0">
-                                <label>{{ __('Category').' '.__('Ticket'). ' ' . '1' }}</label>
-                                <input id="category[0]" type="text" name="tourismCategories[0]" class="form-control @error('tourismCategories') is-invalid @enderror" value="{{ old('tourismCategories.0') }}" placeholder="{{ __('Name').' '.__('Category') }}...." required>
-                            </div>
-                        </div>
-                        <div class="col-sm-3" id="price">
-                            <div class="form-group">
-                                <label>{{ __('Price').' '.__('Ticket'). ' ' . '1' }}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"> Lokasi</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="searchAddress" class="control-label">Lokasi</label>
                                 <div class="input-group">
-                                    <input id="price-separator[{{ 0 }}]" name="priceSeparator[{{ 0 }}]" type="text" class="form-control @error('tourismPrice.0') is-invalid @enderror" value="{{ old('priceSeparator.0') }}" placeholder="{{ __('Price') }}...." data-a-sign="Rp. " data-a-dec="," data-a-sep="." required>
-                                    <input id="price[{{ 0 }}]" type="hidden" name="tourismPrice[{{ 0 }}]"  value="{{ old('tourismPrice.0') }}" class="form-control">
-                                    <span class="input-group-append">
-                                        <button type="button" onClick="removeCategory({{ 0 }})"  class="btn btn-danger btn-flat">
-                                            {{ __('Remove') }}
-                                        </button>
+                                    <input id="searchAddress" type="text" required class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
+                                    <span class="input-group-btn">
+                                        <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('Code')}} </label>
-                                <input type="text" name="tourismCode" class="form-control @error('tourismCode') is-invalid @enderror" minlength="5" maxlength="5" value="{{ old('tourismCode') }}" placeholder="{{ __('Code').' '.__('Tourism') }}...." required>
+        
+                            <div class="form-group col-md-12">
+                                <div id="map" style="width:100%;height:380px;"></div>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="logoFile">Logo Pariwisata</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('tourismLogo') is-invalid @enderror" name="tourismLogo" value="{{ old('tourismLogo') }}" accept="image/*" id="logoFile" required>
-                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Pariwisata</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label for="logoFile">Logo Bumdes</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('tourismLogoBumdes') is-invalid @enderror" name="tourismLogoBumdes" value="{{ old('tourismLogoBumdes') }}" accept="image/*" id="logoFile">
-                                        <label class="custom-file-label" for="logoFile">{{ __('Choose') }} Logo Bumdes</label>
-                                    </div>
-                                </div>
-                                <span class="form-text text-muted">Jika tidak ada Logo Bumdes maka dikosongkan saja kolom ini.</span>
-
+        
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Koordinat Lokasi</label>
+                                <input id="position" type="text" class="form-control @error('tourismPosition') is-invalid @enderror" name="tourismPosition" value="{{ old('tourismPosition') }}" readonly>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Insurance') }}</label>
-                                <input type="text" class="form-control @error('tourismInsurance') is-invalid @enderror" name="tourismInsurance" value="{{ old('tourismInsurance') }}" placeholder="{{ __('Name').' '.__('Insurance') }}....">
-                                <span class="form-text text-muted">Jika tidak ada Asuransi maka dikosongkan saja kolom ini.</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('Manage').' '.__('By') }} </label>
-                                <input type="text" name="tourismManageBy" value="{{ old('tourismManageBy') }}" class="form-control @error('tourismManageBy') is-invalid @enderror" placeholder="{{ __('Name').' '.__('Manage') }}...."  required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Address') }}</label>
-                                <textarea class="form-control @error('tourismAddress') is-invalid @enderror" name="tourismAddress" rows="3" value="{{ old('tourismAddress') }}" placeholder="Address ..."></textarea>
-                              </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ __('Perda') }}</label>
-                                <textarea class="form-control @error('tourismNote1') is-invalid @enderror" name="tourismNote1" rows="3" value="{{ old('tourismNote1') }}" placeholder="Perda ..."></textarea>
-                                <span class="form-text text-muted">Jika belum ada maka dikosongkan saja kolom ini.</span>
-
-                              </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label for="searchAddress" class="control-label">Lokasi</label>
-                            <div class="input-group">
-                                <input id="searchAddress" type="text" required class="form-control" placeholder="Masukkan koordinat (latitude, longitude) / alamat lengkap / nama tempat / nama jalan / kelurahan / kecamatan / kode pos / kota / kabupaten">
-                                <span class="input-group-btn">
-                                    <button id="geocode" class="btn btn-info btn-flat" type="button">Cari</button>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <div id="map" style="width:100%;height:380px;"></div>
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Koordinat Lokasi</label>
-                            <input id="position" type="text" class="form-control @error('tourismPosition') is-invalid @enderror" name="tourismPosition" value="{{ old('tourismPosition') }}" readonly>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+                </div>   
+            </div>            
         </div>
     </form>
+
+    
 </div>
+
 
 @stop
 
