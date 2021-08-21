@@ -23,7 +23,7 @@ class AddOverviewContactTourismInfo extends Migration
             $table->string('instagram',100)->nullable()->after('facebook');
             $table->string('url_cover_image')->after('url_logo');
             $table->string('opening_hour',750)->after('code');
-            $table->string('slug',50)->after('name')->unique();
+            $table->string('slug',50)->after('name');
         });
 
         $openingHour = [
@@ -39,7 +39,7 @@ class AddOverviewContactTourismInfo extends Migration
         $tourismInfos = TourismInfo::get();
         foreach ($tourismInfos as $tourismInfo) {
             $tourismInfo->slug = Str::slug($tourismInfo->name,'-');
-            $tourismInfo->overview = "Dummy Overview";
+            $tourismInfo->overview = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed egestas elit id purus ultricies, nec iaculis diam convallis. Vestibulum gravida, ipsum sed malesuada dictum, erat odio luctus libero, ac imperdiet mauris lorem eu tortor. Aenean aliquet, ipsum id tempus euismod, nulla enim fermentum tortor, eget malesuada urna nisi a mauris. Donec sit amet porttitor velit, eget sollicitudin ipsum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut accumsan, lacus nec elementum euismod, erat tortor dapibus neque, a laoreet dui ligula ac risus. Donec sagittis tempus dolor, eu posuere diam dapibus vel. Praesent efficitur mattis odio sit amet convallis. Morbi mollis arcu sit amet lectus dapibus, in ultrices ligula blandit.";
             $tourismInfo->phone = '-';
             $tourismInfo->opening_hour = json_encode($openingHour);
             $tourismInfo->save();
