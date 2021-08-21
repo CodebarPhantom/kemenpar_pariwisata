@@ -25,7 +25,11 @@ class TourismInfoController extends Controller
 
     public function show($slug)
     {
-        $detailTourism = TourismInfo::where('slug',$slug)->first();
+        $detailTourism = TourismInfo::with([
+            'categories'=> function ($query) {
+                $query->limit(2);
+            }
+        ])->where('slug',$slug)->first();
 
         return response()->json($detailTourism, 200);
 
