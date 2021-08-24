@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\API\Auth\LoginController;
 use App\Http\Controllers\API\Auth\LogoutController;
 use App\Http\Controllers\API\Report\Ticket\ReportTicketController;
+use App\Http\Controllers\API\Tourism\TourismInfoController;
+
 // use App\Http\Controllers\API\Ticket\TicketController;
 
 /*
@@ -84,7 +86,7 @@ Route::namespace('API')->group(function () {
     // to ulinyu.id nanti aja pengamannya gan
     Route::namespace('Tourism')->group(function () {
         Route::group([],function () {
-            
+            Route::post('/tourism-info/category-info',[TourismInfoController::class,'categoryInfo']);
             Route::apiResources(['/tourism-info'=>'TourismInfoController']);
         });
     });

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use DataTables, Laratrust;
+use Illuminate\Support\Facades\Log;
+use SebastianBergmann\Environment\Console;
 
 class TourismInfoController extends Controller
 {
@@ -33,5 +35,24 @@ class TourismInfoController extends Controller
 
         return response()->json($detailTourism, 200);
 
+    }
+
+    public function categoryInfo(Request $request){
+       
+        $categoryIds = json_decode($request->tourism_info_category_id);
+
+        Log::debug($categoryIds);
+
+        foreach ($categoryIds as $categoryId) {
+           $tourismInfoCategory = TourismInfoCategories::findOrFail($categoryId);
+            $detailCategory[] =  [
+                'id'=> $tourismInfoCategory->id,
+                'tourism_info_id'=>$tourismInfoCategory->tourism_info_id,
+                'price'=>$tourismInfoCategory->price,
+                'name'=>$tourismInfoCategory->name
+                ];
+        }
+           
+       return response()->json(($detailCategory), 200);
     }
 }
