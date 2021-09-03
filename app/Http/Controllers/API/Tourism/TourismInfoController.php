@@ -20,7 +20,7 @@ class TourismInfoController extends Controller
 {
     public function index()
     {
-        $tourismInfos = TourismInfo::orderBy('name', 'ASC')->get();
+        $tourismInfos = TourismInfo::select('name','slug','url_cover_image')->orderBy('name', 'ASC')->get();
 
         return response()->json($tourismInfos, 200);
     }
