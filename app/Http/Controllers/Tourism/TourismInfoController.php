@@ -134,6 +134,7 @@ class TourismInfoController extends Controller
             // if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
+
         $this->validate($request, [
             'tourismName' => 'required',
             'tourismCategories' => 'required',
@@ -190,10 +191,8 @@ class TourismInfoController extends Controller
             $tourismInfo->opening_hour = json_encode($operationDay);
             $tourismInfo->save();
 
-            
-
             foreach ($request->tourismCategories as $i => $tourismName) {
-                if (!!$tourismName && $request->priceSeparator[$i] > 0) {
+                if (!!$tourismName && $request->tourismPrice[$i] > 0) {
                     $tourismInfoCategories = new TourismInfoCategories();
                     $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
                     $tourismInfoCategories->name = $tourismName;

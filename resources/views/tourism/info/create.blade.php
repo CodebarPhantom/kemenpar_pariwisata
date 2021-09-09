@@ -323,7 +323,7 @@
         var $category = document.getElementById("category");
         var $price = document.getElementById("price");
 
-        var $arrCategories = [];
+        var $arrCategories = [0];
 
         $(document).ready(function() {
             bsCustomFileInput.init();
