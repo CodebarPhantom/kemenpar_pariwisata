@@ -191,7 +191,6 @@
                 },
                 columns: [
                     { title: "{{ __('Code') }}", data: 'code', name: 'code', defaultContent: '-', class: 'text-center', orderable: false,sorting: false },
-                    { title: "{{ __('Price') }}", data: 'price', name: 'price', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
                     { title: "{{ __('Status') }}", data: 'status', name: 'status', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
                     { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' ', class: 'text-center',searchable:false, orderable: false },
 
