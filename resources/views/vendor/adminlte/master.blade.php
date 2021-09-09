@@ -78,6 +78,7 @@
     {{-- Body Content --}}
     @yield('body')
 
+    @include('vendor.adminlte.partials.footer.footer')
     {{-- Base Scripts --}}
     @if(!config('adminlte.enabled_laravel_mix'))
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>

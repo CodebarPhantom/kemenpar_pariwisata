@@ -57,12 +57,11 @@ class RoleController extends Controller
     public function update($id, Request $request)
     {
         if (!Laratrust::isAbleTo('view-role')) return abort(404);
-
         $role = Role::findOrFail($id);
         $this->validate($request, [
             //'nama' => 'required|alpha_dash|unique:roles,name,' . $id,
             'hak_akses.*' => 'nullable|integer',
-            'description' => 'required|unique:roles,description'
+            'description' => 'required'
         ]);
 
         $permissions = [];

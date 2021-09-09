@@ -74,7 +74,7 @@
 @stop
 
 @section('content')
-<div class="row">
+<!--<div class="row">
     <form role="form" id="form_1" action="{{ route('ticket.store') }}" onsubmit="return confirm('Apakah jumlah tiket sudah benar?');"  method="POST" class="col-md-12" enctype="multipart/form-data">
         @csrf
         <div class="">
@@ -129,7 +129,7 @@
             </div>  
         </div>
     </form>
-</div>
+</div>-->
 <div class="row">
     <div class="col-md-12">
         <div class="card card-info card-outline">
@@ -191,6 +191,7 @@
                 },
                 columns: [
                     { title: "{{ __('Code') }}", data: 'code', name: 'code', defaultContent: '-', class: 'text-center', orderable: false,sorting: false },
+                    { title: "{{ __('Price') }}", data: 'price', name: 'price', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
                     { title: "{{ __('Status') }}", data: 'status', name: 'status', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
                     { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' ', class: 'text-center',searchable:false, orderable: false },
 

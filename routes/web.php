@@ -53,9 +53,10 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
 
     Route::namespace('Tourism')->group(function () {
         Route::middleware('permission:view-tourism-info')->group(function () {
-            Route::post('/tourism-info/data-tourism', 'TourismInfoController@tourismInfoData')->name(
-                'tourism-info.data'
-            );
+            Route::post('/tourism-info/data-tourism', 'TourismInfoController@tourismInfoData')->name('tourism-info.data');
+            Route::post('/tourism-info/upload-file', 'TourismInfoController@uploadFile')->name('tourism-info.upload-file');
+
+
             Route::resource('tourism-info', 'TourismInfoController')->except('destroy');
         });
     });

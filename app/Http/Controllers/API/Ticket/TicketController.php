@@ -323,6 +323,33 @@ class TicketController extends Controller
         }
     }
 
+    public function ticketData()
+    {
+        $tickets = Ticket::select('id','code','status','price','created_at')->where('user_id',auth()->user()->id)
+        ->whereDay('created_at', '=', date('d')) 
+        ->when(request('search'), function ($query) {
+            $query->where(function ($query) {
+                $query->where('code', 'like', '%' . request('search') . '%');
+            });
+        })
+        ->orderBy('created_at','DESC')->orderBy('id','DESC')->paginate(request('perPage') ?? 5);
+        return response()->json($tickets, 200);
+    }
+
+    public function voidTicket(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        $ticket->status =  0; //void ticket
+        $ticket->save();
+
+        $result = [
+            "message" =>"Tiket $ticket->code Berhasil di Void"
+        ];
+
+        return response()->json($result, 200);
+
+    }
+
     public function update(Request $request, $id)
     {
         dd($id);

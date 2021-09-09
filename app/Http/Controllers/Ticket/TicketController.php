@@ -85,8 +85,11 @@ class TicketController extends Controller
     {
         if (!Laratrust::isAbleTo('view-ticket')) return abort(404);
 
-        $tickets = Ticket::select('id','code','status','created_at')->where('user_id',Auth::user()->id)->whereDay('created_at', '=', date('d'))->orderBy('created_at','DESC')->orderBy('id','DESC');
+        $tickets = Ticket::select('id','code','status','price','created_at')->where('tourism_info_id',Auth::user()->tourism_info_id)/*->where('user_id',Auth::user()->id)->whereDay('created_at', '=', date('d'))*/->orderBy('created_at','DESC')->orderBy('id','DESC');
         return DataTables::of($tickets)
+            ->editColumn('action',function($ticket){
+                return number_format($ticket->price);
+            })
             ->editColumn('status',function($ticket){
                 if($ticket->status == 0){
                     $color = 'danger'; $status = 'Void';

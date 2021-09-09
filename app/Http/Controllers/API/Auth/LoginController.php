@@ -25,7 +25,7 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if (auth()->user()->roles()->first()->name == 'user' && auth()->user()->is_active){
+            if ((auth()->user()->roles()->first()->name == 'user' || auth()->user()->roles()->first()->name == 'administrator') && auth()->user()->is_active){
                 $token = $request->user()->createToken($request->token_name);
 
                 return ['token' => $token->plainTextToken];

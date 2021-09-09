@@ -247,7 +247,7 @@ return [
             'permission'=>'view-dashboard-user'
         ],
         [
-            'text' => 'Tiket',
+            'text' => 'Master Tiket',
             'url' => '/ticket',
             'icon' => 'fas fa-fw fa-ticket-alt',
             'active' => ['ticket*'],
