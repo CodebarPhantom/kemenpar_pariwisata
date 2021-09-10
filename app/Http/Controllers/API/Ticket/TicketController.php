@@ -128,6 +128,8 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
+            $grandTotal = 0; 
+
             $ticket = new Ticket();
             $ticket->user_id = auth()->user()->id;
             $ticket->name = $request->name;
@@ -144,6 +146,9 @@ class TicketController extends Controller
                 $ticketsDetail->price = $request->price[$i];
                 $ticketsDetail->save();
             }
+
+            $ticket->price = $grandTotal;
+            $ticket->save();
 
             DB::commit();
         } catch (Exception $e) {
@@ -262,8 +267,9 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
-            $grandTotal = 0; 
+            
             foreach ($request->name as $i => $name) {
+                $grandTotal = 0; 
                 $ticket = new Ticket();
                 $ticket->user_id = auth()->user()->id;
                 $ticket->name = $name;
