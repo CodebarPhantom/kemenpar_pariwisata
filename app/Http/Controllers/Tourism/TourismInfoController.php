@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Tourism;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Setting\Amenity;
 use App\Models\Tourism\TourismInfo;
+use App\Models\Tourism\TourismInfoAmenity;
 use App\Models\Tourism\TourismInfoCategories;
+use App\Models\Tourism\TourismInfoGallery;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +17,12 @@ use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use DataTables, Laratrust;
 
+use App\Traits\UrlImage;
+
 class TourismInfoController extends Controller
 {
+    use UrlImage;
+
     public function index()
     {
         if (!Laratrust::isAbleTo('view-tourism-info')) {
@@ -115,8 +122,12 @@ class TourismInfoController extends Controller
 
         $tourismInfo = TourismInfo::findOrFail($id);
         $tourismInfoCategories = TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)->get();
+        $amenities = Amenity::orderBy('name','asc')->get();
+        $tourismInfoAmenities = TourismInfoAmenity::select('amenity_id')->where('tourism_info_id',$tourismInfo->id)
+        ->pluck('amenity_id')
+        ->toArray();
 
-        return view('tourism.info.edit', compact('tourismInfo', 'tourismInfoCategories'));
+        return view('tourism.info.edit', compact('tourismInfo', 'tourismInfoCategories', 'amenities','tourismInfoAmenities'));
     }
 
     public function create()
@@ -125,7 +136,9 @@ class TourismInfoController extends Controller
             // if (!Laratrust::isAbleTo('view-tourism-info')) {
             return abort(404);
         }
-        return view('tourism.info.create');
+
+        $amenities = Amenity::orderBy('name','asc')->get();
+        return view('tourism.info.create',compact('amenities'));
     }
 
     public function store(Request $request)
@@ -200,6 +213,28 @@ class TourismInfoController extends Controller
                     $tourismInfoCategories->save();
                 }
             }
+
+            if (!empty($request->gallery)) {
+                foreach ($request->gallery as $i => $gallery) {
+                    $galleryTourism = new TourismInfoGallery();
+                    $galleryTourism->tourism_info_id = $tourismInfo->id;
+                    $photoPath = $request->file('gallery')[$i]->store('public/tourism/gallery');
+                    $photoUrl = url('/storage') . str_replace('public', '', $photoPath);
+                    $galleryTourism->url_image = $photoUrl;
+                    $galleryTourism->save();
+                }
+            }
+
+            if (!empty($request->amenities)) {
+
+                foreach ($request->amenities as $i => $amenity) {
+                    $amenityTourism = new TourismInfoAmenity();
+                    $amenityTourism->tourism_info_id = $tourismInfo->id;
+                    $amenityTourism->amenity_id = $request->amenities[$i];
+                    $amenityTourism->save();
+                }
+            }
+
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
@@ -293,10 +328,29 @@ class TourismInfoController extends Controller
                 }
             }
 
+            $amenities = [];
+
+            if (!empty($request->amenities)) {
+
+                foreach ($request->amenities as $i => $amenity) {
+                    $amenityTourism = new TourismInfoAmenity();
+                    $amenityTourism->tourism_info_id = $tourismInfo->id;
+                    $amenityTourism->amenity_id = $request->amenities[$i];
+                    $amenityTourism->save();
+                    array_push($amenities, $amenityTourism->id);
+                }
+            }
+
             Schema::disableForeignKeyConstraints();
+
             TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)
                 ->whereNotIn('id', $categories)
                 ->delete();
+
+            TourismInfoAmenity::where('tourism_info_id', $tourismInfo->id)
+            ->whereNotIn('id', $amenities)
+            ->delete();
+            
             Schema::enableForeignKeyConstraints();
         } catch (Exception $e) {
             DB::rollBack();
@@ -308,6 +362,24 @@ class TourismInfoController extends Controller
 
         Alert::alert('Success', 'Pariwisata ' . $tourismInfo->name . ' Telah di Ubah', 'info');
         return redirect()->route('tourism-info.index');
+    }
+
+    public function uploadFile()
+    {
+
+        $tourismId = request('tourismId');
+        $imageName = 'gallery-'.Str::random(20).'-'.$tourismId;
+        $imageExtension = request()->gallery->guessClientExtension();
+        request()->gallery->move(public_path('storage/tourism/gallery/'), $imageName.'.'.$imageExtension);
+
+
+        $fileSurvey = new TourismInfoGallery();
+        $fileSurvey->tourism_info_id = $tourismId;
+        $fileSurvey->url_image = url('storage/tourism/gallery').'/'.str_replace('public','',$imageName.'.'.$imageExtension);
+        $fileSurvey->save();
+
+        return response()->json(['uploaded' => '/upload/'.$imageName.'.'.$imageExtension]);
+
     }
 
     private function checkPermission($id)

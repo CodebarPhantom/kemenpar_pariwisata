@@ -3,6 +3,10 @@
 
 @section('title', 'Add Pariwisata')
 
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css" integrity="sha512-8KeRJXvPns3KF9uGWdZW18Azo4c1SG8dy2IqiMBq8Il1wdj7EWtR3EGLwj+DnvznrRjn0oyBU+OEwJk7A79n7w==" crossorigin="anonymous" />
+@endpush
+
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -47,17 +51,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        @if ($errors->all())
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
-                            <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                            </ul>
-                        </div>
-                        @endif
+                        @include('inc.error')
                         <div class="row">
                             <div class="col-sm-12 text-right">
                                 <button id="add-category" class="btn btn-success btn-flat btn-sm ">
@@ -199,6 +193,37 @@
                                     </div>
                             </div>                        
                         </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Fasilitas</label>
+                                    <select id="amenities" class="form-control select2" style="width: 100%;" name="amenities[]" multiple="multiple">
+                                        @foreach ($amenities as $amenity)                                            
+                                            <option value="{{ $amenity->id }}"><i class="{{ $amenity->icon }}"></i>{{  $amenity->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Gallery</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-sm-12" >
+                                <input id="gallery" type="file" multiple name="gallery[]" data-overwrite-initial="false" accept="image/*" >
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -272,10 +297,11 @@
                 </div>
             </div>
 
+
             <div class="col-md-8">
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"> Lokasi</h3>
+                        <h3 class="card-title">Lokasi</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -302,8 +328,9 @@
                         </div>
                     </div>
                 </div>   
-            </div>            
+            </div>      
         </div>
+           
     </form>
 
     
@@ -312,12 +339,16 @@
 
 @stop
 
-
 @section('plugins.bsCustomFileInput', true)
+
+@section('plugins.Select2', true)
 
 @section('adminlte_js')
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&language=id&region=ID"></script>
     <script src="{{ asset(mix('js/autonumeric/autonumeric.js')) }}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js" integrity="sha512-vDrq7v1F/VUDuBTB+eILVfb9ErriIMW7Dn3JC/HOQLI8ZzTBTRRKrKJO3vfMmZFQpEGVpi+EYJFatPgVFxOKGA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fas/theme.min.js" integrity="sha512-BeQMmfGMfVp5kEkEGxUtlT5R9+m7jDVr5LDFCG2EK9VR50cEhR0kKzD5bn3XtSit/qNoYQUtr405lf5aSCSF8A==" crossorigin="anonymous"></script>
+
     <script type="text/javascript">
         var $form = $( "#form_1" );
         var $category = document.getElementById("category");
@@ -327,6 +358,7 @@
 
         $(document).ready(function() {
             bsCustomFileInput.init();
+            $('#amenities').select2({ placeholder: 'Pilih Fasilitas yang Tersedia'});
 
             $form = $( "#form_1" );
             $form.find('[name^="priceSeparator"]').autoNumeric('init');
@@ -411,6 +443,26 @@
                 return true;
            });
         });
+
+        $("#gallery").fileinput({
+            theme: 'fas',
+            previewFileType: "image",
+            browseClass: "btn btn-success",
+            browseLabel: "Pick Image",
+            browseIcon: "<i style='color:white;' class=\"fa fa-images\"></i> ",
+            removeClass: "btn btn-danger",
+            removeLabel: "Delete",
+            removeIcon: "<i style='color:white;' class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn btn-info",
+            uploadLabel: "Upload",
+            uploadIcon: "<i style='color:white;' class=\"fa fa-upload\"></i> ",
+            showRemove: false,
+            showUpload: false,
+            required: true,
+            overwriteInitial: false,
+            maxFileSize:1500,
+            maxFilesNum: 5,
+        }); 
 
         function removeCategory(index) {
             if (($category.childElementCount == $price.childElementCount) && $category.childElementCount > 1){

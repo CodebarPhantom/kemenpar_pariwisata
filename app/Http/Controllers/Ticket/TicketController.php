@@ -87,7 +87,7 @@ class TicketController extends Controller
 
         $tickets = Ticket::select('id','code','status','price','created_at')->where('tourism_info_id',Auth::user()->tourism_info_id)/*->where('user_id',Auth::user()->id)->whereDay('created_at', '=', date('d'))*/->orderBy('created_at','DESC')->orderBy('id','DESC');
         return DataTables::of($tickets)
-            ->editColumn('action',function($ticket){
+            ->editColumn('price',function($ticket){
                 return number_format($ticket->price);
             })
             ->editColumn('status',function($ticket){

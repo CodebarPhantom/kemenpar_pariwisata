@@ -316,6 +316,23 @@ return [
             ],
         ],
 
+        [
+            'text' => 'Konfigurasi',
+            'icon' => 'fas fa-fw fa-cog',
+            'active' => ['setting*'],
+            'permission'=>['view-amenities'],
+
+            'submenu' => [
+                [
+                    'text' => 'Fasilitas',
+                    'url'  => '/setting/amenities',
+                    'permission'=>'view-amenities',
+                    'active' => ['setting/amenities*'],
+                ],
+                
+            ],
+        ],
+
 
         [
             'text' => 'Laporan',

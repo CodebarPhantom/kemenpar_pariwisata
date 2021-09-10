@@ -7,6 +7,7 @@ use App\User;
 use App\Models\Tourism\TourismInfoCategories;
 use App\Models\Ticket\Ticket;
 use App\Models\Promotion\TicketPromotion;
+use App\Models\Setting\Amenity;
 
 class TourismInfo extends Model
 {
@@ -35,5 +36,10 @@ class TourismInfo extends Model
     public function promotion()
     {
         return $this->hasMany(TicketPromotion::class);
+    }
+
+    public function amenities()
+    {
+        return $this->hasMany(Amenity::class);
     }
 }
