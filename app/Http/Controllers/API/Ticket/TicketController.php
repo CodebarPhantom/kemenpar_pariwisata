@@ -145,6 +145,8 @@ class TicketController extends Controller
                 $ticketsDetail->quantity = $request->quantity[$i];
                 $ticketsDetail->price = $request->price[$i];
                 $ticketsDetail->save();
+                $grandTotal +=  $ticketsDetail->quantity * $ticketsDetail->price;
+
             }
 
             $ticket->price = $grandTotal;
