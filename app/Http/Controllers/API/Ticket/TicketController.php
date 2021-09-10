@@ -342,6 +342,7 @@ class TicketController extends Controller
         $tickets = Ticket::select('id','code','status','price','created_at')->where('user_id',auth()->user()->id)
         ->whereDay('created_at', '=', date('d')) 
         ->where('status',1)
+        ->where('created_at', '>',  Carbon::now()->subHours(1)->toDateTimeString())
         ->when(request('search'), function ($query) {
             $query->where(function ($query) {
                 $query->where('code', 'like', '%' . request('search') . '%');
