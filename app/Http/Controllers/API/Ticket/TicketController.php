@@ -285,7 +285,7 @@ class TicketController extends Controller
 
                 }
 
-                $ticket->grand_total = $grandTotal;
+                $ticket->price = $grandTotal;
                 $ticket->save();
             }
             DB::commit();
