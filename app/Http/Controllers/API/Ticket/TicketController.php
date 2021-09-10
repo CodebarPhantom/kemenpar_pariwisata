@@ -11,6 +11,7 @@ use App\Models\Tourism\TourismInfoCategories;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Lang;
 use Exception, ErrorException;
+use Carbon\Carbon;
 
 class TicketController extends Controller
 {
@@ -342,7 +343,7 @@ class TicketController extends Controller
         $tickets = Ticket::select('id','code','status','price','created_at')->where('user_id',auth()->user()->id)
         ->whereDay('created_at', '=', date('d')) 
         ->where('status',1)
-        ->where('created_at', '>',  Carbon::now()->subHours(1)->toDateTimeString())
+        ->where('created_at', '>',  Carbon::now()->subHours(1)->format('Y-m-d H:i:s'))
         ->when(request('search'), function ($query) {
             $query->where(function ($query) {
                 $query->where('code', 'like', '%' . request('search') . '%');
