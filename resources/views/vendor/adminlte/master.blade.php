@@ -73,7 +73,7 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data')>
+<body class="@yield('classes_body') @if(Request::url() === ENV('APP_URL').'/register/tourism-info') sidebar-collapse @endif" @yield('body_data')>
 
     {{-- Body Content --}}
     @yield('body')

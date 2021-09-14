@@ -391,4 +391,109 @@ class TourismInfoController extends Controller
             );
         }
     }
+
+    public function createGuest()
+    {
+        $amenities = Amenity::orderBy('name','asc')->get();
+        return view('tourism.info.create',compact('amenities'));
+    }
+
+    public function storeGuest(Request $request)
+    {
+        $this->validate($request, [
+            'tourismName' => 'required',
+            'tourismCategories' => 'required',
+            'tourismPrice' => 'required',
+            'tourismLogo' => 'required',
+            'tourismAddress' => 'required',
+            'tourismCode' => 'required',
+            'tourismPosition' => 'required',
+            'tourismManageBy' => 'required',
+            'tourismPhone' => 'required',
+            'tourismOverview' => 'required',
+
+
+        ]);
+
+        $tourismPosition = explode(',', $request->tourismPosition);
+        DB::beginTransaction();
+        try {
+            $filePathLogo = $request->tourismLogo->store('public/logos');
+            $fileUrlLogo = url('/storage') . str_replace('public', '', $filePathLogo);
+
+            $filePathCoverImage = $request->tourismCoverImage->store('public/cover-image');
+            $fileUrlCoverImage = url('/storage') . str_replace('public', '', $filePathCoverImage);
+
+            $tourismInfo = new TourismInfo();
+            $tourismInfo->name = $request->tourismName;
+            $tourismInfo->code = str::upper($request->tourismCode);
+            $tourismInfo->address = $request->tourismAddress;
+            $tourismInfo->url_logo = $fileUrlLogo;
+            $tourismInfo->url_cover_image = $fileUrlCoverImage;
+            $tourismInfo->price = 0;
+            $tourismInfo->slug = Str::slug($request->tourismName,'-');
+            $tourismInfo->is_active = 0;
+            $tourismInfo->latitude = $tourismPosition[0];
+            $tourismInfo->longitude = $tourismPosition[1];
+            $tourismInfo->manage_by = $request->tourismManageBy;
+            $tourismInfo->insurance = $request->tourismInsurance ? $request->tourismInsurance : null;
+            $tourismInfo->note1 = $request->tourismNote1 ? $request->tourismNote1 : null;
+            $tourismInfo->phone = $request->tourismPhone;
+            $tourismInfo->facebook = $request->tourismFacebook ? $request->tourismFacebook : null;
+            $tourismInfo->instagram = $request->tourismInstagram ? $request->tourismInstagram : null;
+            $tourismInfo->overview =  $request->tourismOverview;
+
+            if ($request->tourismLogoBumdes) {
+                $filePathPhotoBumdes = $request->tourismLogoBumdes->store('public/logos/bumdes');
+                $fileUrlPhotoBumdes = url('/storage') . str_replace('public', '', $filePathPhotoBumdes);
+                $tourismInfo->logo_bumdes = $fileUrlPhotoBumdes;
+            }
+
+            foreach($request->opening_hour as $j => $openingHour)
+            {
+                $operationDay[] = ['day'=>$request->day[$j], 'opening_hour'=>$openingHour];
+            }
+            $tourismInfo->opening_hour = json_encode($operationDay);
+            $tourismInfo->save();
+
+            foreach ($request->tourismCategories as $i => $tourismName) {
+                if (!!$tourismName && $request->tourismPrice[$i] > 0) {
+                    $tourismInfoCategories = new TourismInfoCategories();
+                    $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
+                    $tourismInfoCategories->name = $tourismName;
+                    $tourismInfoCategories->price = $request->tourismPrice[$i];
+                    $tourismInfoCategories->save();
+                }
+            }
+
+            if (!empty($request->gallery)) {
+                foreach ($request->gallery as $i => $gallery) {
+                    $galleryTourism = new TourismInfoGallery();
+                    $galleryTourism->tourism_info_id = $tourismInfo->id;
+                    $photoPath = $request->file('gallery')[$i]->store('public/tourism/gallery');
+                    $photoUrl = url('/storage') . str_replace('public', '', $photoPath);
+                    $galleryTourism->url_image = $photoUrl;
+                    $galleryTourism->save();
+                }
+            }
+
+            if (!empty($request->amenities)) {
+
+                foreach ($request->amenities as $i => $amenity) {
+                    $amenityTourism = new TourismInfoAmenity();
+                    $amenityTourism->tourism_info_id = $tourismInfo->id;
+                    $amenityTourism->amenity_id = $request->amenities[$i];
+                    $amenityTourism->save();
+                }
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return abort(500);
+        }
+        DB::commit();
+        Alert::alert('Success', 'Tempat pariwisata telah di daftarkan mohon menunggu untuk proses verifikasi', 'success');
+        return redirect()->route('tourism-register.create');
+    }
 }

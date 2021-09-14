@@ -105,3 +105,8 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
         Route::resource('report-emergency', 'EmergencyReportController')->except('destroy');
     });
 });
+
+Route::middleware('guest')->namespace('Tourism')->group(function () {
+    Route::get('/register/tourism-info', 'TourismInfoController@createGuest')->name('tourism-register.create');
+    Route::post('/register/tourism-info', 'TourismInfoController@storeGuest')->name('tourism-register.store');
+});

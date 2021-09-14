@@ -23,7 +23,14 @@
 
 @section('content')
 <div class="container-fluid">
-    <form role="form" id="form_1" action="{{ route('tourism-info.store') }}" method="POST" class="" enctype="multipart/form-data">
+    @php
+        if(Auth::check()){
+            $routePost ='tourism-info.store';
+        }else{
+            $routePost ='tourism-register.store';
+        }
+    @endphp
+    <form role="form" id="form_1" action="{{ route($routePost) }}" method="POST" class="" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -93,8 +100,9 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label> {{ __('Code')}} </label>
+                                    <label> {{ __('Code').' Pariwsata' }} </label>
                                     <input type="text" name="tourismCode" class="form-control @error('tourismCode') is-invalid @enderror" minlength="5" maxlength="5" value="{{ old('tourismCode') }}" placeholder="{{ __('Code').' '.__('Tourism') }}...." required>
+                                    <span class="form-text text-muted">Tentukan Sendiri Kode Pariwisatanya harus 5 huruf</span>
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -203,6 +211,8 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <span class="form-text text-muted">Boleh dikosongkan terlebih dahulu</span>
+
                             </div> 
                         </div>
                     </div>
@@ -224,7 +234,9 @@
                                 <input id="gallery" type="file" multiple name="gallery[]" data-overwrite-initial="false" accept="image/*" >
                             </div>
                         </div>
+                    <span class="form-text text-danger">Jika ingin melampirkan lebih dari satu gambar simpan pada satu folder yang sama lalu block semua gambar</span>
                     </div>
+
                 </div>
             </div>
 
