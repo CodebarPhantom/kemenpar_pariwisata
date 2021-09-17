@@ -31,7 +31,9 @@ class TourismInfoController extends Controller
             'categories'=> function ($query) {
                 $query->limit(2);
             }
-        ])->where('slug',$slug)->first();
+        ])
+        ->with(['amenities'])
+        ->where('slug',$slug)->first();
 
         return response()->json($detailTourism, 200);
 
