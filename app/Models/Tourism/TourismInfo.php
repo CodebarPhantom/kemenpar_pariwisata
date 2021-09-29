@@ -46,6 +46,7 @@ class TourismInfo extends Model
             'tourism_info_amenities.tourism_info_id',
             'tourism_info_amenities.amenity_id',
             'amenity.icon',
+            'amenity.icon_class',
             'amenity.name',
             'amenity.category'
         )->leftJoin('amenities as amenity','amenity.id','=','tourism_info_amenities.amenity_id');

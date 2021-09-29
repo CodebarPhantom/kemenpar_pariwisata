@@ -43,7 +43,7 @@ class TourismInfoController extends Controller
        
         $categoryIds = json_decode($request->tourism_info_category_id);
 
-        Log::debug($categoryIds);
+        //Log::debug($categoryIds);
 
         foreach ($categoryIds as $categoryId) {
            $tourismInfoCategory = TourismInfoCategories::findOrFail($categoryId);

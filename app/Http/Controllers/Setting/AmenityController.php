@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Setting;
 use App\Models\Setting\Amenity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Lang, Auth, DB, Exception,Storage, Laratrust, DataTables, Alert;
+use Lang, Str, Auth, DB, Exception,Storage, Laratrust, DataTables, Alert;
 
 
 
@@ -89,6 +89,8 @@ class AmenityController extends Controller
             $amenity->name = $request->name; 
             $amenity->category = $request->category;
             $amenity->icon = $request->icon;
+            $amenity->icon_class = Str::camel(str_replace('fas fa','',$amenity->icon));
+
             $amenity->save();
             DB::commit();
 
@@ -142,6 +144,7 @@ class AmenityController extends Controller
             $amenity->name = $request->name; 
             $amenity->category = $request->category;
             $amenity->icon = $request->icon;
+            $amenity->icon_class = Str::camel(str_replace('fas fa','',$amenity->icon));
             $amenity->save();
             DB::commit();
 
