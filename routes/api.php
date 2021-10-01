@@ -77,6 +77,10 @@ Route::namespace('API')->group(function () {
                 Route::get('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name(
                     'report.ticket.monthly'
                 );
+
+                Route::post('/report/ticket/custom-date', [ReportTicketController::class, 'customDate'])->name(
+                    'report.ticket.custom-date'
+                );
             });
         });
     });
