@@ -13,7 +13,7 @@ class AddWeatherTourismInfo extends Migration
      */
     public function up()
     {
-        Schema::table('=tourism_infos', function (Blueprint $table) {
+        Schema::table('tourism_infos', function (Blueprint $table) {
             $table->json('open_weather')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddWeatherTourismInfo extends Migration
      */
     public function down()
     {
-        Schema::table('=tourism_infos', function (Blueprint $table) {
+        Schema::table('tourism_infos', function (Blueprint $table) {
             //
         });
     }

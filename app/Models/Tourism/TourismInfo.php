@@ -18,6 +18,7 @@ class TourismInfo extends Model
         'count_visitor' => 'integer',
         'sum_price' => 'float',
         'opening_hour'=>'array',
+        'open_weather'=>'array',
     ];
 
     public function user()
