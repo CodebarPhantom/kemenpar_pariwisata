@@ -341,6 +341,17 @@ class TourismInfoController extends Controller
                 }
             }
 
+            if (!empty($request->gallery)) {
+                foreach ($request->gallery as $i => $gallery) {
+                    $galleryTourism = new TourismInfoGallery();
+                    $galleryTourism->tourism_info_id = $tourismInfo->id;
+                    $photoPath = $request->file('gallery')[$i]->store('public/tourism/gallery');
+                    $photoUrl = url('/storage') . str_replace('public', '', $photoPath);
+                    $galleryTourism->url_image = $photoUrl;
+                    $galleryTourism->save();
+                }
+            }
+
             Schema::disableForeignKeyConstraints();
 
             TourismInfoCategories::where('tourism_info_id', $tourismInfo->id)
@@ -380,6 +391,13 @@ class TourismInfoController extends Controller
 
         return response()->json(['uploaded' => '/upload/'.$imageName.'.'.$imageExtension]);
 
+    }
+
+    public function destroyFile(Request $request)
+    {
+        $galleryFile = TourismInfoGallery::find($request->key)->delete();
+
+        return response()->json($galleryFile);
     }
 
     private function checkPermission($id)

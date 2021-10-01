@@ -88,7 +88,7 @@
                                 <div class="form-group">
                                     <label> {{ __('Icon') }} </label>
                                     <!-- Button tag -->
-                                    <button class="form-control btn btn-secondary" data-rows="3"
+                                    <button id="icon-picker1" class="form-control btn btn-secondary" data-rows="3"
                                     data-cols="12" name="icon" role="iconpicker"></button>
                                 </div>
                             </div>
@@ -115,10 +115,41 @@
         $(document).ready(function() {
             // Initialize select2
             initailizeSelect2();
-
-
+           // getIcon();
+           
+           
 
         });
+
+       function getIcon(){
+            
+
+            $('#icon-picker1').click(function(){
+                var button = $( "#icon-picker1" );
+                var input = button.find("i");   
+            console.log(input.attr('class'));
+
+            });
+
+       }
+
+        
+        
+
+        function faUnicode(name) {
+            var testI = document.createElement('i');
+            var char;
+
+            testI.className = 'fas fa-' + name;
+            document.body.appendChild(testI);
+
+            char = window.getComputedStyle( testI, ':before' )
+                    .content.replace(/'|"/g, '');
+
+            testI.remove();
+            console.log(char.charCodeAt(0))
+            return char.charCodeAt(0);
+        }
 
         function initailizeSelect2(){
             $(".select2").select2({

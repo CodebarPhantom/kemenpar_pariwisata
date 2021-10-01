@@ -277,6 +277,25 @@
                 </div>
             </div>
 
+            <div class="col-md-12">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Gallery</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-sm-12" >
+                                <input id="gallery" type="file" multiple name="gallery[]" data-overwrite-initial="false" accept="image/*" >
+                            </div>
+                        </div>
+                    <span class="form-text text-danger">Jika ingin melampirkan lebih dari satu gambar simpan pada satu folder yang sama lalu block semua gambar</span>
+                    </div>
+
+                </div>
+            </div>
+
             <div class="col-md-4">
                 <div class="card card-info card-outline">
                     <div class="card-header">
@@ -405,6 +424,90 @@
         var $price = document.getElementById("price");
 
         var $arrCategories = [];
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#gallery").fileinput({
+            theme: 'fas',
+            previewFileType: "image",
+            browseClass: "btn btn-success",
+            browseLabel: "Pick Image",
+            browseIcon: "<i style='color:white;' class=\"fa fa-images\"></i> ",
+            removeClass: "btn btn-danger",
+            removeLabel: "Delete",
+            removeIcon: "<i style='color:white;' class=\"fa fa-trash\"></i> ",
+            uploadClass: "btn btn-info",
+            uploadLabel: "Upload",
+            uploadIcon: "<i style='color:white;' class=\"fa fa-upload\"></i> ",
+            showRemove: false,
+            showUpload: false,
+            required: true,
+            overwriteInitial: true,
+            maxFileSize:1500,
+            maxFilesNum: 5,
+
+            initialPreview: [
+                @php
+                    use Illuminate\Support\Facades\Storage;
+                @endphp     
+                @foreach ($tourismInfo->galleries as $file)
+                    '{{ $file->url_image }}',
+                @endforeach
+            ],
+            initialPreviewAsData: true,
+            initialPreviewConfig: [
+                @foreach ($tourismInfo->galleries as $file)
+                    @php
+                        $mimeType = Storage::mimeType(str_replace('storage', 'public', parse_url($file->url_image, PHP_URL_PATH)));
+                        $size = Storage::size(str_replace('storage', 'public', parse_url($file->url_image, PHP_URL_PATH)));
+                        if (strpos($mimeType, 'postscript') || strpos($mimeType, 'tiff')) { 
+                            $type = 'gdocs';
+                        } elseif (strpos($mimeType, 'office')) {
+                            $type = 'office';
+                        } elseif (strpos($mimeType, 'pdf')) {
+                            $type = 'pdf';
+                        } elseif (strpos($mimeType, 'text')) {
+                            $type = 'text';
+                        } elseif (strpos($mimeType, 'html')) {
+                            $type = 'html';
+                        } else {
+                            $type = 'image';
+                        }
+                    @endphp
+                    { type: "{{ $type }}", caption: "{{ basename($file->url_image) }}", size: {{ $size }}, url: "{{ route('tourism-info.destroy-file') }}", key: {{ $file->id }}},
+                @endforeach
+            ],
+            previewFileExtSettings: { // configure the logic for determining icon file extensions
+                'doc': function(ext) {
+                    return ext.match(/(doc|docx)$/i);
+                },
+                'xls': function(ext) {
+                    return ext.match(/(xls|xlsx)$/i);
+                },
+                'ppt': function(ext) {
+                    return ext.match(/(ppt|pptx)$/i);
+                },
+                'zip': function(ext) {
+                    return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+                },
+                'htm': function(ext) {
+                    return ext.match(/(htm|html)$/i);
+                },
+                'txt': function(ext) {
+                    return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+                },
+                'mov': function(ext) {
+                    return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+                },
+                'mp3': function(ext) {
+                    return ext.match(/(mp3|wav)$/i);
+                }
+            }
+        }); 
 
         @foreach ($tourismInfoCategories as $i => $tourismInfoCategory)
             $arrCategories.push({{ $i }});
@@ -577,55 +680,7 @@
             infoWindow.open(map);
         }*/
 
-        var url1 = '{{ $tourismInfo->url_logo }}';
-
-        /*$("#gallery").fileinput({
-            theme: 'fas',
-            previewFileType: "image",
-            browseClass: "btn btn-success",
-            browseLabel: "Pick Image",
-            browseIcon: "<i style='color:white;' class=\"fa fa-images\"></i> ",
-            removeClass: "btn btn-danger",
-            removeLabel: "Delete",
-            removeIcon: "<i style='color:white;' class=\"fa fa-trash\"></i> ",
-            uploadClass: "btn btn-info",
-            uploadLabel: "Upload",
-            uploadIcon: "<i style='color:white;' class=\"fa fa-upload\"></i> ",
-            required: true,
-            showRemove: false,
-            showUpload: false,
-            uploadUrl: "{{ route('tourism-info.upload-file') }}",
-            deleteUrl: "{{ route('tourism-info.upload-file') }}",
-            uploadExtraData: function() {
-                return {
-                    _token: $("input[name='_token']").val(),
-                    tourismId:{{ $tourismInfo->id }}
-                };
-            },
-            deleteExtraData: function() {
-                return {
-                    _token: $("input[name='_token']").val(),
-                    tourismId:{{ $tourismInfo->id }}
-                };
-            },
-            //allowedFileExtensions: ['jpg', 'png', 'gif'],
-            overwriteInitial: false,
-            maxFileSize:1500,
-            maxFilesNum: 5,
-            slugCallback: function (filename) {
-                return filename.replace('(', '_').replace(']', '_');
-            },
-            
-
-            initialPreview: [url1],
-                initialPreviewAsData: true,
-                initialPreviewFileType: 'image', // image is the default and can be overridden in config below
-                initialPreviewConfig: [
-                    {caption: "{{ $tourismInfo->url_logo }}", downloadUrl: url1, width: "100px"},
-                ],
-        }).on("filebatchselected", function(event, files) {
-            $("#gallery").fileinput("upload");
-        });*/
+        
 
     </script>
 @endsection

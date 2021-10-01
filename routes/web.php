@@ -55,6 +55,8 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
         Route::middleware('permission:view-tourism-info')->group(function () {
             Route::post('/tourism-info/data-tourism', 'TourismInfoController@tourismInfoData')->name('tourism-info.data');
             Route::post('/tourism-info/upload-file', 'TourismInfoController@uploadFile')->name('tourism-info.upload-file');
+            Route::post('tourism-info/delete-file', 'TourismInfoController@destroyFile')->name('tourism-info.destroy-file');
+
             Route::resource('tourism-info', 'TourismInfoController')->except('destroy');
 
         });
