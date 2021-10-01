@@ -32,7 +32,7 @@ class TourismInfoController extends Controller
                 $query->limit(2);
             }
         ])
-        ->with(['amenities'])
+        ->with(['amenities','galleries'])
         ->where('slug',$slug)->first();
 
         return response()->json($detailTourism, 200);

@@ -9,6 +9,7 @@ use App\Models\Ticket\Ticket;
 use App\Models\Promotion\TicketPromotion;
 use App\Models\Setting\Amenity;
 use App\Models\Tourism\TourismInfoAmenity;
+use App\Models\Tourism\TourismInfoGallery;
 
 class TourismInfo extends Model
 {
@@ -50,5 +51,10 @@ class TourismInfo extends Model
             'amenity.name',
             'amenity.category'
         )->leftJoin('amenities as amenity','amenity.id','=','tourism_info_amenities.amenity_id');
+    }
+
+    public function galleries(){
+        return $this->hasMany(TourismInfoGallery::class);
+        
     }
 }
