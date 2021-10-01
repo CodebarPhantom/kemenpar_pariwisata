@@ -62,7 +62,7 @@ class OpenWeather extends Command
                    //dd('test');
                    $getOpenWeather = [
                         'description'=>$dataWeather->weather[0]->description,
-                        'icon'=>' http://openweathermap.org/img/wn/'.$dataWeather->weather[0]->icon.'n@2x.png',
+                        'icon'=>'http://openweathermap.org/img/wn/'.$dataWeather->weather[0]->icon.'@2x.png',
                         'temp'=>$dataWeather->main->temp,
                         'feels_like'=>$dataWeather->main->feels_like,
                    ];
