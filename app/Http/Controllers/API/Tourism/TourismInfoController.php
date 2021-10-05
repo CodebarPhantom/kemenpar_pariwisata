@@ -20,7 +20,17 @@ class TourismInfoController extends Controller
 {
     public function index()
     {
-        $tourismInfos = TourismInfo::select('name','slug','url_cover_image')->where('is_active',1)->orderBy('name', 'ASC')->get();
+        $searchByTourismName =request('tourism_name');
+
+        $tourismInfos = TourismInfo::select('id','name','slug','url_cover_image','open_weather')
+        ->with(['categories'=> function ($query) {
+                $query->limit(2);
+            }
+        ])
+        ->when($searchByTourismName, function ($query, $searchByTourismName) {
+            return $query->whereRaw("name like ?", ["%$searchByTourismName%"]);
+        })
+        ->where('is_active',1)->orderBy('name', 'ASC')->get();
 
         return response()->json($tourismInfos, 200);
     }
