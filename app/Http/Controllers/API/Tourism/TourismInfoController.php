@@ -22,11 +22,8 @@ class TourismInfoController extends Controller
     {
         $searchByTourismName =request('tourism_name');
 
-        $tourismInfos = TourismInfo::select('id','name','slug','url_cover_image','open_weather')
-        ->with(['categories'=> function ($query) {
-                $query->limit(2);
-            }
-        ])
+        $tourismInfos = TourismInfo::select('id','name','slug','url_cover_image','address','open_weather')
+        ->with(['categories'])
         ->when($searchByTourismName, function ($query, $searchByTourismName) {
             return $query->whereRaw("name like ?", ["%$searchByTourismName%"]);
         })

@@ -445,7 +445,7 @@
             uploadIcon: "<i style='color:white;' class=\"fa fa-upload\"></i> ",
             showRemove: false,
             showUpload: false,
-            required: true,
+            //required: true,
             overwriteInitial: true,
             maxFileSize:1500,
             maxFilesNum: 5,

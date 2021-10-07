@@ -204,15 +204,19 @@ class TourismInfoController extends Controller
             $tourismInfo->opening_hour = json_encode($operationDay);
             $tourismInfo->save();
 
-            foreach ($request->tourismCategories as $i => $tourismName) {
-                if (!!$tourismName && $request->tourismPrice[$i] > 0) {
-                    $tourismInfoCategories = new TourismInfoCategories();
-                    $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
-                    $tourismInfoCategories->name = $tourismName;
-                    $tourismInfoCategories->price = $request->tourismPrice[$i];
-                    $tourismInfoCategories->save();
+            //foreach ($request->tourismCategories as $i => $tourismName) {
+
+                for ($i=0; $i <2; $i++) { //untuk sementara max 2
+                    if (!!$request->tourismCategories [$i] && $request->tourismPrice[$i] > 0) {
+                        $tourismInfoCategories = new TourismInfoCategories();
+                        $tourismInfoCategories->tourism_info_id = $tourismInfo->id;
+                        $tourismInfoCategories->name = $request->tourismCategories [$i];
+                        $tourismInfoCategories->price = $request->tourismPrice[$i];
+                        $tourismInfoCategories->save();
+                    }
                 }
-            }
+                
+            //}
 
             if (!empty($request->gallery)) {
                 foreach ($request->gallery as $i => $gallery) {
@@ -312,8 +316,9 @@ class TourismInfoController extends Controller
 
             $categories = [];
 
-            foreach ($request->tourismCategories as $i => $tourismCategory) {
-                if (!!$tourismCategory && $request->tourismPrice[$i] > 0) {
+            //foreach ($request->tourismCategories as $i => $tourismCategory) {
+                for ($i=0; $i <2; $i++) { 
+                if (!!$request->tourismCategories[$i] && $request->tourismPrice[$i] > 0) {
                     $tourismInfoCategories = TourismInfoCategories::find($request->tourismCategoriesId[$i]);
                     if (!$tourismInfoCategories) {
                         $tourismInfoCategories = new TourismInfoCategories();
@@ -327,6 +332,7 @@ class TourismInfoController extends Controller
                     array_push($categories, $tourismInfoCategories->id);
                 }
             }
+            //}
 
             $amenities = [];
 
