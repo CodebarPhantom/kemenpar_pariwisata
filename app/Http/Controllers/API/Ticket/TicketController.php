@@ -7,14 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\TicketItems;
+use App\Models\Tourism\TourismInfoBalance;
 use App\Models\Tourism\TourismInfoCategories;
+use App\Models\Tourism\TourismInfoLog;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Lang;
 use Exception, ErrorException;
 use Carbon\Carbon;
+use App\Traits\AllSetLog;
 
 class TicketController extends Controller
 {
+    use AllSetLog;
+    
     public function __construct(Request $request)
     {
         $this->ticket_fields = '*';
@@ -137,6 +142,7 @@ class TicketController extends Controller
             $ticket->code = $request->code;
             $ticket->tourism_info_id = $request->tourism_info_id;
             $ticket->status = 1;
+            $ticket->is_qr = $request->is_qr;
             $ticket->save();
 
             foreach ($request->tourism_info_category_id as $i => $category_id) {
@@ -150,8 +156,15 @@ class TicketController extends Controller
 
             }
 
+           /* if($ticket->is_qr){
+
+                $this->tourismInfoLog($ticket->tourism_info_id, "Saldo bertambah sebanyak ".number_format($grandTotal), TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS['0']['status']);
+            }*/
+
             $ticket->price = $grandTotal;
             $ticket->save();
+
+            
 
             DB::commit();
         } catch (Exception $e) {
@@ -279,6 +292,7 @@ class TicketController extends Controller
                 $ticket->code = $request->code[$i];
                 $ticket->tourism_info_id = $request->tourism_info_id[$i];
                 $ticket->status = 1;
+                $ticket->is_qr = $request->is_qr[$i];
                 $ticket->save();
 
                 array_push($storedTickets, $ticket->id);
