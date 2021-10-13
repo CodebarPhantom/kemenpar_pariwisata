@@ -71,10 +71,10 @@ Route::namespace('API')->group(function () {
     Route::namespace('Report')->group(function () {
         Route::namespace('Ticket')->group(function () {
             Route::middleware('auth:sanctum', 'api.user')->group(function () {
-                Route::get('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name(
+                Route::post('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name(
                     'report.ticket.daily'
                 );
-                Route::get('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name(
+                Route::post('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name(
                     'report.ticket.monthly'
                 );
 
