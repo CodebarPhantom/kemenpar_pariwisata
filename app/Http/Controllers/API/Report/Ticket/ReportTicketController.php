@@ -24,6 +24,7 @@ class ReportTicketController extends Controller
                 $join->where('t.created_at', '>=', $startDate . ' 00:00:00');
                 $join->where('t.created_at', '<=', $endDate . ' 23:59:59');
                 $join->where('t.status', 1);
+                $join->where('t.is_qr',0);
             })
             ->leftJoin('ticket_items as ti', function ($join) {
                 $join->on('ti.ticket_id', '=', 't.id');
@@ -60,6 +61,7 @@ class ReportTicketController extends Controller
                 $join->where('t.created_at', '>=', $startDate . ' 00:00:00');
                 $join->where('t.created_at', '<=', $endDate . ' 23:59:59');
                 $join->where('t.status', 1);
+                $join->where('t.is_qr',0);
             })
             ->leftJoin('ticket_items as ti', function ($join) {
                 $join->on('ti.ticket_id', '=', 't.id');
@@ -97,6 +99,7 @@ class ReportTicketController extends Controller
                 $join->where('t.created_at', '>=', $startDate . ' 00:00:00');
                 $join->where('t.created_at', '<=', $endDate . ' 23:59:59');
                 $join->where('t.status', 1);
+                $join->where('t.is_qr',0);
             })
             ->leftJoin('ticket_items as ti', function ($join) {
                 $join->on('ti.ticket_id', '=', 't.id');

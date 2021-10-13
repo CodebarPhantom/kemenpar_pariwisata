@@ -88,6 +88,10 @@ class TourismInfoController extends Controller
 
                 return $priceField;
             })
+            ->editColumn('balance', function ($tourismInfo) {
+                return 'Rp. '.number_format($tourismInfo->balance);
+            })
+
             ->editColumn('action', function ($tourismInfo) {
                 $show =
                     '<a href="' .

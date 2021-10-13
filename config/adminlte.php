@@ -255,10 +255,29 @@ return [
         ],
         [
             'text' => 'Master Pariwisata',
-            'url' => '/tourism-info',
+            //'url' => '/tourism-info',
             'icon' => 'fas fa-fw fa-store-alt',
             'active' => ['tourism-info*'],
-            'permission'=>'view-tourism-info'
+            'permission'=>'view-tourism-info',
+
+            
+            'submenu' => [
+                [
+                    'text' => 'Pariwisata',
+                    'icon' => 'fas fa-fw fa-store-alt',
+                    'url'  => '/tourism-info',
+                    'permission'=>'view-tourism-info',
+                    'active' => ['tourism-info','tourism-info/*'],
+                ],
+                [
+                    'text' => 'Withdrawal',
+                    'icon' => 'fas fa-fw fa-exchange-alt',
+                    'url'  => '/tourism-info-withdrawal',
+                    'permission'=>'view-withdrawal',
+                    'active' => ['tourism-info-withdrawal*'],
+                ],
+                
+            ],
         ],
         [
             'text' => 'Master Promosi',

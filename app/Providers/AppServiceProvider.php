@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use DB, Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('*', function($view) {
+
+            $view->with('authUser',DB::table('users')->select('users.id', 'users.user_type', 'ti.name as tourism_name', 'ti.balance')
+            ->leftJoin('tourism_infos as ti', 'ti.id', '=', 'users.tourism_info_id')
+            ->where('users.id', Auth::user()->id)
+            ->first());
+        });
+
     }
 }

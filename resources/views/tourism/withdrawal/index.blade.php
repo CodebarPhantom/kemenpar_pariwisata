@@ -1,21 +1,23 @@
 @extends('adminlte::page')
 
-@section('title', 'Master Pariwisata')
+@section('title', 'Withdrawal Pariwisata')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Master {{ __('Tourism') }}</h1>
+            <h1 class="m-0 text-dark">{{__('Withdrawal') }} {{ __('Tourism') }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Master {{ __('Tourism') }}</a></li>
+                <li class="breadcrumb-item"><a href="#">{{__('Withdrawal')}} {{ __('Tourism') }}</a></li>
             </ol>
         </div>
     </div>
 @stop
 
 @section('content')
+@include('inc.modal-confirmation')
+
 <div class="row">
     <div class="col-md-12">
         <div class="card card-info card-outline">
@@ -23,10 +25,11 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-store-alt"></i>
-                            &nbsp; {{ 'Master'.' '.__('Tourism') }}
+                            &nbsp; {{ __('Withdrawal').' '.__('Tourism') }}
                     </h3>
-                    @if(Laratrust::hasRole('superadmin'))
-                        <a href="{{ route('tourism-info.create') }}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Create').' '. __('Tourism') }}</a>
+                    @if(Laratrust::hasRole('administrator'))
+                        <a href="#" data-href="{{ route('tourism-info-withdrawal.store') }}" class="btn btn-primary btn-flat btn-sm btn-tooltip" title="Pengajuan" data-toggle="modal" data-text="Apakah anda yakin untuk mengajukan pencairan dana {{ $authUser->tourism_name }} sebesar Rp.{{  number_format($authUser->balance) }}" data-target="#modal-confirmation" data-value="'.$tourismWithdrawal->id.'"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Withdrawal').' '.__('Tourism') }}</a>
+                       
                     @endif
                 </div>
             </div>
@@ -42,9 +45,8 @@
 </div>
 
 @stop
-
 @section('plugins.Datatables', true)
-@section('adminlte_js')
+@push('js')
     <script>
         $(document).ready(function(){
 
@@ -70,15 +72,16 @@
             },
             ajax: {
                 method: 'POST',
-                url: "{{ route('tourism-info.data') }}",
+                url: "{{ route('tourism-info-withdrawal.data') }}",
                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
             },
             columns: [
-                { title: "{{ __('Name') }}", data: 'name', name: 'name', defaultContent: '-', class: 'text-center' },
-                { title: "{{ __('Balance') }}", data: 'balance', name: 'balance', defaultContent: '-', class: 'text-center' },
-                { title: "{{ __('Price') }}", data: 'price', name: 'price', defaultContent: '-', class: 'text-center' },
-                { title: "{{ __('Status') }}", data: 'status', name: 'status', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
-                { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' ', class: 'text-center',searchable:false, orderable: false },
+                { title: "{{ __('Name') }}", data: 'tourism.name', name: 'tourism.name', defaultContent: '-', class: 'text-center' },
+                { title: "{{ __('Amount') }}", data: 'amount', name: 'amount', defaultContent: '-', class: 'text-center' },
+                { title: "{{ __('Amount') }}", data: 'status', name: 'status', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
+                { title: "{{ __('Date') }}", data: 'tourism_info_balances.created_at', name: 'tourism_info_balances.created_at', defaultContent: '-', class: 'text-center',searchable:false, orderable: false },
+
+                { title: "{{ __('Action') }}", data: 'action', name: 'action', defaultContent: ' ', class: 'text-center', searchable:false, orderable: false },
 
             ]
         });
@@ -86,7 +89,7 @@
 
         });
     </script>
-@endsection
+@endpush
 
 
 

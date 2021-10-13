@@ -60,6 +60,19 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
             Route::resource('tourism-info', 'TourismInfoController')->except('destroy');
 
         });
+
+        Route::middleware('permission:view-withdrawal')->group(function () {
+
+            Route::post('/tourism-info-withdrawal/data-withdrawal', 'TourismInfoWithdrawalController@data')->name('tourism-info-withdrawal.data');
+            Route::post('/tourism-info-withdrawal/submission', 'TourismInfoWithdrawalController@submission')->name('tourism-info-withdrawal.processed');
+            Route::post('/tourism-info-withdrawal/processed', 'TourismInfoWithdrawalController@processed')->name('tourism-info-withdrawal.processed');
+            Route::post('/tourism-info-withdrawal/rejected', 'TourismInfoWithdrawalController@rejected')->name('tourism-info-withdrawal.rejected');
+            Route::post('/tourism-info-withdrawal/completed', 'TourismInfoWithdrawalController@completed')->name('tourism-info-withdrawal.completed');
+
+
+            Route::resource('tourism-info-withdrawal', 'TourismInfoWithdrawalController')->except('destroy');
+
+        });
     });
 
     Route::namespace('Setting')->prefix('setting')->as('setting.')->group(function () {
