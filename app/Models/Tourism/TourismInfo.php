@@ -10,6 +10,7 @@ use App\Models\Promotion\TicketPromotion;
 use App\Models\Setting\Amenity;
 use App\Models\Tourism\TourismInfoAmenity;
 use App\Models\Tourism\TourismInfoGallery;
+use Str;
 
 class TourismInfo extends Model
 {
@@ -57,5 +58,10 @@ class TourismInfo extends Model
     public function galleries(){
         return $this->hasMany(TourismInfoGallery::class);
         
+    }
+
+    public function setCategoryAttribute($value)
+    {
+        $this->attributes['category'] = Str::ucfirst($value);
     }
 }

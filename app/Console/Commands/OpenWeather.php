@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
-use DB;
+use DB, Str;
 
 class OpenWeather extends Command
 {
@@ -61,7 +61,7 @@ class OpenWeather extends Command
                     //Log::debug($dataWeather->weather[0]->description);
                    //dd('test');
                    $getOpenWeather = [
-                        'description'=>$dataWeather->weather[0]->description,
+                        'description'=> Str::ucfirst($dataWeather->weather[0]->description),
                         'icon'=>'http://openweathermap.org/img/wn/'.$dataWeather->weather[0]->icon.'@2x.png',
                         'temp'=>$dataWeather->main->temp,
                         'feels_like'=>$dataWeather->main->feels_like,
