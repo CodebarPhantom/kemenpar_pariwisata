@@ -14,7 +14,7 @@ class ReportTicketController extends Controller
         $startDate = date('Y-m-d');
         $endDate = date('Y-m-d');
         $isQr = $request->is_qr;
-        $getAll = $request->get_all ?: false;
+        $getAll = $request->get_all;
 
         $visitorRevenueDaily = TourismInfo::select('tourism_infos.name as tourism_name')
             ->selectRaw('ifnull( cat.NAME, "Umum" ) AS category_name')
@@ -58,7 +58,7 @@ class ReportTicketController extends Controller
         $startDate = Carbon::parse($request->start_date)->format('Y-m-d');
         $endDate = Carbon::parse($request->end_date)->format('Y-m-d');
         $isQr = $request->is_qr;
-        $getAll = $request->get_all ?: false;
+        $getAll = $request->get_all;
 
         $visitorRevenueDaily = TourismInfo::select('tourism_infos.name as tourism_name')
             ->selectRaw('ifnull( cat.NAME, "Umum" ) AS category_name')
@@ -100,7 +100,7 @@ class ReportTicketController extends Controller
         $startDate = date('Y-m-01');
         $endDate = date('Y-m-t');
         $isQr = $request->is_qr;
-        $getAll = $request->get_all ?: false;
+        $getAll = $request->get_all;
 
         $visitorRevenueMonthly = TourismInfo::select('tourism_infos.name as tourism_name')
             ->selectRaw('ifnull( cat.NAME, "Umum" ) AS category_name')
