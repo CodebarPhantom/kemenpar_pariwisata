@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('authUser',DB::table('users')->select('users.id', 'users.user_type', 'ti.name as tourism_name', 'ti.balance')
             ->leftJoin('tourism_infos as ti', 'ti.id', '=', 'users.tourism_info_id')
-            ->where('users.id', Auth::user()->id)
+            ->where('users.id', optional(Auth::user())->id)
             ->first());
         });
 

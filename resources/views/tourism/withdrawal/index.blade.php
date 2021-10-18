@@ -28,7 +28,7 @@
                             &nbsp; {{ __('Withdrawal').' '.__('Tourism') }}
                     </h3>
                     @if(Laratrust::hasRole('administrator'))
-                        <a href="#" data-href="{{ route('tourism-info-withdrawal.store') }}" class="btn btn-primary btn-flat btn-sm btn-tooltip" title="Pengajuan" data-toggle="modal" data-text="Apakah anda yakin untuk mengajukan pencairan dana {{ $authUser->tourism_name }} sebesar Rp.{{  number_format($authUser->balance) }}" data-target="#modal-confirmation" data-value="'.$tourismWithdrawal->id.'"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Withdrawal').' '.__('Tourism') }}</a>
+                        <a href="#" data-href="{{ route('tourism-info-withdrawal.store') }}" class="btn btn-primary btn-flat btn-sm btn-tooltip" title="Pengajuan" data-toggle="modal" data-text="Apakah anda yakin untuk mengajukan pencairan dana {{ $authUser->tourism_name }} sebesar Rp.{{  number_format($authUser->balance) }}" data-target="#modal-confirmation" data-value="{{ auth()->user()->tourism_info_id }}"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ __('Withdrawal').' '.__('Tourism') }}</a>
                        
                     @endif
                 </div>

@@ -6,12 +6,17 @@ use Carbon\Carbon;
 use App\Models\Tourism\TourismInfoBalance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Tourism\TourismInfo;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Traits\AllSetLog;
+
 
 use Str, DB, Lang, DataTables, Laratrust;
 
 class TourismInfoWithdrawalController extends Controller
 {
+    use AllSetLog;
+
     /**
      * Display a listing of the resource.
      *
@@ -74,6 +79,10 @@ class TourismInfoWithdrawalController extends Controller
         $tourismInfoBalance->status = TourismInfoBalance::BALANCESTATUS[3]['status'];
         $tourismInfoBalance->save();       
 
+        $tourismInfo = TourismInfo::slect('id','balance')->findOrFail($tourismInfoBalance->tourism_info_id);
+
+        $this->tourismInfoLog($tourismInfoBalance->tourism_info_id, 'Pengajuan penarikan dana '.$tourismInfoBalance->tourism->name.' sebesar '. $tourismInfo->balance.' diproses, silahkan selesaikan pengajuan dengan konfirmasi pihak-pihak terkait', TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS[3]['status']);
+
         Alert::alert('Information', 'Pengajuan penarikan dana '.$tourismInfoBalance->tourism->name.' diproses, silahkan selesaikan pengajuan dengan konfirmasi pihak-pihak terkait', 'info');
         return redirect()->route('tourism-info-withdrawal.index');
 
@@ -94,7 +103,12 @@ class TourismInfoWithdrawalController extends Controller
     {
         $tourismInfoBalance = TourismInfoBalance::with(['tourism'])->findOrFail($request->confirmation_id);
         $tourismInfoBalance->status = TourismInfoBalance::BALANCESTATUS[5]['status'];
-        $tourismInfoBalance->save();       
+        $tourismInfoBalance->save();    
+        
+        $tourismInfo = TourismInfo::select('id','balance')->findOrFail($tourismInfoBalance->tourism_info_id);
+        $tourismInfo->balance -= $tourismInfoBalance->amount;
+        $tourismInfo->save();
+        
 
         Alert::alert('Information', 'Pengajuan penarikan dana '.$tourismInfoBalance->tourism->name.' sudah selesai', 'succeess');
         return redirect()->route('tourism-info-withdrawal.index');
@@ -118,7 +132,37 @@ class TourismInfoWithdrawalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $tourismInfo = TourismInfo::select('id','balance')->findOrFail(auth()->user()->tourism_info_id);
+
+        $tourisminfoBalanceCheck = TourismInfoBalance::whereNotIn('status',[4,5])->where('tourism_info_id',auth()->user()->tourism_info_id)->first();
+        
+        if($tourisminfoBalanceCheck != NULL){
+            Alert::alert('Information', 'Anda sudah mengajukan penarikan dana, Silahkan selesaikan pengajauan sebelumnya terlebih dahulu', 'error');
+            return redirect()->route('tourism-info-withdrawal.index'); 
+        }else{
+
+            if($tourismInfo->balance == 0) {
+                Alert::alert('Information', 'Saldo anda 0', 'error');
+                return redirect()->route('tourism-info-withdrawal.index'); 
+            }
+
+            $tourismInfoBalance = new TourismInfoBalance();
+            $tourismInfoBalance->tourism_info_id =  $request->confirmation_id;
+            $tourismInfoBalance->status = TourismInfoBalance::BALANCESTATUS[2]['status'];
+            $tourismInfoBalance->amount =  $tourismInfo->balance;
+            $tourismInfoBalance->save();    
+        
+        
+
+            $this->tourismInfoLog($tourismInfoBalance->tourism_info_id, 'Penarikan dana '.$tourismInfoBalance->tourism->name.' sebesar '. $tourismInfo->balance.' berhasil diajukan.', TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS[2]['status']);
+
+            Alert::alert('Information', 'Penarikan dana '.$tourismInfoBalance->tourism->name.' sebesar '. $tourismInfo->balance.' berhasil diajukan.', 'info');
+            return redirect()->route('tourism-info-withdrawal.index'); 
+        }
+
+
+        
     }
 
     /**

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\TicketItems;
+use App\Models\Tourism\TourismInfo;
 use App\Models\Tourism\TourismInfoBalance;
 use App\Models\Tourism\TourismInfoCategories;
 use App\Models\Tourism\TourismInfoLog;
@@ -156,10 +157,15 @@ class TicketController extends Controller
 
             }
 
-           /* if($ticket->is_qr){
+            if($ticket->is_qr == 1){
 
                 $this->tourismInfoLog($ticket->tourism_info_id, "Saldo bertambah sebanyak ".number_format($grandTotal), TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS['0']['status']);
-            }*/
+                
+                $tourismInfo = TourismInfo::select('id','balance')->findOrFail($ticket->tourism_info_id);
+                $tourismInfo->balance += $grandTotal;
+                $tourismInfo->save();
+
+            }
 
             $ticket->price = $grandTotal;
             $ticket->save();
