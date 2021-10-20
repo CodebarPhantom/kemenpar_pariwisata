@@ -120,7 +120,7 @@ class TicketController extends Controller
         $this->validate(
             $request,
             [
-                'name' => 'required|alpha|max:255',
+                'name' => 'required|max:255',
                 'code' => 'required|alpha_num|unique:tickets,code',
                 'tourism_info_id' => 'required|exists:App\Models\Tourism\TourismInfo,id',
                 'tourism_info_category_id.*' => 'required|distinct|in:'.implode(',', $categories),
