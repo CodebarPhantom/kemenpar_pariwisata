@@ -143,7 +143,7 @@ class TicketController extends Controller
             $ticket->code = $request->code;
             $ticket->tourism_info_id = $request->tourism_info_id;
             $ticket->status = 1;
-            $ticket->is_qr = $request->is_qr;
+            $ticket->is_qr = ($request->is_qr == true ? 1 : 0);
             $ticket->save();
 
             foreach ($request->tourism_info_category_id as $i => $category_id) {
@@ -157,7 +157,7 @@ class TicketController extends Controller
 
             }
 
-            if($ticket->is_qr == 1){
+            if($ticket->is_qr == true){
 
                 $this->tourismInfoLog($ticket->tourism_info_id, "Saldo bertambah sebanyak ".number_format($grandTotal), TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS['0']['status']);
                 
