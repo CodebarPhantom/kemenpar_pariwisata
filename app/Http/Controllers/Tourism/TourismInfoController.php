@@ -320,8 +320,8 @@ class TourismInfoController extends Controller
 
             $categories = [];
 
-            //foreach ($request->tourismCategories as $i => $tourismCategory) {
-                for ($i=0; $i <2; $i++) { 
+            foreach ($request->tourismCategories as $i => $tourismCategory) {
+                //for ($i=0; $i <2; $i++) { 
                 if (!!$request->tourismCategories[$i] && $request->tourismPrice[$i] > 0) {
                     $tourismInfoCategories = TourismInfoCategories::find($request->tourismCategoriesId[$i]);
                     if (!$tourismInfoCategories) {
@@ -335,8 +335,8 @@ class TourismInfoController extends Controller
 
                     array_push($categories, $tourismInfoCategories->id);
                 }
-            }
             //}
+            }
 
             $amenities = [];
 
