@@ -324,6 +324,14 @@ return [
 
                 ],
                 [
+                    'text' => 'Laporan Pariwisata Harian Void',
+                    'url'  => '/report-ticket-administrator-daily-void',
+                    'permission'=>'view-report-ticket-administrator',
+                    'active' => ['report-administrator*'],
+
+
+                ],
+                [
                     'text' => 'Laporan Keadaan Darurat',
                     'url'  => '/report-emergency',
                     'permission'=>'view-emergency-report',

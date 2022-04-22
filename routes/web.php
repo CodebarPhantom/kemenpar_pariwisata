@@ -110,6 +110,9 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
             Route::get('/report-ticket-administrator-daily', 'ReportController@reportAdministratorDaily')->name(
                 'report-ticket.administrator-daily'
             );
+            Route::get('/report-ticket-administrator-daily-void', 'ReportController@reportAdministratorDailyVoid')->name(
+                'report-ticket.administrator-daily-void'
+            );
         });
     });
 
