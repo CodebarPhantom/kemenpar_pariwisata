@@ -66,7 +66,7 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-calendar-alt"></i>
-                            &nbsp; {{ __('Report').' '.__('Harian').' '.__('Harian').' - '.date("d F Y",strtotime($startDate)).' s.d. '.date("d F Y",strtotime($endDate)) }} 
+                            &nbsp; {{ __('Report').' '.__('Harian').' '.__('Void').' - '.date("d F Y",strtotime($startDate)).' s.d. '.date("d F Y",strtotime($endDate)) }} 
                     </h3>                
                 </div>
             </div>
