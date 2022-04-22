@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="row">
-    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-daily') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
+    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-daily-void') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
         @csrf
         <div class="">
             <div class="card card-info card-outline">
@@ -66,7 +66,7 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-calendar-alt"></i>
-                            &nbsp; {{ __('Report').' '.__('Harian').' - '.date("d F Y",strtotime($startDate)).' s.d. '.date("d F Y",strtotime($endDate)) }} 
+                            &nbsp; {{ __('Report').' '.__('Harian').' '.__('Harian').' - '.date("d F Y",strtotime($startDate)).' s.d. '.date("d F Y",strtotime($endDate)) }} 
                     </h3>                
                 </div>
             </div>
