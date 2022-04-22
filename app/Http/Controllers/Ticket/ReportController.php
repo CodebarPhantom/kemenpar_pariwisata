@@ -161,8 +161,7 @@ class ReportController extends Controller
 
         $visitorRevenueDailys = $visitorRevenueDailys->groupby('tourism_infos.id', 'tourism_infos.name')->get();
 
-        return view(
-            'ticket.report.report-administrator-daily',
+        return view('ticket.report.report-administrator-daily',
             compact('startDate', 'endDate', 'visitorRevenueDailys')
         );
     }

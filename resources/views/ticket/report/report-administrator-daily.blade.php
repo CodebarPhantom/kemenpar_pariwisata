@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="row">
-    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-daily') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
+    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-daily-void') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
         @csrf
         <div class="">
             <div class="card card-info card-outline">
