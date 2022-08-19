@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\API\Report\Ticket\ReportTicketController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -125,23 +124,6 @@ Route::middleware(['auth', 'hasRole.user'])->group(function () {
             'report-emergency.data'
         );
         Route::resource('report-emergency', 'EmergencyReportController')->except('destroy');
-    });
-
-    Route::namespace('Report')->group(function () {
-        Route::namespace('Ticket')->group(function () {
-            Route::middleware('auth:sanctum', 'api.user')->group(function () {
-                Route::post('/report/ticket/daily', [ReportTicketController::class, 'daily'])->name(
-                    'report.ticket.daily'
-                );
-                Route::post('/report/ticket/monthly', [ReportTicketController::class, 'monthly'])->name(
-                    'report.ticket.monthly'
-                );
-
-                Route::post('/report/ticket/custom-date', [ReportTicketController::class, 'customDate'])->name(
-                    'report.ticket.custom-date'
-                );
-            });
-        });
     });
 });
 
