@@ -163,6 +163,28 @@
     <div class="col-12">
         <div class="card card-info card-outline">
             <div class="card-header">
+                <h3 class="card-title">Grafik Pembatalan Tiket @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                <canvas id="barChartVoid" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info card-outline">
+            <div class="card-header">
                 <h3 class="card-title">Grafik Pendapatan  @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
 
                 <div class="card-tools">
@@ -174,6 +196,27 @@
             <div class="card-body">
                 <div class="chart">
                 <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Grafik Pendapatan Loss @php echo Carbon::createFromDate($yearReport, $monthReport)->translatedFormat('F Y'); @endphp</h3>
+
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                <canvas id="barChart2Void" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
             </div>
             <!-- /.card-body -->
@@ -274,7 +317,11 @@
 @endphp
 <script>
 
-
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
     $(".select2-eryan").select2({
         placeholder: 'Pilih Bulan',
@@ -306,6 +353,73 @@
             data                : [
                                         @foreach ($visitorRevenueTourisms as $visitorRevenueTourism)
                                             '{{$visitorRevenueTourism->count_visitor }}',
+                                        @endforeach
+                                    ]
+            },
+            /*{
+            label               : 'Electronics',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                : [65, 59, 80, 81, 56, 55, 40]
+            },*/
+        ],
+        },
+        options: {
+            title: {
+            display: false,
+            text: 'Visitor Graph'
+            },
+            maintainAspectRatio : false,
+            responsive : true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines : {
+                        display : false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines : {
+                        display : false,
+                    },
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+    var ctxVoid = document.getElementById("barChartVoid");
+    var myChartVoid = new Chart(ctxVoid, {
+        type: 'bar',
+        data: {
+            labels  : [
+                @foreach ($visitorVoidRevenueTourisms as $visitorVoidRevenueTourism)
+                    '{{$visitorVoidRevenueTourism->tourism_name }}',
+                @endforeach
+            ],
+
+            datasets: [
+            {
+            label               : 'Visitor',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius          : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data                : [
+                                        @foreach ($visitorVoidRevenueTourisms as $visitorVoidRevenueTourism)
+                                            '{{$visitorVoidRevenueTourism->count_visitor }}',
                                         @endforeach
                                     ]
             },
@@ -405,6 +519,62 @@
             }
         }
     });
+
+    var ctx2Void = document.getElementById("barChart2Void");
+    var myChart2Void = new Chart(ctx2Void, {
+        type: 'bar',
+        data: {
+            labels  : [
+                @foreach ($visitorVoidRevenueTourisms as $visitorVoidRevenueTourism)
+                    '{{$visitorVoidRevenueTourism->tourism_name }}',
+                @endforeach
+            ],
+
+            datasets: [
+            {
+            label               : 'Loss',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                :   [
+                                        @foreach ($visitorVoidRevenueTourisms as $visitorVoidRevenueTourism)
+                                            '{{$visitorVoidRevenueTourism->sum_price }}',
+                                        @endforeach
+                                    ]
+            },
+        ],
+        },
+        options: {
+            title: {
+            display: false,
+            text: 'Loss Graph'
+            },
+            maintainAspectRatio : false,
+            responsive : true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines : {
+                        display : false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines : {
+                        display : false,
+                    },
+                    ticks: {
+                        beginAtZero:true
+                    },
+                }]
+            }
+        }
+    });
     @else
 
     var chartVisitorDaily;
@@ -446,7 +616,7 @@
     var GetChartDataVisitorDaily = function () {
         $.ajax({
             url: "{{ route('report.ticket.daily') }}",
-            method: 'GET',
+            method: 'POST',
             dataType: 'json',
             success: function (d) {
                 if (d.data.length != chartDataColor.length) {
@@ -491,7 +661,7 @@
     var GetChartDataVisitorMonthly = function () {
         $.ajax({
             url: "{{ route('report.ticket.monthly') }}",
-            method: 'GET',
+            method: 'POST',
             dataType: 'json',
             success: function (d) {
                 if (d.data.length != chartDataColor.length) {

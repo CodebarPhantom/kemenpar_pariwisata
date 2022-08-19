@@ -17,13 +17,13 @@ class HasRoleUser
      */
     public function handle($request, Closure $next)
     {
-        if (LaratrustFacade::hasRole('user')) {
-            Auth::logout();
-            return abort(
-                config('laratrust.middleware.handlers.abort.code'),
-                __('USER_LOGIN_NOTICE')
-            );
-        }
+        // if (LaratrustFacade::hasRole('user')) {
+        //     Auth::logout();
+        //     return abort(
+        //         config('laratrust.middleware.handlers.abort.code'),
+        //         __('USER_LOGIN_NOTICE')
+        //     );
+        // }
 
         return $next($request);
     }

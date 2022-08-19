@@ -17,34 +17,55 @@
 
 @section('content')
 <div class="row">
-    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-daily-void') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
+    <form role="form" id="form_1" action="{{ route('report-ticket.administrator-void') }}" method="GET" class="col-md-12" enctype="multipart/form-data">
         @csrf
         <div class="">
             <div class="card card-info card-outline">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h3 class="card-title mt-1">
-                            <i class="fa fa-calendar-alt"></i>
+                            <i class="fa  fa-calendar-alt"></i>
                                 &nbsp; {{ __('Option').' '.__('Search') }}
                         </h3>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label> {{ __('Month') }} </label>
+                                <select class="form-control select2-eryan" style="width: 100%;" name="month">
+                                    <option value="01" @if ($monthReport == "01") {{ 'selected' }} @endif >Januari</option>
+                                    <option value="02" @if ($monthReport == "02") {{ 'selected' }} @endif>Februari</option>
+                                    <option value="03" @if ($monthReport == "03") {{ 'selected' }} @endif>Maret</option>
+                                    <option value="04" @if ($monthReport == "04") {{ 'selected' }} @endif>April</option>
+                                    <option value="05" @if ($monthReport == "05") {{ 'selected' }} @endif>Mei</option>
+                                    <option value="06" @if ($monthReport == "06") {{ 'selected' }} @endif>Juni</option>
+                                    <option value="07" @if ($monthReport == "07") {{ 'selected' }} @endif>Juli</option>
+                                    <option value="08" @if ($monthReport == "08") {{ 'selected' }} @endif>Agustus</option>
+                                    <option value="09" @if ($monthReport == "09") {{ 'selected' }} @endif>September</option>
+                                    <option value="10" @if ($monthReport == "10") {{ 'selected' }} @endif>Oktober</option>
+                                    <option value="11" @if ($monthReport == "11") {{ 'selected' }} @endif>November</option>
+                                    <option value="12" @if ($monthReport == "12") {{ 'selected' }} @endif>Desember</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label> {{ __('Start').' '.__('Date') }} </label>
-                                <input type="text"  name="start_date" class="form-control daterange-single" value="{{  date("d-m-Y",strtotime($startDate)) }}" readonly />
+                                <label> {{ __('Year') }} </label>
+                                <select class="form-control select2-eryan" style="width: 100%;" name="year">
+                                    @php
+                                    for($i=date('Y'); $i>=2018; $i--) {
+                                        $selected = '';
+                                        if ($yearReport == $i){$selected = ' selected="selected"';}
+                                        print('<option value="'.$i.'"'.$selected.'>'.$i.'</option>'."\n");
+                                        //print('<option value="'.$i.'">'.$i.'</option>'."\n");
+                                    }
+                                    @endphp
+                                </select>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label> {{ __('End').' '.__('Date') }} </label>
-                                <input type="text" name="end_date" class="form-control daterange-single" value="{{ date("d-m-Y",strtotime($endDate)) }}" readonly />
-                            </div>
-                        </div>
-
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-info btn-flat btn-sm form-control">
@@ -66,7 +87,7 @@
                 <div class="d-flex justify-content-between">
                     <h3 class="card-title mt-1">
                         <i class="fa fa-calendar-alt"></i>
-                            &nbsp; {{ __('Report').' '.__('Harian').' '.__('Void').' - '.date("d F Y",strtotime($startDate)).' s.d. '.date("d F Y",strtotime($endDate)) }}
+                            &nbsp; {{ __('Report').' '.__('Bulanan').' '.__('Void') }}
                     </h3>
                 </div>
             </div>
@@ -78,11 +99,11 @@
                                 @php
                                     $i = 1;
                                 @endphp
-                                @foreach ($visitorRevenueDailys as $visitorRevenueDaily)
+                                @foreach ($visitorRevenueTourisms as $visitorRevenueTourism)
                                 <tr>
-                                    <td>{{ $visitorRevenueDaily->tourism_name }}</td>
-                                    <td>{{ number_format($visitorRevenueDaily->count_visitor) }}</td>
-                                    <td>{{ number_format($visitorRevenueDaily->sum_price) }}</td>
+                                    <td>{{ $visitorRevenueTourism->tourism_name }}</td>
+                                    <td>{{ number_format($visitorRevenueTourism->count_visitor) }}</td>
+                                    <td>{{ number_format($visitorRevenueTourism->sum_price) }}</td>
 
                                 </tr>
                                 @endforeach
@@ -99,23 +120,16 @@
 
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
-@section('plugins.daterangepicker', true)
-
 
 @section('adminlte_js')
     <script>
         $(document).ready(function(){
 
-            $('.daterange-single').daterangepicker({
-                singleDatePicker: true,
-                autoApply: true,
-                locale: {
-                    format: 'DD-MM-YYYY'
-                }
+            $(".select2-eryan").select2({
+                placeholder: 'Pilih Bulan',
+                theme: 'bootstrap4',
+                dropdownPosition: 'below'
             });
-
-
-            initailizeSelect2();
 
             $(document).on("wheel", "input[type=number]", function (e) {
                 $(this).blur();
@@ -153,34 +167,6 @@
 
 
         });
-
-        function initailizeSelect2(){
-                $(".select2-eryan").select2({
-                    placeholder: 'Pilih Tempat Wisata',
-                    theme: 'bootstrap4',
-                    ajax: {
-                        url : "{{ route('user.tourism') }}",
-                        method : "POST",
-                        dataType : 'json',
-                        delay: 1000,
-                        data: function(params) {
-                            var query = {
-                                search: params.term,
-                                page: params.page || 1
-                            }
-
-                            // Query parameters will be ?search=[term]&page=[page]
-                            return query;
-                        },
-
-                        processResults: function (response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                });
-            }
     </script>
 @endsection
 

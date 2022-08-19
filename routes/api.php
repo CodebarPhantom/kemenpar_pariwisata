@@ -81,6 +81,17 @@ Route::namespace('API')->group(function () {
                 Route::post('/report/ticket/custom-date', [ReportTicketController::class, 'customDate'])->name(
                     'report.ticket.custom-date'
                 );
+
+                Route::post('/report/ticket/void/daily', [ReportTicketController::class, 'dailyVoid'])->name(
+                    'report.ticket.void.daily'
+                );
+                Route::post('/report/ticket/void/monthly', [ReportTicketController::class, 'monthlyVoid'])->name(
+                    'report.ticket.void.monthly'
+                );
+
+                Route::post('/report/ticket/void/custom-date', [ReportTicketController::class, 'customDateVoid'])->name(
+                    'report.ticket.void.custom-date'
+                );
             });
         });
     });

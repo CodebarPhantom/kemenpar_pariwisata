@@ -75,6 +75,23 @@ class DashboardController extends Controller
             })
             ->where('tourism_infos.is_active', 1);
 
+        $visitorVoidRevenueTourisms = TourismInfo::select('tourism_infos.id', 'tourism_infos.name as tourism_name')
+            ->selectRaw('ifnull(sum( ti.quantity ), 0) count_visitor')
+            ->selectRaw('ifnull(sum( ti.quantity * ti.price ), 0) sum_price')
+            ->leftJoin('tourism_info_categories as cat', 'cat.tourism_info_id', '=', 'tourism_infos.id')
+            ->leftJoin('tickets as t', function ($join) use ($monthReport, $yearReport) {
+                $join->on('t.tourism_info_id', '=', 'tourism_infos.id');
+                $join
+                    ->whereMonth('t.created_at', '=', $monthReport)
+                    ->whereYear('t.created_at', '=', $yearReport)
+                    ->where('t.status', 0);
+            })
+            ->leftJoin('ticket_items as ti', function ($join) {
+                $join->on('ti.ticket_id', '=', 't.id');
+                $join->on('ti.tourism_info_category_id', '=', 'cat.id');
+            })
+            ->where('tourism_infos.is_active', 1);
+
         if (!Laratrust::hasRole('superadmin')) {
             $visitorRevenueTourisms = $visitorRevenueTourisms->where(
                 'tourism_infos.id',
@@ -83,10 +100,10 @@ class DashboardController extends Controller
         }
 
         $visitorRevenueTourisms = $visitorRevenueTourisms->groupby('tourism_infos.id', 'tourism_infos.name')->get();
+        $visitorVoidRevenueTourisms = $visitorVoidRevenueTourisms->groupby('tourism_infos.id', 'tourism_infos.name')->get();
 
-        return view(
-            'dashboard.administrator',
-            compact('visitorRevenueTourisms', 'monthReport', 'yearReport', 'emergencyReports')
+        return view('dashboard.administrator',
+            compact('visitorRevenueTourisms', 'visitorVoidRevenueTourisms', 'monthReport', 'yearReport', 'emergencyReports')
         );
     }
 

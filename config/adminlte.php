@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Lang;
+
 return [
 
     /*
@@ -260,7 +262,7 @@ return [
             'active' => ['tourism-info*'],
             'permission'=>'view-tourism-info',
 
-            
+
             'submenu' => [
                 [
                     'text' => 'Pariwisata',
@@ -276,7 +278,7 @@ return [
                     'permission'=>'view-withdrawal',
                     'active' => ['tourism-info-withdrawal*'],
                 ],
-                
+
             ],
         ],
         [
@@ -324,8 +326,16 @@ return [
 
                 ],
                 [
-                    'text' => 'Laporan Pariwisata Harian Void',
+                    'text' => 'Laporan Pariwisata Harian - Batal',
                     'url'  => '/report-ticket-administrator-daily-void',
+                    'permission'=>'view-report-ticket-administrator',
+                    'active' => ['report-administrator*'],
+
+
+                ],
+                [
+                    'text' => 'Laporan Pariwisata Bulanan - Batal',
+                    'url'  => '/report-ticket-administrator-void',
                     'permission'=>'view-report-ticket-administrator',
                     'active' => ['report-administrator*'],
 
@@ -339,7 +349,7 @@ return [
 
 
                 ],
-                
+
             ],
         ],
 
@@ -356,7 +366,7 @@ return [
                     'permission'=>'view-amenities',
                     'active' => ['setting/amenities*'],
                 ],
-                
+
             ],
         ],
 
@@ -377,7 +387,7 @@ return [
             'permission'=>'view-report-ticket-user'
         ],
 
-       
+
         [
             'text' => 'Log Aktifitas',
             'url' => '/user-log-activity',
@@ -386,7 +396,7 @@ return [
             'permission'=>'view-user-log'
         ],
 
-        
+
     ],
 
     /*

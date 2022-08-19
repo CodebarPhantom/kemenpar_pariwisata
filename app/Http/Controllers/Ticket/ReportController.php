@@ -85,6 +85,49 @@ class ReportController extends Controller
         );
     }
 
+    public function reportAdministratorMonthlyVoid(Request $request)
+    {
+        if (!Laratrust::isAbleTo('view-report-ticket-administrator')) {
+            return abort(404);
+        }
+        if ($request->year == null && $request->month == null) {
+            $monthReport = date('m');
+            $yearReport = date('Y');
+        } else {
+            $monthReport = $request->month;
+            $yearReport = $request->year;
+        }
+
+        $visitorRevenueTourisms = TourismInfo::select('tourism_infos.id', 'tourism_infos.name as tourism_name')
+            ->selectRaw('ifnull(sum( ti.quantity ), 0) count_visitor')
+            ->selectRaw('ifnull(sum( ti.quantity * ti.price ), 0) sum_price')
+            ->leftJoin('tourism_info_categories as cat', 'cat.tourism_info_id', '=', 'tourism_infos.id')
+            ->leftJoin('tickets as t', function ($join) use ($monthReport, $yearReport) {
+                $join->on('t.tourism_info_id', '=', 'tourism_infos.id');
+                $join
+                    ->whereMonth('t.created_at', '=', $monthReport)
+                    ->whereYear('t.created_at', '=', $yearReport)
+                    ->where('t.status', 0);
+            })
+            ->leftJoin('ticket_items as ti', function ($join) {
+                $join->on('ti.ticket_id', '=', 't.id');
+                $join->on('ti.tourism_info_category_id', '=', 'cat.id');
+            });
+
+        if (!Laratrust::hasRole('superadmin')) {
+            $visitorRevenueTourisms = $visitorRevenueTourisms->where(
+                'tourism_infos.id',
+                auth()->user()->tourism_info_id
+            );
+        }
+
+        $visitorRevenueTourisms = $visitorRevenueTourisms->groupby('tourism_infos.id', 'tourism_infos.name')->get();
+
+        return view('ticket.report.report-administrator-void',
+            compact('visitorRevenueTourisms', 'monthReport', 'yearReport')
+        );
+    }
+
     public function reportAdministratorDaily(Request $request)
     {
         if (!Laratrust::isAbleTo('view-report-ticket-administrator')) {
