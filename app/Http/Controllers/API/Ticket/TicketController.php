@@ -20,7 +20,7 @@ use App\Traits\AllSetLog;
 class TicketController extends Controller
 {
     use AllSetLog;
-    
+
     public function __construct(Request $request)
     {
         $this->ticket_fields = '*';
@@ -135,7 +135,7 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
-            $grandTotal = 0; 
+            $grandTotal = 0;
 
             $ticket = new Ticket();
             $ticket->user_id = auth()->user()->id;
@@ -160,7 +160,7 @@ class TicketController extends Controller
             if($ticket->is_qr == true){
 
                 $this->tourismInfoLog($ticket->tourism_info_id, "Saldo bertambah sebanyak ".number_format($grandTotal), TourismInfoBalance::BALANCE, TourismInfoBalance::BALANCESTATUS['0']['status']);
-                
+
                 $tourismInfo = TourismInfo::select('id','balance')->findOrFail($ticket->tourism_info_id);
                 $tourismInfo->balance += $grandTotal;
                 $tourismInfo->save();
@@ -170,7 +170,7 @@ class TicketController extends Controller
             $ticket->price = $grandTotal;
             $ticket->save();
 
-            
+
 
             DB::commit();
         } catch (Exception $e) {
@@ -289,9 +289,9 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
-            
+
             foreach ($request->name as $i => $name) {
-                $grandTotal = 0; 
+                $grandTotal = 0;
                 $ticket = new Ticket();
                 $ticket->user_id = auth()->user()->id;
                 $ticket->name = $name;
@@ -361,8 +361,23 @@ class TicketController extends Controller
     public function ticketData()
     {
         $tickets = Ticket::select('id','code','status','price','created_at')->where('user_id',auth()->user()->id)
-        ->whereDay('created_at', '=', date('d')) 
+        ->whereDay('created_at', '=', date('d'))
         ->where('status',1)
+        ->where('created_at', '>',  Carbon::now()->subHours(1)->format('Y-m-d H:i:s'))
+        ->when(request('search'), function ($query) {
+            $query->where(function ($query) {
+                $query->where('code', 'like', '%' . request('search') . '%');
+            });
+        })
+        ->orderBy('created_at','DESC')->orderBy('id','DESC')->paginate(request('perPage') ?? 5);
+        return response()->json($tickets, 200);
+    }
+
+    public function ticketVoidData()
+    {
+        $tickets = Ticket::select('id','code','status','price','created_at')->where('user_id',auth()->user()->id)
+        ->whereDay('created_at', '=', date('d'))
+        ->where('status',0)
         ->where('created_at', '>',  Carbon::now()->subHours(1)->format('Y-m-d H:i:s'))
         ->when(request('search'), function ($query) {
             $query->where(function ($query) {

@@ -35,6 +35,7 @@ Route::namespace('API')->group(function () {
     Route::namespace('Ticket')->group(function () {
         Route::middleware('auth:sanctum', 'api.user')->group(function () {
             Route::get('/ticket/ticket-data', [App\Http\Controllers\API\Ticket\TicketController::class, 'ticketData']);
+            Route::get('/ticket/ticket-void-data', [App\Http\Controllers\API\Ticket\TicketController::class, 'ticketVoidData']);
             Route::post('/ticket/store-bulk', [App\Http\Controllers\API\Ticket\TicketController::class, 'storeBulk']);
             Route::post('/ticket/void', [App\Http\Controllers\API\Ticket\TicketController::class, 'voidTicket']);
 
